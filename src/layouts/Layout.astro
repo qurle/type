@@ -1,0 +1,77 @@
+---
+const {
+  title = 'Type',
+  headerTitle,
+  description = 'Just type',
+  locales,
+  class: className,
+} = Astro.props
+
+const base = Astro.url.pathname.endsWith('/')
+  ? Astro.url.pathname
+  : Astro.url.pathname + '/'
+---
+
+<!doctype html>
+<html>
+  <head>
+    <base href={base} target="_self" />
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width initial-scale=1" />
+    <meta name="theme-color" content="#161616" />
+    <meta name="msapplication-navbutton-color" content="#161616" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="#161616" />
+
+    <meta property="og:title" content={title} />
+    <!-- <meta property="og:image" content="/og/main.png" />
+    <meta property="vk:image" content="/og/main-vk.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="/og/main.png" /> -->
+
+    <link rel="icon" type="image/svg+xml" href="/fav/favicon.svg" />
+ 
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/fav/favicon-32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/fav/favicon-16.png"
+    />
+    <meta name="msapplication-TileColor" content="#575757" />
+    <title>{title}</title>
+  </head>
+  <body class={className}>
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>
+
+<style lang="scss">
+  html,
+  body {
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  main {
+    width: 100%;
+    max-width: 1200px;
+
+    padding: 0 var(--padding-page) var(--padding-page);
+    margin: auto;
+  }
+</style>
+<script>
+</script>
