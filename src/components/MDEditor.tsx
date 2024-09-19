@@ -98,7 +98,7 @@ function MDEditor() {
 			</button>
 				<div className="customization">
 					<button className="theme" onClick={(e) => cycleModes('theme')}>
-						⏺
+						◑
 					</button>
 
 					<button className="font" onClick={(e) => cycleModes('font')}>
