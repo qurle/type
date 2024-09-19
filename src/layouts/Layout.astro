@@ -3,8 +3,8 @@ import Fonts from '@components/Fonts.astro'
 import '@styles/global.sass'
 
 const {
-  title = 'Type',
-  description = 'Just type',
+  title = 'type.',
+  description = 'just type',
   class: className,
 } = Astro.props
 
@@ -26,12 +26,12 @@ const base = Astro.url.pathname.endsWith('/')
     <meta name="apple-mobile-web-app-status-bar-style" content="#161616" />
 
     <meta property="og:title" content={title} />
-    <!-- <meta property="og:image" content="/og/main.png" />
+    <meta property="og:image" content="/og/main.png" />
     <meta property="vk:image" content="/og/main-vk.png" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content="/og/main.png" /> -->
+    <meta name="twitter:image" content="/og/main.png" />
 
-    <Fonts/>
+    <Fonts />
 
     <link rel="icon" type="image/svg+xml" href="/fav/favicon.svg" />
     <link
