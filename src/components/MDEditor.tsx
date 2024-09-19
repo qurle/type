@@ -113,10 +113,8 @@ function MDEditor() {
 
 	function save() {
 		const doc = ref.current.getMarkdown()
-		if (doc !== '') {
-			localStorage.setItem('doc', doc)
-			console.log('Saved log')
-		}
+		localStorage.setItem('doc', doc)
+		console.log('Saved log')
 	}
 
 	function download(filename, text) {
