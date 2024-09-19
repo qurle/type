@@ -2,12 +2,32 @@ div[class^="_rootContentEditableWrapper"]
 	position: relative
 
 .editor
-	outline: none
 	height: 60vh
-	transition: opacity var(--transition-m)
+
+	border-radius: 0.25rem
+	outline: transparent
+	background-color: transparent
+	transition: opacity var(--transition-m), background-color var(--transition-m)
+	&::after
+		transition: opacity var(--transition-m)
+		content: 'Drop .md files to edit'
+		position: absolute
+
+		top: 50%
+		left: 50%
+		transform: translate(-50%, -50%)
+
+		font-size: var(--font-size-xs)
+		opacity: 0
+
+	&.dragover
+		background-color: var(--color-main-05)
+		position: relative
+		&::after
+			opacity: 0.33
 	
 	> p:first-child:empty
-		&::after
+		&::before
 			content: 'Start typing...'
 			position: absolute
 
@@ -18,11 +38,10 @@ div[class^="_rootContentEditableWrapper"]
 
 			pointer-events: none
 
-
 header
 	display: flex
 	justify-content: space-between
-	font-size: 0.75rem
+	font-size: var(--font-size-xs)
 
 	margin-bottom: var(--padding-l)
 
