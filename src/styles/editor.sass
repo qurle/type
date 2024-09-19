@@ -4,6 +4,8 @@ div[class^="_rootContentEditableWrapper"]
 .editor
 	outline: none
 	height: 60vh
+	transition: opacity var(--transition-m)
+	
 	> p:first-child:empty
 		&::after
 			content: 'Start typing...'
@@ -43,5 +45,3 @@ header
 		button:not(:first-child)
 			margin-left: var(--padding-l)
 		
-		.theme
-			padding: 0 var(--padding-m)
