@@ -29,7 +29,7 @@ function MDEditor() {
 		]
 
 	}
-	const saveInterval = 10_000
+	const saveInterval = 5_000
 
 	useEffect(() => {
 

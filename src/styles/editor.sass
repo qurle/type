@@ -17,7 +17,6 @@ div[class^="_rootContentEditableWrapper"]
 			pointer-events: none
 
 
-
 header
 	display: flex
 	justify-content: space-between
@@ -29,7 +28,8 @@ header
 	.export
 		font-family: var(--font-sans)
 
-		&:has(~div .editor > p:first-child:empty)
+	&:has(~div .editor > p:first-child:empty) 
+		.export	
 			opacity: 0
 
 	button
