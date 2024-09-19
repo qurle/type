@@ -4,7 +4,7 @@
     "baseUrl": ".",
     "allowJs": true,
     "noImplicitAny": false,
-    // "target": "ES6",
+    "target": "ES6",
     "paths": {
       "@components/*": [
         "src/components/*"
@@ -24,6 +24,8 @@
       "@data/*": [
         "src/data/*"
       ]
-    }
+    },
+    "jsx": "react-jsx",
+    "jsxImportSource": "react"
   }
 }

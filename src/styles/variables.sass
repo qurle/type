@@ -1,4 +1,48 @@
 :root
 	--color-background: oklch(98% 0 0)
-	--color-main: oklch(5% 0 0)
-	--padding-page: 8rem
+	--color-main: oklch(8% 0 0)
+
+	--font-main: var(--font-serif)
+	--font-size: 1.5rem
+
+	--font-serif: 'PT Serif', Playfair, Georgia, serif
+	--font-mono: 'Fira Code', 'Space Mono', 'Source Code Pro', monospace
+	--font-sans: 'Mulish', Inter, 'Helvetica Neue', Helvetica, -apple-system, -system-ui, sans-serif
+
+	--page-padding: 2rem
+	
+	--page-width: 640px
+
+	--padding-s: 0.25rem
+	--padding-m: 0.5rem
+	--padding-l: 1rem
+	--padding-xl: 2rem
+
+	--transition-easing: cubic-bezier(0.75, 0, 0.25, 1)
+	--transition-m: 300ms var(--transition-easing)
+
+@media screen and (max-width: 640px)
+	:root
+		--font-size: 1.25rem
+		--page-padding: 1rem
+
+:root[data-font="serif"]
+	--font-main: var(--font-serif)
+
+:root[data-font="mono"]
+	--font-main: var(--font-mono)
+
+:root[data-font="sans"]
+	--font-main: var(--font-sans)
+
+:root[data-theme="dark"]
+	--color-background: oklch(20% 0 0)
+	--color-main: oklch(92% 0 0)
+
+:root[data-theme="sepia"]
+	--color-background: #c7b1a5
+	--color-main: #211109
+
+:root[data-theme="blue"]
+	--color-background: hsl(236deg 54.88% 34.02%)
+	--color-main: hsl(234deg, 18%, 85%)

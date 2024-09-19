@@ -1,0 +1,47 @@
+div[class^="_rootContentEditableWrapper"]
+	position: relative
+
+.editor
+	outline: none
+	height: 60vh
+	> p:first-child:empty
+		&::after
+			content: 'Start typing...'
+			position: absolute
+
+			top: 0
+			left: 0
+
+			opacity: 0.33
+
+			pointer-events: none
+
+
+
+header
+	display: flex
+	justify-content: space-between
+	font-size: 0.75rem
+
+	margin-bottom: var(--padding-l)
+
+
+	.export
+		font-family: var(--font-sans)
+
+		&:has(~div .editor > p:first-child:empty)
+			opacity: 0
+
+	button
+		opacity: .2
+
+		transition: opacity var(--transition-m)
+		&:hover
+			opacity: .3
+
+	.customization
+		button:not(:first-child)
+			margin-left: var(--padding-l)
+		
+		.theme
+			padding: 0 var(--padding-m)

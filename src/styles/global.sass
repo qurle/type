@@ -1,1 +1,21 @@
 @import @styles/variables.sass
+@import @styles/reset.sass
+@import @styles/editor.sass
+
+// Typography
+html
+	font-family: var(--font-main)
+	font-size: var(--font-size)
+
+h1
+	font-size: 1.5em
+
+// Elements
+button
+	cursor: pointer
+
+ul
+	ul > li
+		margin-left: var(--padding-m)
+ul li:not(:has(ul:first-child))::before
+		content: "· "

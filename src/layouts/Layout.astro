@@ -1,9 +1,10 @@
 ---
+import Fonts from '@components/Fonts.astro'
+import '@styles/global.sass'
+
 const {
   title = 'Type',
-  headerTitle,
   description = 'Just type',
-  locales,
   class: className,
 } = Astro.props
 
@@ -13,13 +14,14 @@ const base = Astro.url.pathname.endsWith('/')
 ---
 
 <!doctype html>
-<html>
+<html data-font="serif">
   <head>
     <base href={base} target="_self" />
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width initial-scale=1" />
     <meta name="theme-color" content="#161616" />
+    <meta name="msapplication-TileColor" content="#575757" />
     <meta name="msapplication-navbutton-color" content="#161616" />
     <meta name="apple-mobile-web-app-status-bar-style" content="#161616" />
 
@@ -29,8 +31,9 @@ const base = Astro.url.pathname.endsWith('/')
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content="/og/main.png" /> -->
 
+    <Fonts/>
+
     <link rel="icon" type="image/svg+xml" href="/fav/favicon.svg" />
- 
     <link
       rel="icon"
       type="image/png"
@@ -43,7 +46,7 @@ const base = Astro.url.pathname.endsWith('/')
       sizes="16x16"
       href="/fav/favicon-16.png"
     />
-    <meta name="msapplication-TileColor" content="#575757" />
+
     <title>{title}</title>
   </head>
   <body class={className}>
@@ -53,7 +56,7 @@ const base = Astro.url.pathname.endsWith('/')
   </body>
 </html>
 
-<style lang="scss">
+<style>
   html,
   body {
     min-height: 100vh;
@@ -63,15 +66,13 @@ const base = Astro.url.pathname.endsWith('/')
   body {
     display: flex;
     flex-direction: column;
+    padding: var(--page-padding);
   }
 
   main {
     width: 100%;
-    max-width: 1200px;
-
-    padding: 0 var(--padding-page) var(--padding-page);
-    margin: auto;
+    max-width: var(--page-width);
+    margin: 0 auto;
   }
 </style>
-<script>
-</script>
+<script></script>

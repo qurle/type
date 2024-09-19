@@ -1,6 +1,24 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import MDEditor from '@components/MDEditor'
+import Layout from '../layouts/Layout.astro'
 ---
+
 <Layout>
-	Hello!
+	<MDEditor client:load />
 </Layout>
+<script>
+	console.log(
+		'%cHello 🤙🏻',
+		'font-size: 1rem; background-color: #eee; padding: 0.5rem; border-radius: 0.25rem',
+	)
+
+	function loadMode(mode) {
+		const value = localStorage.getItem(mode)
+		if (value && value !== 'undefined') {
+			document.documentElement.dataset[mode] = value
+			console.log(`Loaded ${mode} ${value}`)
+		}
+	}
+	loadMode('theme')
+	loadMode('font')
+</script>

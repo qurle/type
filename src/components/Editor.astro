@@ -1,0 +1,49 @@
+---
+import MDEditor from './MDEditor'
+---
+
+<div class="editor" contenteditable>
+	<p is="block" class="empty"></p>
+</div>
+<style>
+	.editor {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+
+		height: 80vh;
+
+		outline: none;
+		cursor: text;
+
+		p {
+			width: 100%;
+		}
+	}
+	.test {
+		background: #80808080;
+		border-radius: 4px;
+	}
+	p:empty {
+		&::after {
+			content: 'Start typing...';
+			opacity: 0.33;
+		}
+	}
+</style>
+<script>
+	class Block extends HTMLParagraphElement {
+		constructor() {
+			super()
+		}
+
+		connectedCallback() {}
+	}
+	customElements.define('block', Block, { extends: 'p' })
+
+	document
+		.querySelector<HTMLParagraphElement>('p[is="block"]:first-child')
+		.addEventListener('click', (e) => {
+			;(e.target as HTMLParagraphElement).classList.remove('empty')
+		})
+</script>
