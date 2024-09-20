@@ -28,13 +28,12 @@ const Editor = () => {
 			return
 
 		editorRef.current.setMarkdown(savedDoc)
-		console.log('Loaded saved doc')
+		console.debug('Loaded saved doc')
 	}
 
 	function save() {
 		const doc = editorRef.current.getMarkdown()
 		localStorage.setItem('doc', doc)
-		console.log('Saved doc by timer')
 	}
 
 	function download(filename = 'type.md', text = editorRef.current?.getMarkdown()) {
@@ -67,6 +66,7 @@ const Editor = () => {
 
 		let saver = setInterval(() => {
 			save()
+			console.debug('Saved doc by timer')
 		}, saveInterval)
 
 		document.addEventListener("visibilitychange", () => {

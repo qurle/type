@@ -1,4 +1,4 @@
-import { codeBlockPlugin, frontmatterPlugin, headingsPlugin, imagePlugin, linkDialogPlugin, linkPlugin, listsPlugin, markdownShortcutPlugin, quotePlugin, tablePlugin, thematicBreakPlugin } from '@mdxeditor/editor';
+import { frontmatterPlugin, headingsPlugin, imagePlugin, linkDialogPlugin, linkPlugin, listsPlugin, markdownShortcutPlugin, quotePlugin, tablePlugin, thematicBreakPlugin } from '@mdxeditor/editor';
 
 export const plugins = [
 	listsPlugin(),
@@ -6,13 +6,19 @@ export const plugins = [
 	headingsPlugin({ allowedHeadingLevels: [1, 2, 3] }),
 	linkPlugin(),
 	linkDialogPlugin(),
+	// этот чертила работает только на одну сессию
 	imagePlugin({
-		imageAutocompleteSuggestions: ['https://via.placeholder.com/150', 'https://via.placeholder.com/150'],
-		imageUploadHandler: async () => Promise.resolve('https://picsum.photos/200/300')
+		disableImageSettingsButton: true,
+		imageUploadHandler: async (file) => {
+			return URL.createObjectURL(file)
+		}
 	}),
 	tablePlugin(),
 	thematicBreakPlugin(),
 	frontmatterPlugin(),
-	codeBlockPlugin({ defaultCodeBlockLanguage: '' }),
+	// этот чертила не работает
+	// tablePlugin(),
+	// этот чертила ломает всё к херам
+	// codeBlockPlugin(),
 	markdownShortcutPlugin()
 ]

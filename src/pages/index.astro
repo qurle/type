@@ -16,7 +16,7 @@ import Layout from '../layouts/Layout.astro'
 		const value = localStorage.getItem(mode)
 		if (value && value !== 'undefined') {
 			document.documentElement.dataset[mode] = value
-			console.log(`Loaded ${mode} ${value}`)
+			console.debug(`Loaded ${mode} ${value}`)
 		}
 	}
 	loadMode('theme')

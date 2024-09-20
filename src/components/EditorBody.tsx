@@ -24,7 +24,7 @@ const EditorBody = React.forwardRef((props, outerRef) => {
 
 		editor.addEventListener('drop', (e) => {
 			editor.classList.remove('dragover')
-			console.log("File(s) dropped")
+			console.debug(`File dropped`)
 
 			// Prevent default behavior (Prevent file from being opened)
 			e.preventDefault()
