@@ -26,9 +26,11 @@ a
 	text-decoration-color: var(--color-main-25)
 	text-decoration-thickness: 1px
 
-
 ul
 	ul > li
-		margin-left: var(--padding-m)
+		padding-left: var(--padding-m)
 ul li:not(:has(ul:first-child))::before
 		content: "· "
+
+.editor > ul
+	margin-left: -12px
