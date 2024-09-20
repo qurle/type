@@ -8,10 +8,23 @@ html
 	font-size: var(--font-size)
 
 h1
-	font-size: 1.5em
+	&:not(first-child)
+		padding-top: var(--padding-xl)
+	font-size: 2em
 
 h2
-	font-size: 1.3em
+	&:not(first-child)
+		padding-top: var(--padding-m)
+	font-size: 1.4em
+
+h4
+	font-weight: 500
+	opacity: .5
+
+h5
+	font-size: 0.8em
+	font-weight: 500
+	opacity: .5
 
 // Elements
 body
@@ -28,7 +41,10 @@ a
 
 ul
 	ul > li
-		padding-left: var(--padding-m)
+		padding-left: var(--padding-xl)
 ul li:not(:has(ul:first-child))::before
 		content: "·  "
 
+ol
+	ol > li
+		padding-left: var(--padding-xl)
