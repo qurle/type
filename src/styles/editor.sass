@@ -25,7 +25,7 @@ div[class^="_rootContentEditableWrapper"]
 		position: relative
 		&::after
 			opacity: 0.33
-	
+
 	> p:first-child:empty
 		&::before
 			content: 'Start typing...'
@@ -45,13 +45,12 @@ header
 
 	margin-bottom: var(--padding-l)
 
-
 	.export
 		font-family: var(--font-sans)
 		font-weight: 500
 
-	&:has(~div .editor > p:first-child:empty) 
-		.export	
+	&:has(~div .editor > p:first-child:empty)
+		.export
 			opacity: 0
 
 	button
@@ -64,10 +63,9 @@ header
 	.customization
 		button:not(:first-child)
 			margin-left: var(--padding-l)
-		
+
 .editor > ul
 	margin-left: -16px
 
-.editor > *:not(:first-child) {
-    margin-top: var(--padding-m);
-}
+.editor > *:not(:first-child)
+	margin-top: var(--padding-m)
