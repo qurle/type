@@ -1,18 +1,24 @@
 # type.
 
+![Vercel](https://vercelbadge.vercel.app/api/qurle/type?style=flat) ![Static Badge](https://img.shields.io/badge/badass-code-white?style=flat)
+
+
 Zen editor for those who love simplicity.
-![](https://github.com/qurle/type/blob/main/.github/hero.png)
+
+![hero image](https://github.com/qurle/type/blob/main/.github/hero.png)
 
 ## why you need this
 **type.** is like a blank notebook. 
-![](https://github.com/qurle/type/blob/main/.github/notebook.png)
+
+![notebook in comparison with type](https://github.com/qurle/type/blob/main/.github/notebook.png)
 
 
 Distractions and interfaces may restrain your thought. Unleash your creativity and just type your thoughts / blog posts / notes / docs.
 Fast and simple. 
 
 You can also switch between themes and fonts. Every wish to have notebook with colored pages?
-![](https://github.com/qurle/type/blob/main/.github/style.png)
+
+![themes and fonts of type](https://github.com/qurle/type/blob/main/.github/style.png)
 
 
 ## mark it down
@@ -35,13 +41,13 @@ Bugs and ideas can be reported via [issues](https://github.com/qurle/type/issues
 Any dialogs are also welcome at [nick.denq@gmail.com](mailto:nick.denq@gmail.com?subject=type.).
 
 ## authors
-<p><a href="" target="_blank"><img src="https://avatars.githubusercontent.com/u/32414396?v=4" width="48" style="border-radius: 999px"/></a>
-<a href="" target="_blank"><img src="https://avatars.githubusercontent.com/u/32977836?v=4" width="48" style="border-radius: 999px"/></a>
-<a href="https://github.com/qurle/type/fork" target="_blank"><img src="https://github.com/qurle/type/blob/main/.github/add.svg" width="48" style="border-radius: 999px"/></a></p>
+<p><a href="" target="_blank"><img alt="userpic of qurle" src="https://avatars.githubusercontent.com/u/32414396?v=4" width="48" style="border-radius: 999px"/></a>
+<a href="" target="_blank"><img alt="userpic of kulizh" src="https://avatars.githubusercontent.com/u/32977836?v=4" width="48" style="border-radius: 999px"/></a>
+<a href="https://github.com/qurle/type/fork" target="_blank"><img alt="contribution plus sign" src="https://github.com/qurle/type/blob/main/.github/add.svg" width="48" style="border-radius: 999px"/></a></p>
 
-[@qurle](https://github.com/qurle)
+[@qurle](https://github.com/qurle)<br/>
 Creator. Designer. Frontender.
 
-[@kulizh](https://github.com/kulizh)
+[@kulizh](https://github.com/kulizh)<br/>
 Supporter. Backender. Frontender.
 
