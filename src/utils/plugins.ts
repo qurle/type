@@ -6,6 +6,14 @@ export const plugins = [
 	headingsPlugin({ allowedHeadingLevels: [1, 2, 3] }),
 	linkPlugin(),
 	linkDialogPlugin(),
+	tablePlugin(),
+	thematicBreakPlugin(),
+	frontmatterPlugin(),
+	markdownShortcutPlugin(),
+	// этот чертила не работает
+	// tablePlugin(),
+	// этот чертила ломает всё к херам
+	// codeBlockPlugin(),
 	// этот чертила работает только на одну сессию
 	imagePlugin({
 		disableImageSettingsButton: true,
@@ -13,12 +21,4 @@ export const plugins = [
 			return URL.createObjectURL(file)
 		}
 	}),
-	tablePlugin(),
-	thematicBreakPlugin(),
-	frontmatterPlugin(),
-	// этот чертила не работает
-	// tablePlugin(),
-	// этот чертила ломает всё к херам
-	// codeBlockPlugin(),
-	markdownShortcutPlugin()
 ]
