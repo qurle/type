@@ -23,17 +23,17 @@ const Editor = () => {
 	const editorRef = useRef<MDXEditorMethods>(null);
 
 	function load() {
-		const savedDoc = localStorage.getItem('doc')
-		if (!savedDoc)
+		const savedNote = localStorage.getItem('note')
+		if (!savedNote)
 			return
 
-		editorRef.current.setMarkdown(savedDoc)
-		console.debug('Loaded saved doc')
+		editorRef.current.setMarkdown(savedNote)
+		console.debug('Loaded saved note')
 	}
 
 	function save() {
-		const doc = editorRef.current.getMarkdown()
-		localStorage.setItem('doc', doc)
+		const note = editorRef.current.getMarkdown()
+		localStorage.setItem('note', note)
 	}
 
 	function download(filename = 'type.md', text = editorRef.current?.getMarkdown()) {

@@ -22,7 +22,7 @@ You can also switch between themes and fonts. Every wish to have notebook with c
 
 
 ## mark it down
-Every doc is markdown file. 
+Every note is markdown file. 
 
 ![typing in markdown with type](https://github.com/qurle/type/blob/main/.github/demo.gif)
 
@@ -33,7 +33,7 @@ For example, there are things like `# Headings`, `**bold texts**` and <code>\`co
 ## technologies
 Shout out to [MDXEditor](https://github.com/mdx-editor/editor) — core engine of **type.** It's not always perfect, but it can do a lot of things. There are also [React](https://github.com/facebook/react) and [Astro](https://github.com/withastro/astro) frameworks under the hood.
 
-Docs and styling is saved locally, so it works quite fast. Offline mode is coming soon.
+Notes and styling are saved locally, so it works quite fast. Offline mode is coming soon.
 
 ## special thanks
 Of course **type.** is inspired by apps like [iA Writer](https://ia.net/writer), [Teletype](https://teletype.in/), [Telegraph](https://telegra.ph/) and [Notion](https://notion.so/). It was created as DIY alternative, but it's also the project I'd like to evolve.
