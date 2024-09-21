@@ -1,47 +1,47 @@
-# Astro Starter Kit: Minimal
+# type.
 
-```sh
-npm create astro@latest -- --template minimal
-```
+Zen editor for those who love simplicity.
+![](https://github.com/qurle/type/blob/main/.github/hero.png)
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/minimal)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/minimal)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/minimal/devcontainer.json)
+## why you need this
+**type.** is like a blank notebook. 
+![](https://github.com/qurle/type/blob/main/.github/notebook.png)
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
 
-## 🚀 Project Structure
+Distractions and interfaces may restrain your thought. Unleash your creativity and just type your thoughts / blog posts / notes / docs.
+Fast and simple. 
 
-Inside of your Astro project, you'll see the following folders and files:
+You can also switch between themes and fonts. Every wish to have notebook with colored pages?
+![](https://github.com/qurle/type/blob/main/.github/style.png)
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## mark it down
+Every doc is markdown file. 
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+You can download it and upload via drag'n'drop (mobiles, we'll catch you later!). Markdown is easy markup language which makes **type.** more than plain text editor. 
 
-Any static assets, like images, can be placed in the `public/` directory.
+For example, there are things like `# Headings`, `**bold texts**` and <code>\`code\`</code>. You can check more rules [here](https://www.markdownguide.org/basic-syntax/).
 
-## 🧞 Commands
+## technologies
+Shout out to [MDXEditor](https://github.com/mdx-editor/editor) — core engine of **type.** It's not always perfect, but it can do a lot of things. There are also [React](https://github.com/facebook/react) and [Astro](https://github.com/withastro/astro) frameworks under the hood.
 
-All commands are run from the root of the project, from a terminal:
+Docs and styling is saved locally, so it works quite fast. Offline mode is coming soon.
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+## special thanks
+Of course **type.** is inspired by apps like [iA Writer](https://ia.net/writer), [Teletype](https://teletype.in/), [Telegraph](https://telegra.ph/) and [Notion](https://notion.so/). It was created as DIY alternative, but it's also the project I'd like to evolve.
 
-## 👀 Want to learn more?
+## contact
+Bugs and ideas can be reported via [issues](https://github.com/qurle/type/issues).
+Any dialogs are also welcome at [nick.denq@gmail.com](mailto:nick.denq@gmail.com?subject=type.).
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+## authors
+<p><a href="" target="_blank"><img src="https://avatars.githubusercontent.com/u/32414396?v=4" width="48" style="border-radius: 999px"/></a>
+<a href="" target="_blank"><img src="https://avatars.githubusercontent.com/u/32977836?v=4" width="48" style="border-radius: 999px"/></a>
+<a href="https://github.com/qurle/type/fork" target="_blank"><img src="https://github.com/qurle/type/blob/main/.github/add.svg" width="48" style="border-radius: 999px"/></a></p>
+
+[@qurle](https://github.com/qurle)
+Creator. Designer. Frontender.
+
+[@kulizh](https://github.com/kulizh)
+Supporter. Backender. Frontender.
+
