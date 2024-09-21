@@ -24,6 +24,8 @@ You can also switch between themes and fonts. Every wish to have notebook with c
 ## mark it down
 Every doc is markdown file. 
 
+![typing in markdown with type](https://github.com/qurle/type/blob/main/.github/demo.gif)
+
 You can download it and upload via drag'n'drop (mobiles, we'll catch you later!). Markdown is easy markup language which makes **type.** more than plain text editor. 
 
 For example, there are things like `# Headings`, `**bold texts**` and <code>\`code\`</code>. You can check more rules [here](https://www.markdownguide.org/basic-syntax/).
