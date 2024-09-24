@@ -81,14 +81,13 @@ const Editor = () => {
 			}
 		})
 
-		let count = 0
 
 		document.addEventListener('keydown', (e) => {
 			if ((e.ctrlKey || e.metaKey) && e.key === 's') {
 				e.preventDefault()
 				if (e.repeat) return
-				count++
-				console.debug(`Key pressed: ${e.key}. It happend ${count}th time`)
+
+				console.debug(`Key pressed: ${e.key}`)
 				if (e.shiftKey) {
 					download()
 					console.debug(`Exported note by shortcut`)
@@ -97,7 +96,6 @@ const Editor = () => {
 					save()
 					console.log(`Saved note by shortcut`)
 				}
-
 			}
 		})
 	})

@@ -1,71 +1,77 @@
 div[class^="_rootContentEditableWrapper"]
-	position: relative
+    position: relative
 
 .editor
-	height: 60vh
+    height: 60vh
 
-	border-radius: 0.25rem
-	outline: transparent
-	background-color: transparent
-	transition: opacity var(--transition-m), background-color var(--transition-m)
-	&::after
-		transition: opacity var(--transition-m)
-		content: 'Drop .md files to edit'
-		position: absolute
+    border-radius: 0.25rem
+    outline: transparent
+    background-color: transparent
+    transition: opacity var(--transition-m), background-color var(--transition-m)
+    &::after
+        transition: opacity var(--transition-m)
+        content: 'Drop .md files to edit'
+        position: absolute
 
-		top: 50%
-		left: 50%
-		transform: translate(-50%, -50%)
+        top: 50%
+        left: 50%
+        transform: translate(-50%, -50%)
 
-		font-size: var(--font-size-xs)
-		opacity: 0
+        font-size: var(--font-size-xs)
+        opacity: 0
 
-	&.dragover
-		background-color: var(--color-main-05)
-		position: relative
-		&::after
-			opacity: 0.33
+    &.dragover
+        background-color: var(--color-main-05)
+        position: relative
+        &::after
+            opacity: 0.33
 
-	> p:first-child:empty
-		&::before
-			content: 'Start typing...'
-			position: absolute
+    // I don't fucking know why MDXE create second editor that breaks the flow
+    &:nth-child(2)
+        position: absolute
+        top: 0
+        width: 100%
 
-			top: 0
-			left: 0
+    > p:first-child:empty
+        &::before
+            content: 'Start typing...'
+            position: absolute
 
-			opacity: 0.33
+            top: 0
+            left: 0
 
-			pointer-events: none
+            opacity: 0.33
+
+            pointer-events: none
 
 header
-	display: flex
-	justify-content: space-between
-	font-size: var(--font-size-xs)
+    display: flex
+    justify-content: space-between
+    font-size: var(--font-size-xs)
 
-	margin-bottom: var(--padding-l)
+    margin-bottom: var(--padding-l)
 
-	.export
-		font-family: var(--font-sans)
-		font-weight: 500
+    .export
+        font-family: var(--font-sans)
+        font-weight: 500
 
-	&:has(~div .editor > p:first-child:empty)
-		.export
-			opacity: 0
+    &:has(~div .editor > p:first-child:empty)
+        .export
+            opacity: 0
 
-	button
-		opacity: .2
+    button
+        opacity: .2
 
-		transition: opacity var(--transition-m)
-		&:hover
-			opacity: .3
+        transition: opacity var(--transition-m)
+        &:hover
+            opacity: .3
 
-	.customization
-		button:not(:first-child)
-			margin-left: var(--padding-l)
+    .customization
+        button:not(:first-child)
+            margin-left: var(--padding-l)
 
 .editor > ul
-	margin-left: -16px
+    margin-left: -16px
 
 .editor > *:not(:first-child)
-	margin-top: var(--padding-m)
+    margin-top: var(--padding-m)
