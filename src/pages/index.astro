@@ -6,19 +6,3 @@ import Layout from '../layouts/Layout.astro'
 <Layout>
 	<Editor client:load />
 </Layout>
-<script>
-	console.log(
-		'%cHello 🤙🏻',
-		'font-size: 1rem; background-color: #eee; padding: 0.5rem; border-radius: 0.25rem',
-	)
-
-	function loadMode(mode) {
-		const value = localStorage.getItem(mode)
-		if (value && value !== 'undefined') {
-			document.documentElement.dataset[mode] = value
-			console.debug(`Loaded ${mode} ${value}`)
-		}
-	}
-	loadMode('theme')
-	loadMode('font')
-</script>

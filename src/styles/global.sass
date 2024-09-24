@@ -3,19 +3,19 @@
 @import @styles/editor.sass
 
 // Typography
-html
+body
 	font-family: var(--font-main)
 	font-size: var(--font-size)
 
 h1
 	&:not(first-child)
-		padding-top: var(--padding-xl)
-	font-size: 2em
+		padding-top: var(--space-xl)
+		font-size: 2em
 
 h2
 	&:not(first-child)
-		padding-top: var(--padding-m)
-	font-size: 1.4em
+		padding-top: var(--space-m)
+		font-size: 1.4em
 
 h4
 	font-weight: 500
@@ -33,18 +33,7 @@ body
 button
 	cursor: pointer
 
-a
-	text-decoration: underline
-	text-underline-offset: 4px
-	text-decoration-color: var(--color-main-25)
-	text-decoration-thickness: 1px
-
-ul
-	ul > li
-		padding-left: var(--padding-xl)
-ul li:not(:has(ul:first-child))::before
-		content: "·  "
-
-ol
-	ol > li
-		padding-left: var(--padding-xl)
+hr
+	height: 0
+	border: 0
+	border-top: 1px solid var(--color-main-25)

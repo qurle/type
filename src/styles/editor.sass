@@ -1,71 +1,91 @@
 div[class^="_rootContentEditableWrapper"]
-	position: relative
+    position: relative
 
 .editor
-	height: 60vh
+    height: 60vh
+    padding: var(--space-m)
 
-	border-radius: 0.25rem
-	outline: transparent
-	background-color: transparent
-	transition: opacity var(--transition-m), background-color var(--transition-m)
-	&::after
-		transition: opacity var(--transition-m)
-		content: 'Drop .md files to edit'
-		position: absolute
+    border-radius: 0.25rem
+    outline: transparent
+    background-color: transparent
+    transition: opacity var(--transition-m), background-color var(--transition-m)
+    &::after
+        transition: opacity var(--transition-m)
+        content: 'Drop .md files to edit'
+        position: absolute
 
-		top: 50%
-		left: 50%
-		transform: translate(-50%, -50%)
+        top: 50%
+        left: 50%
+        transform: translate(-50%, -50%)
 
-		font-size: var(--font-size-xs)
-		opacity: 0
+        font-size: var(--font-size-xs)
+        opacity: 0
 
-	&.dragover
-		background-color: var(--color-main-05)
-		position: relative
-		&::after
-			opacity: 0.33
+    &.dragover
+        background-color: var(--color-main-05)
+        position: relative
+        &::after
+            opacity: 0.33
 
-	> p:first-child:empty
-		&::before
-			content: 'Start typing...'
-			position: absolute
+    > p:first-child:empty
+        &::before
+            content: 'Start typing...'
+            position: absolute
 
-			top: 0
-			left: 0
+            top: var(--space-m)
+            left: var(--space-m)
 
-			opacity: 0.33
+            opacity: 0.33
 
-			pointer-events: none
+            pointer-events: none
 
-header
-	display: flex
-	justify-content: space-between
-	font-size: var(--font-size-xs)
+    a
+        text-decoration: underline
+        text-underline-offset: 4px
+        text-decoration-color: var(--color-main-25)
+        text-decoration-thickness: 1px
 
-	margin-bottom: var(--padding-l)
+    ul
+        ul > li
+            // space-left: var(--space-xl)
+    ul li:not(:has(ul:first-child))::before
+            content: "·  "
 
-	.export
-		font-family: var(--font-sans)
-		font-weight: 500
+    ol
+        ol > li
+            space-left: var(--space-xl)
 
-	&:has(~div .editor > p:first-child:empty)
-		.export
-			opacity: 0
 
-	button
-		opacity: .2
+header.editor-header
+    display: flex
+    justify-content: space-between
 
-		transition: opacity var(--transition-m)
-		&:hover
-			opacity: .3
+    padding: var(--space-m)
+    margin-bottom: var(--space-m)
 
-	.customization
-		button:not(:first-child)
-			margin-left: var(--padding-l)
+    font-size: var(--font-size-xs)
+
+    .export
+        font-family: var(--font-sans)
+        font-weight: 500
+
+    &:has(~div .editor > p:first-child:empty)
+        .export
+            opacity: 0
+
+    button
+        opacity: .2
+
+        transition: opacity var(--transition-m)
+        &:hover
+            opacity: .3
+
+    .customization
+        button:not(:first-child)
+            margin-left: var(--space-l)
 
 .editor > ul
-	margin-left: -16px
+    margin-left: -16px
 
 .editor > *:not(:first-child)
-	margin-top: var(--padding-m)
+    margin-top: var(--space-m)

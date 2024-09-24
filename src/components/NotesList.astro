@@ -1,0 +1,86 @@
+---
+import EditorHeader from './EditorHeader'
+---
+
+<!-- TODO: Pass a prop to make upload button -->
+<EditorHeader client:load />
+<button class="new">
+	<span>new</span><span>+</span>
+</button>
+<hr />
+<ul class="notes">
+	<li>
+		<span class="name">File 1 Final</span><span class="date">Sep 25</span>
+	</li>
+	<li>
+		<span class="name"
+			>My thoughts on the totally strange appear of green truck in The
+			Cars</span
+		><span class="date">Aug 13</span>
+	</li>
+	<li>
+		<span class="name">Nobody came to my birthday</span><span class="date"
+			>Jul 29</span
+		>
+	</li>
+	<li>
+		<span class="name">I need a place to put my thoughts</span><span
+			class="date">June 20</span
+		>
+	</li>
+	<li>
+		<span class="name">Never going to jail again</span><span class="date"
+			>June 18</span
+		>
+	</li>
+</ul>
+
+<style>
+	button.new {
+		display: flex;
+		justify-content: space-between;
+
+		width: 100%;
+		margin: var(--space-xl) 0;
+	}
+
+	button.new,
+	li {
+		padding: var(--space-m);
+		border-radius: var(--radius-m);
+		cursor: pointer;
+		&:hover {
+			opacity: 0.5;
+		}
+	}
+
+	hr {
+		transition: border-color var(--transition-s);
+		margin: var(--space-xl) var(--space-m);
+	}
+
+	ul.notes {
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-s);
+	}
+
+	li {
+		display: flex;
+		gap: var(--space-xl);
+		font-size: var(--font-size-s);
+		text-wrap: balance;
+		span {
+			&.name {
+				flex-grow: 1;
+			}
+			&.date {
+				transition: color var(--transition-s);
+				color: var(--color-main-50);
+				text-wrap: nowrap;
+			}
+		}
+	}
+</style>
+<script></script>

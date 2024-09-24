@@ -3,15 +3,13 @@ import EditorHeader from '@components/EditorHeader';
 import type { MDXEditorMethods } from '@mdxeditor/editor';
 import { useEffect, useRef } from 'react';
 
-const modes = {
-	font: ['serif', 'mono', 'sans'],
-	theme: ['light', 'dark', 'sepia', 'blue']
-}
+
 
 const saveInterval = 5_000
 
 const Editor = () => {
 	const editorRef = useRef<MDXEditorMethods>(null);
+	// const rootHandler = await navigator.storage.getDirectory()
 
 	function load() {
 		const savedNote = localStorage.getItem('note')
@@ -43,15 +41,6 @@ const Editor = () => {
 		document.body.removeChild(element);
 	}
 
-	function cycleModes(mode) {
-		const modeArray = modes[mode]
-		const currentValueRaw = document.documentElement.dataset[mode]
-		const currentValue = currentValueRaw && currentValueRaw !== 'undefined' ? currentValueRaw : modeArray[0]
-		const nextValue = modeArray[(modeArray.indexOf(currentValue) + 1) % modeArray.length]
-		document.documentElement.dataset[mode] = nextValue
-		localStorage.setItem(mode, nextValue)
-	}
-
 	useEffect(() => {
 		load()
 		editorRef.current.focus()
@@ -81,14 +70,11 @@ const Editor = () => {
 			}
 		})
 
-		let count = 0
-
 		document.addEventListener('keydown', (e) => {
 			if ((e.ctrlKey || e.metaKey) && e.key === 's') {
 				e.preventDefault()
 				if (e.repeat) return
-				count++
-				console.debug(`Key pressed: ${e.key}. It happend ${count}th time`)
+				console.debug(`Key pressed: ${e.key}`)
 				if (e.shiftKey) {
 					download()
 					console.debug(`Exported note by shortcut`)
@@ -97,14 +83,13 @@ const Editor = () => {
 					save()
 					console.log(`Saved note by shortcut`)
 				}
-
 			}
 		})
 	})
 
 	return (
 		<>
-			<EditorHeader download={() => { download() }} changeTheme={() => cycleModes('theme')} changeFont={() => cycleModes('font')} />
+			<EditorHeader button={{ name: 'save as file', action: download }} />
 			<EditorBody ref={editorRef} />
 		</>
 	);
