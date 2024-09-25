@@ -27,6 +27,12 @@ div[class^="_rootContentEditableWrapper"]
         &::after
             opacity: 0.33
 
+    // I don't fucking know why MDXE create second editor that breaks the flow
+    &:nth-child(2)
+        position: absolute
+        top: 0
+        width: 100%
+
     > p:first-child:empty
         &::before
             content: 'Start typing...'
