@@ -10,7 +10,7 @@ const fontSVG = <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmln
 
 // TODO: prop for distinguishing upload / save file (name and function)
 
-function EditorHeader({ button = { name: 'save as file', action: null } }) {
+export default function EditorHeader({ button = { name: 'save as file', action: null } }) {
 	return (
 		<header className='editor-header'><button className="export" onClick={button.action}>
 			{button.name}
@@ -27,4 +27,3 @@ function EditorHeader({ button = { name: 'save as file', action: null } }) {
 		</header>
 	)
 }
-export default EditorHeader

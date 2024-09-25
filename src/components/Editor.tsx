@@ -1,6 +1,9 @@
 import EditorBody from '@components/EditorBody';
 import EditorHeader from '@components/EditorHeader';
 import type { MDXEditorMethods } from '@mdxeditor/editor';
+import { exportFile } from '@utils/exportFile';
+import { load } from '@utils/load';
+import { save } from '@utils/save';
 import { useEffect, useRef } from 'react';
 
 
@@ -11,42 +14,12 @@ const Editor = () => {
 	const editorRef = useRef<MDXEditorMethods>(null);
 	// const rootHandler = await navigator.storage.getDirectory()
 
-	function load() {
-		const savedNote = localStorage.getItem('note')
-		if (!savedNote)
-			return
-
-		editorRef.current.setMarkdown(savedNote)
-		console.debug('Loaded saved note')
-	}
-
-	function save() {
-		const note = editorRef.current.getMarkdown()
-		localStorage.setItem('note', note)
-	}
-
-	function download(filename = 'type.md', text = editorRef.current?.getMarkdown()) {
-		if (!text) return
-
-		console.debug(`Downloading. Filename is ${filename}. Text has ${text.length} symbols`)
-		var element = document.createElement('a');
-		element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-		element.setAttribute('download', filename);
-
-		element.style.display = 'none';
-		document.body.appendChild(element);
-
-		element.click();
-
-		document.body.removeChild(element);
-	}
-
 	useEffect(() => {
-		load()
+		load(editorRef)
 		editorRef.current.focus()
 
 		let saver = setInterval(() => {
-			save()
+			save(editorRef)
 			console.debug('Saved doc by timer')
 		}, saveInterval)
 
@@ -55,17 +28,7 @@ const Editor = () => {
 				clearInterval(saver)
 			} else {
 				saver = setInterval(() => {
-					save()
-				}, saveInterval)
-			}
-		})
-
-		document.addEventListener("visibilitychange", () => {
-			if (document.hidden) {
-				clearInterval(saver)
-			} else {
-				saver = setInterval(() => {
-					save()
+					save(editorRef)
 				}, saveInterval)
 			}
 		})
@@ -76,11 +39,11 @@ const Editor = () => {
 				if (e.repeat) return
 				console.debug(`Key pressed: ${e.key}`)
 				if (e.shiftKey) {
-					download()
+					exportFile(editorRef)
 					console.debug(`Exported note by shortcut`)
 				}
 				else {
-					save()
+					save(editorRef)
 					console.log(`Saved note by shortcut`)
 				}
 			}
@@ -89,7 +52,7 @@ const Editor = () => {
 
 	return (
 		<>
-			<EditorHeader button={{ name: 'save as file', action: download }} />
+			<EditorHeader button={{ name: 'save as file', action: exportFile }} />
 			<EditorBody ref={editorRef} />
 		</>
 	);
