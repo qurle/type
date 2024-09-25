@@ -1,18 +1,16 @@
 ---
-import Layout from '@layouts/Layout.astro'
+import '@styles/milkdown/style.css'
 ---
 
-<Layout />
 <script>
 	import { Crepe } from '@milkdown/crepe'
-	import '@milkdown/crepe/theme/common/style.css'
 
 	// We have some themes for you to choose
 	// available themes: frame, classic, nord, frame-dark, classic-dark, nord-dark
 	import '@milkdown/crepe/theme/frame.css'
 
 	const crepe = new Crepe({
-		root: document.getElementById('app'),
+		root: document.querySelector('main'),
 	})
 
 	crepe.create().then(() => {

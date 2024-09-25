@@ -1,5 +1,4 @@
-import EditorBody from '@components/EditorBody';
-import EditorHeader from '@components/EditorHeader';
+import EditorHeader from '@components/old/_EditorHeader';
 import type { MDXEditorMethods } from '@mdxeditor/editor';
 import { exportFile } from '@utils/exportFile';
 import { load } from '@utils/load';
@@ -53,7 +52,6 @@ const Editor = () => {
 	return (
 		<>
 			<EditorHeader button={{ name: 'save as file', action: exportFile }} />
-			<EditorBody ref={editorRef} />
 		</>
 	);
 };

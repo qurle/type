@@ -1,97 +1,26 @@
-div[class^="_rootContentEditableWrapper"]
-    position: relative
+.milkdown {
+  --crepe-color-background: #FFFFFF;
+  --crepe-color-on-background: #000000;
+  --crepe-color-surface: #F7F7F7;
+  --crepe-color-surface-low: #EDEDED;
+  --crepe-color-on-surface: #1C1C1C;
+  --crepe-color-on-surface-variant: #4D4D4D;
+  --crepe-color-outline: #A8A8A8;
+  --crepe-color-primary: #333333;
+  --crepe-color-secondary: #CFCFCF;
+  --crepe-color-on-secondary: #000000;
+  --crepe-color-inverse: #F0F0F0;
+  --crepe-color-on-inverse: #1A1A1A;
+  --crepe-color-inline-code: #BA1A1A;
+  --crepe-color-error: #BA1A1A;
+  --crepe-color-hover: #E0E0E0;
+  --crepe-color-selected: #D5D5D5;
+  --crepe-color-inline-area: #CACACA;
 
-.editor
-    height: 60vh
-    padding: var(--space-m)
+  --crepe-font-title: "Noto Serif", Cambria, "Times New Roman", Times, serif;
+  --crepe-font-default: "Noto Sans", Arial, Helvetica, sans-serif;
+  --crepe-font-code: "Space Mono", Fira Code, Menlo, Monaco, "Courier New", Courier, monospace;
 
-    border-radius: 0.25rem
-    outline: transparent
-    background-color: transparent
-    transition: opacity var(--transition-m), background-color var(--transition-m)
-    &::after
-        transition: opacity var(--transition-m)
-        content: 'Drop .md files to edit'
-        position: absolute
-
-        top: 50%
-        left: 50%
-        transform: translate(-50%, -50%)
-
-        font-size: var(--font-size-xs)
-        opacity: 0
-
-    &.dragover
-        background-color: var(--color-main-05)
-        position: relative
-        &::after
-            opacity: 0.33
-
-    // I don't fucking know why MDXE create second editor that breaks the flow
-    &:nth-child(2)
-        position: absolute
-        top: 0
-        width: 100%
-
-    > p:first-child:empty
-        &::before
-            content: 'Start typing...'
-            position: absolute
-
-            top: var(--space-m)
-            left: var(--space-m)
-
-            opacity: 0.33
-
-            pointer-events: none
-
-    a
-        text-decoration: underline
-        text-underline-offset: 4px
-        text-decoration-color: var(--color-main-25)
-        text-decoration-thickness: 1px
-
-    ul
-        ul > li
-            // space-left: var(--space-xl)
-    ul li:not(:has(ul:first-child))::before
-            content: "·  "
-
-    ol
-        ol > li
-            space-left: var(--space-xl)
-
-
-header.editor-header
-    display: flex
-    justify-content: space-between
-
-    padding: var(--space-m)
-    margin-bottom: var(--space-m)
-
-    font-size: var(--font-size-xs)
-
-    .export
-        font-family: var(--font-sans)
-        font-weight: 500
-
-    &:has(~div .editor > p:first-child:empty)
-        .export
-            opacity: 0
-
-    button
-        opacity: .2
-
-        transition: opacity var(--transition-m)
-        &:hover
-            opacity: .3
-
-    .customization
-        button:not(:first-child)
-            margin-left: var(--space-l)
-
-.editor > ul
-    margin-left: -16px
-
-.editor > *:not(:first-child)
-    margin-top: var(--space-m)
+  --crepe-shadow-1: 0px 1px 3px 1px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.30);
+  --crepe-shadow-2: 0px 2px 6px 2px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.30);
+}

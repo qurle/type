@@ -1,0 +1,88 @@
+.ProseMirror-focused {
+  outline: none;
+}
+
+.ProseMirror {
+  padding: 60px 120px;
+
+  *::selection {
+    background: var(--crepe-color-selected);
+  }
+
+  li.ProseMirror-selectednode {
+    background: var(--crepe-color-selected);
+    outline: none;
+
+    ::selection {
+      background: transparent;
+    }
+
+    &::selection {
+      background: transparent;
+    }
+  }
+
+  li.ProseMirror-selectednode:after {
+    all: unset;
+  }
+
+  .ProseMirror-selectednode {
+    background: var(--crepe-color-selected);
+    outline: none;
+    background: color-mix(in srgb, var(--crepe-color-selected), transparent 60%);
+
+    ::selection {
+      background: transparent;
+    }
+
+    &::selection {
+      background: transparent;
+    }
+  }
+
+  &[data-dragging="true"] {
+
+    .ProseMirror-selectednode,
+    &::selection,
+    *::selection {
+      background: transparent;
+    }
+
+    input::selection {
+      background: var(--crepe-color-selected);
+    }
+  }
+
+  img {
+    vertical-align: bottom;
+    max-width: 100%;
+
+    &.ProseMirror-selectednode {
+      background: none;
+      outline: 2px solid var(--crepe-color-primary);
+    }
+  }
+}
+
+&[data-dragging="true"] {
+
+  .ProseMirror-selectednode,
+  &::selection,
+  *::selection {
+    background: transparent;
+  }
+
+  input::selection {
+    background: var(--crepe-color-selected);
+  }
+}
+
+img {
+  vertical-align: bottom;
+  max-width: 100%;
+
+  &.ProseMirror-selectednode {
+    background: none;
+    outline: 2px solid var(--crepe-color-primary);
+  }
+}
