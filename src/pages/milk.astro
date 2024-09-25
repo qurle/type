@@ -1,0 +1,27 @@
+---
+import Layout from '@layouts/Layout.astro'
+---
+
+<Layout />
+<script>
+	import { Crepe } from '@milkdown/crepe'
+	import '@milkdown/crepe/theme/common/style.css'
+
+	// We have some themes for you to choose
+	// available themes: frame, classic, nord, frame-dark, classic-dark, nord-dark
+	import '@milkdown/crepe/theme/frame.css'
+
+	const crepe = new Crepe({
+		root: document.getElementById('app'),
+	})
+
+	crepe.create().then(() => {
+		console.log('Editor created')
+	})
+</script>
+<style is:global>
+	.milkdown {
+		--crepe-color-background: transparent !important;
+		max-width: 80ch !important;
+	}
+</style>

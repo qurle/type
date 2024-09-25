@@ -75,4 +75,14 @@ const base = Astro.url.pathname.endsWith('/')
     margin: 0 auto;
   }
 </style>
-<script></script>
+<script>
+  import { loadMode } from '@utils/loadMode'
+
+  console.log(
+    '%cHello 🤙🏻',
+    'font-size: 1rem; background-color: #eee; padding: 0.5rem; border-radius: 0.25rem',
+  )
+
+  loadMode('theme')
+  loadMode('font')
+</script>

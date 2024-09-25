@@ -3,6 +3,7 @@ div[class^="_rootContentEditableWrapper"]
 
 .editor
     height: 60vh
+    padding: var(--space-m)
 
     border-radius: 0.25rem
     outline: transparent
@@ -37,19 +38,38 @@ div[class^="_rootContentEditableWrapper"]
             content: 'Start typing...'
             position: absolute
 
-            top: 0
-            left: 0
+            top: var(--space-m)
+            left: var(--space-m)
 
             opacity: 0.33
 
             pointer-events: none
 
-header
+    a
+        text-decoration: underline
+        text-underline-offset: 4px
+        text-decoration-color: var(--color-main-25)
+        text-decoration-thickness: 1px
+
+    ul
+        ul > li
+            // space-left: var(--space-xl)
+    ul li:not(:has(ul:first-child))::before
+            content: "·  "
+
+    ol
+        ol > li
+            space-left: var(--space-xl)
+
+
+header.editor-header
     display: flex
     justify-content: space-between
-    font-size: var(--font-size-xs)
 
-    margin-bottom: var(--padding-l)
+    padding: var(--space-m)
+    margin-bottom: var(--space-m)
+
+    font-size: var(--font-size-xs)
 
     .export
         font-family: var(--font-sans)
@@ -68,10 +88,10 @@ header
 
     .customization
         button:not(:first-child)
-            margin-left: var(--padding-l)
+            margin-left: var(--space-l)
 
 .editor > ul
     margin-left: -16px
 
 .editor > *:not(:first-child)
-    margin-top: var(--padding-m)
+    margin-top: var(--space-m)
