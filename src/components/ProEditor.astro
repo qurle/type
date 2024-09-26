@@ -3,11 +3,14 @@ import '@styles/milkdown/style.sass'
 import '@styles/crepe.sass'
 ---
 
+<></>
 <script>
 	import { Crepe } from '@milkdown/crepe'
 	import { insert } from '@milkdown/kit/utils'
 	import { exportFile } from '@utils/exportFile'
 	import { save } from '@utils/save'
+
+	console.log('hi')
 
 	const saveInterval = 5_000
 
@@ -34,9 +37,8 @@ import '@styles/crepe.sass'
 		console.debug('Saved doc by timer')
 	}, saveInterval)
 
-	const editorElem = document.querySelector<HTMLParagraphElement>(
-		'.milkdown .editor p',
-	)
+	const editorElem =
+		document.querySelector<HTMLParagraphElement>('.milkdown .editor')
 
 	editorElem.addEventListener('visibilitychange', () => {
 		if (document.hidden) {
@@ -64,8 +66,3 @@ import '@styles/crepe.sass'
 		}
 	})
 </script>
-<style is:global>
-	.milkdown {
-		--crepe-color-background: transparent !important;
-	}
-</style>
