@@ -5,16 +5,67 @@ import '@styles/editor.sass'
 
 <script>
 	import { Crepe } from '@milkdown/crepe'
+	import { insert } from '@milkdown/kit/utils'
+	import { exportFile } from '@utils/exportFile'
+	import { save } from '@utils/save'
+
+	const saveInterval = 5_000
 
 	const crepe = new Crepe({
 		root: document.querySelector('main'),
+		features: {
+			[Crepe.Feature.CodeMirror]: false,
+			[Crepe.Feature.Toolbar]: false,
+		},
+		featureConfigs: {
+			[Crepe.Feature.Placeholder]: {
+				text: 'Start typing...',
+				mode: 'doc',
+			},
+		},
 	})
 
 	crepe.create()
+
+	crepe.editor.action(insert(localStorage.getItem('note')))
+
+	let saver = setInterval(() => {
+		save(crepe)
+		console.debug('Saved doc by timer')
+	}, saveInterval)
+
+	const editorElem = document.querySelector<HTMLParagraphElement>(
+		'.milkdown .editor p',
+	)
+
+	editorElem.addEventListener('visibilitychange', () => {
+		if (document.hidden) {
+			clearInterval(saver)
+		} else {
+			saver = setInterval(() => {
+				save(crepe)
+			}, saveInterval)
+		}
+	})
+
+	editorElem.addEventListener('keydown', (e) => {
+		console.debug(`Key ${e.key.toUpperCase()} pressed`)
+		if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+			e.preventDefault()
+			if (e.repeat) return
+			console.debug(`Key pressed: ${e.key}`)
+			if (e.shiftKey) {
+				exportFile(crepe)
+				console.debug(`Exported note by shortcut`)
+			} else {
+				save(crepe)
+				console.log(`Saved note by shortcut`)
+			}
+		}
+	})
 </script>
 <style is:global>
 	.milkdown {
 		--crepe-color-background: transparent !important;
-		max-width: 80ch !important;
 	}
 </style>

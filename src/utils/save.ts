@@ -1,7 +1,6 @@
-import type { MDXEditorMethods } from '@mdxeditor/editor'
-import type { MutableRefObject } from 'react'
+import type { Crepe } from '@milkdown/crepe'
 
-export function save(editorRef: MutableRefObject<MDXEditorMethods>) {
-	const note = editorRef.current.getMarkdown()
+export function save(editor: Crepe) {
+	const note = editor.getMarkdown()
 	localStorage.setItem('note', note)
 }

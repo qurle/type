@@ -3,40 +3,66 @@
 
 // Typography
 body
-	font-family: var(--font-main)
-	font-size: var(--font-size)
+    font-family: var(--font-main)
+    font-size: var(--font-size)
 
 h1
-	&:not(first-child)
-		padding-top: var(--space-xl)
-		font-size: 2em
+    &:not(:first-child)
+        padding-top: var(--space-xl)
+        font-size: 2em
 
 h2
-	&:not(first-child)
-		padding-top: var(--space-m)
-		font-size: 1.4em
+    &:not(:first-child)
+        padding-top: var(--space-m)
+        font-size: 1.4em
 
 h4
-	font-weight: 500
-	opacity: .5
+    font-weight: 500
+    opacity: .5
 
 h5
-	font-size: 0.8em
-	font-weight: 500
-	opacity: .5
+    font-size: 0.8em
+    font-weight: 500
+    opacity: .5
+
+p
+    &:not(:first-child)
+        padding-top: var(--space-s)
 
 // Elements
 body
-	transition: background-color var(--transition-s), color var(--transition-s)
+    transition: background-color var(--transition-s), color var(--transition-s)
 
 button
-	cursor: pointer
+    cursor: pointer
 
 hr
-	height: 0
-	border: 0
-	border-top: 1px solid var(--color-main-25)
+    height: 0
+    border: 0
+    border-top: 1px solid var(--color-main-25)
 
-::selection 
-	background-color: var(--color-main-05)
-	border-radius: 2px
+::selection
+    background-color: var(--color-main-05)
+    border-radius: 2px
+
+.editor
+    position: relative
+
+    width: 100%
+    max-width: var(--page-width)
+
+    height: 60vh
+    margin: 0 auto
+
+    padding: var(--space-m)
+    > p:first-child:has(br:first-child)
+        &::before
+            content: 'Start typing...'
+            position: absolute
+
+            top: var(--space-m)
+            left: var(--space-m)
+
+            opacity: 0.33
+
+            pointer-events: none

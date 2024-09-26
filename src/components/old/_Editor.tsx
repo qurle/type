@@ -2,7 +2,6 @@ import EditorHeader from '@components/old/_EditorHeader';
 import type { MDXEditorMethods } from '@mdxeditor/editor';
 import { exportFile } from '@utils/exportFile';
 import { load } from '@utils/load';
-import { save } from '@utils/save';
 import { useEffect, useRef } from 'react';
 
 
@@ -18,7 +17,7 @@ const Editor = () => {
 		editorRef.current.focus()
 
 		let saver = setInterval(() => {
-			save(editorRef)
+			// save(editorRef)
 			console.debug('Saved doc by timer')
 		}, saveInterval)
 
@@ -27,7 +26,7 @@ const Editor = () => {
 				clearInterval(saver)
 			} else {
 				saver = setInterval(() => {
-					save(editorRef)
+					// save(editorRef)
 				}, saveInterval)
 			}
 		})
@@ -42,7 +41,7 @@ const Editor = () => {
 					console.debug(`Exported note by shortcut`)
 				}
 				else {
-					save(editorRef)
+					// save(editorRef)
 					console.log(`Saved note by shortcut`)
 				}
 			}

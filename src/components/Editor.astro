@@ -1,6 +1,16 @@
 <script>
 	import { Editor } from '@milkdown/kit/core'
+	import { clipboard } from '@milkdown/kit/plugin/clipboard'
+	import { history } from '@milkdown/kit/plugin/history'
+	import { indent } from '@milkdown/kit/plugin/indent'
+	import { upload } from '@milkdown/kit/plugin/upload'
 	import { commonmark } from '@milkdown/kit/preset/commonmark'
 
-	Editor.make().use(commonmark).create()
+	Editor.make()
+		.use(commonmark)
+		.use(history)
+		.use(clipboard)
+		.use(upload)
+		.use(indent)
+		.create()
 </script>

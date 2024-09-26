@@ -1,8 +1,7 @@
-import type { MDXEditorMethods } from '@mdxeditor/editor';
-import type { MutableRefObject } from 'react';
+import type { Crepe } from '@milkdown/crepe';
 
-export function exportFile(editorRef: MutableRefObject<MDXEditorMethods>, filename = 'type.md') {
-	const text = editorRef.current?.getMarkdown()
+export function exportFile(editor: Crepe, filename = 'type.md') {
+	const text = editor.getMarkdown()
 	if (!text) return
 
 	console.debug(`Downloading. Filename is ${filename}. Text has ${text.length} symbols`)
