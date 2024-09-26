@@ -4,35 +4,23 @@ import '@styles/crepe.sass'
 ---
 
 <script>
-	// import { Crepe } from '@milkdown/crepe'
-
-	// console.log('hi')
-
-	// const saveInterval = 5_000
-
-	// const crepe = new Crepe({
-	// 	root: document.querySelector('main'),
-	// 	features: {
-	// 		[Crepe.Feature.CodeMirror]: false,
-	// 		[Crepe.Feature.Toolbar]: false,
-	// 	},
-	// 	featureConfigs: {
-	// 		[Crepe.Feature.Placeholder]: {
-	// 			text: 'Start typing...',
-	// 			mode: 'doc',
-	// 		},
-	// 	},
-	// })
-
-	// crepe.create().then(() => {
-	// 	console.log('Editor created')
-	// })
-
 	import { Crepe } from '@milkdown/crepe'
 
+	const saveInterval = 5_000
+
 	const crepe = new Crepe({
-		root: document.getElementById('app'),
+		root: document.querySelector('main'),
 		defaultValue: 'Hello, Milkdown!',
+		features: {
+			[Crepe.Feature.CodeMirror]: false,
+			[Crepe.Feature.Toolbar]: false,
+		},
+		featureConfigs: {
+			[Crepe.Feature.Placeholder]: {
+				text: 'Start typing...',
+				mode: 'doc',
+			},
+		},
 	})
 
 	crepe.create().then(() => {
