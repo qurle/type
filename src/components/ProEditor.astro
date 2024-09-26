@@ -5,8 +5,6 @@ import '@styles/crepe.sass'
 
 <script>
 	import { Crepe } from '@milkdown/crepe'
-	import { exportFile } from '@utils/exportFile'
-	import { save } from '@utils/save'
 
 	const saveInterval = 5_000
 
@@ -31,37 +29,37 @@ import '@styles/crepe.sass'
 
 	//crepe.editor.action(insert(localStorage.getItem('note')))
 
-	let saver = setInterval(() => {
-		save(crepe.getMarkdown())
-		console.debug('Saved doc by timer')
-	}, saveInterval)
+	// let saver = setInterval(() => {
+	// 	save(crepe.getMarkdown())
+	// 	console.debug('Saved doc by timer')
+	// }, saveInterval)
 
-	const editorElem =
-		document.querySelector<HTMLParagraphElement>('.milkdown .editor')
+	// const editorElem =
+	// 	document.querySelector<HTMLParagraphElement>('.milkdown .editor')
 
-	editorElem.addEventListener('visibilitychange', () => {
-		if (document.hidden) {
-			clearInterval(saver)
-		} else {
-			saver = setInterval(() => {
-				save(crepe.getMarkdown())
-			}, saveInterval)
-		}
-	})
+	// editorElem.addEventListener('visibilitychange', () => {
+	// 	if (document.hidden) {
+	// 		clearInterval(saver)
+	// 	} else {
+	// 		saver = setInterval(() => {
+	// 			save(crepe.getMarkdown())
+	// 		}, saveInterval)
+	// 	}
+	// })
 
-	editorElem.addEventListener('keydown', (e) => {
-		console.debug(`Key ${e.key.toUpperCase()} pressed`)
-		if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-			e.preventDefault()
-			if (e.repeat) return
-			console.debug(`Key pressed: ${e.key}`)
-			if (e.shiftKey) {
-				exportFile(crepe.getMarkdown())
-				console.debug(`Exported note by shortcut`)
-			} else {
-				save(crepe.getMarkdown())
-				console.log(`Saved note by shortcut`)
-			}
-		}
-	})
+	// editorElem.addEventListener('keydown', (e) => {
+	// 	console.debug(`Key ${e.key.toUpperCase()} pressed`)
+	// 	if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+	// 		e.preventDefault()
+	// 		if (e.repeat) return
+	// 		console.debug(`Key pressed: ${e.key}`)
+	// 		if (e.shiftKey) {
+	// 			exportFile(crepe.getMarkdown())
+	// 			console.debug(`Exported note by shortcut`)
+	// 		} else {
+	// 			save(crepe.getMarkdown())
+	// 			console.log(`Saved note by shortcut`)
+	// 		}
+	// 	}
+	// })
 </script>
