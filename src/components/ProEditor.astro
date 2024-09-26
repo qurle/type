@@ -5,15 +5,13 @@ import '@styles/crepe.sass'
 
 <script>
 	import { Crepe } from '@milkdown/crepe'
-	import { exportFile } from '@utils/exportFile'
-	import { save } from '@utils/save'
 
 	console.log('hi')
 
 	const saveInterval = 5_000
 
 	const crepe = new Crepe({
-		// root: document.querySelector('main'),
+		root: document.querySelector('main'),
 		features: {
 			[Crepe.Feature.CodeMirror]: false,
 			[Crepe.Feature.Toolbar]: false,
@@ -29,13 +27,15 @@ import '@styles/crepe.sass'
 	console.log('crepe')
 	console.log(crepe)
 
-	await crepe.create()
+	await crepe.create().then(() => {
+		console.log('Editor created')
+	})
 
 	console.log('crepe created')
 	console.log(crepe)
 
 	// crepe.editor.action(insert(localStorage.getItem('note')))
-
+	/*
 	let saver = setInterval(() => {
 		save(crepe.getMarkdown())
 		console.debug('Saved doc by timer')
@@ -68,5 +68,5 @@ import '@styles/crepe.sass'
 				console.log(`Saved note by shortcut`)
 			}
 		}
-	})
+	})*/
 </script>
