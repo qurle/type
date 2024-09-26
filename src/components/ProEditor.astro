@@ -6,7 +6,6 @@ import '@styles/crepe.sass'
 <></>
 <script>
 	import { Crepe } from '@milkdown/crepe'
-	import { insert } from '@milkdown/kit/utils'
 	import { exportFile } from '@utils/exportFile'
 	import { save } from '@utils/save'
 
@@ -28,9 +27,15 @@ import '@styles/crepe.sass'
 		},
 	})
 
+	console.log('crepe')
+	console.log(crepe)
+
 	await crepe.create()
 
-	crepe.editor.action(insert(localStorage.getItem('note')))
+	console.log('crepe created')
+	console.log(crepe)
+
+	// crepe.editor.action(insert(localStorage.getItem('note')))
 
 	let saver = setInterval(() => {
 		save(crepe.getMarkdown())
