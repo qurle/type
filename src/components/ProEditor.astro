@@ -1,21 +1,16 @@
 ---
 import '@styles/milkdown/style.sass'
+import '@styles/editor.sass'
 ---
 
 <script>
 	import { Crepe } from '@milkdown/crepe'
 
-	// We have some themes for you to choose
-	// available themes: frame, classic, nord, frame-dark, classic-dark, nord-dark
-	import '@milkdown/crepe/theme/frame.css'
-
 	const crepe = new Crepe({
 		root: document.querySelector('main'),
 	})
 
-	crepe.create().then(() => {
-		console.log('Editor created')
-	})
+	crepe.create()
 </script>
 <style is:global>
 	.milkdown {
