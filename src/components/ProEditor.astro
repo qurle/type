@@ -5,6 +5,8 @@ import '@styles/crepe.sass'
 
 <script>
 	import { Crepe } from '@milkdown/crepe'
+	import { exportFile } from '@utils/exportFile'
+	import { save } from '@utils/save'
 
 	const saveInterval = 5_000
 
@@ -27,8 +29,8 @@ import '@styles/crepe.sass'
 		console.log('Editor created')
 	})
 
-	// crepe.editor.action(insert(localStorage.getItem('note')))
-	/*
+	//crepe.editor.action(insert(localStorage.getItem('note')))
+
 	let saver = setInterval(() => {
 		save(crepe.getMarkdown())
 		console.debug('Saved doc by timer')
@@ -61,5 +63,5 @@ import '@styles/crepe.sass'
 				console.log(`Saved note by shortcut`)
 			}
 		}
-	})*/
+	})
 </script>
