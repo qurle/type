@@ -4,35 +4,50 @@ import '@styles/crepe.sass'
 ---
 
 <script>
+	// import { Crepe } from '@milkdown/crepe'
+
+	// console.log('hi')
+
+	// const saveInterval = 5_000
+
+	// const crepe = new Crepe({
+	// 	root: document.querySelector('main'),
+	// 	features: {
+	// 		[Crepe.Feature.CodeMirror]: false,
+	// 		[Crepe.Feature.Toolbar]: false,
+	// 	},
+	// 	featureConfigs: {
+	// 		[Crepe.Feature.Placeholder]: {
+	// 			text: 'Start typing...',
+	// 			mode: 'doc',
+	// 		},
+	// 	},
+	// })
+
+	// console.log('crepe')
+	// console.log(crepe)
+
+	// crepe.create().then(() => {
+	// 	console.log('Editor created')
+	// })
+
+	// console.log('crepe created')
+	// console.log(crepe)
+
 	import { Crepe } from '@milkdown/crepe'
+	import '@milkdown/crepe/theme/common/style.css'
 
-	console.log('hi')
-
-	const saveInterval = 5_000
+	// We have some themes for you to choose
+	import '@milkdown/crepe/theme/frame.css'
 
 	const crepe = new Crepe({
-		root: document.querySelector('main'),
-		features: {
-			[Crepe.Feature.CodeMirror]: false,
-			[Crepe.Feature.Toolbar]: false,
-		},
-		featureConfigs: {
-			[Crepe.Feature.Placeholder]: {
-				text: 'Start typing...',
-				mode: 'doc',
-			},
-		},
+		root: document.getElementById('app'),
+		defaultValue: 'Hello, Milkdown!',
 	})
 
-	console.log('crepe')
-	console.log(crepe)
-
-	await crepe.create().then(() => {
+	crepe.create().then(() => {
 		console.log('Editor created')
 	})
-
-	console.log('crepe created')
-	console.log(crepe)
 
 	// crepe.editor.action(insert(localStorage.getItem('note')))
 	/*
