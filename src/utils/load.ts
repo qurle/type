@@ -1,11 +1,10 @@
-import type { MDXEditorMethods } from '@mdxeditor/editor'
-import type { MutableRefObject } from 'react'
+import { Editor } from '@milkdown/core'
+import { insert } from '@milkdown/utils'
 
-export function load(editorRef: MutableRefObject<MDXEditorMethods>) {
+export function load(editor: Editor) {
 	const savedNote = localStorage.getItem('note')
 	if (!savedNote)
 		return
 
-	editorRef.current.setMarkdown(savedNote)
-	console.debug('Loaded saved note')
+	editor.action(insert(savedNote))
 }

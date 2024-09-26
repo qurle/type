@@ -36,6 +36,10 @@ body
 button
     cursor: pointer
 
+img
+    width: 100%
+    border-radius: var(--radius-l)
+
 hr
     height: 0
     border: 0
@@ -55,7 +59,7 @@ hr
     margin: 0 auto
 
     padding: var(--space-m)
-    > p:first-child:has(br:first-child)
+    > p:only-child:not(.crepe-placeholder):has(br:first-child)
         &::before
             content: 'Start typing...'
             position: absolute
@@ -66,3 +70,31 @@ hr
             opacity: 0.33
 
             pointer-events: none
+
+header.editor-header
+    display: flex
+    justify-content: space-between
+
+    padding: var(--space-m)
+    margin-bottom: var(--space-m)
+
+    font-size: var(--font-size-xs)
+
+    .export
+        font-family: var(--font-sans)
+        font-weight: 500
+
+    // &:has(~div .editor > p:only-child:not(.crepe-placeholder)>br:first-child)
+    .export
+        opacity: 0
+
+    button
+        opacity: .2
+
+        transition: opacity var(--transition-m)
+        &:hover
+            opacity: .3
+
+    .customization
+        button:not(:first-child)
+            margin-left: var(--space-l)

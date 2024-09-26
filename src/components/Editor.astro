@@ -1,16 +1,61 @@
 <script>
-	import { Editor } from '@milkdown/kit/core'
+	import { Editor, rootCtx } from '@milkdown/kit/core'
 	import { clipboard } from '@milkdown/kit/plugin/clipboard'
 	import { history } from '@milkdown/kit/plugin/history'
 	import { indent } from '@milkdown/kit/plugin/indent'
 	import { upload } from '@milkdown/kit/plugin/upload'
 	import { commonmark } from '@milkdown/kit/preset/commonmark'
+	import { getMarkdown } from '@milkdown/utils'
+	import { exportFile } from '@utils/exportFile'
+	import { load } from '@utils/load'
+	import { save } from '@utils/save'
 
-	Editor.make()
+	const saveInterval = 5_000
+
+	const editor = await Editor.make()
 		.use(commonmark)
 		.use(history)
 		.use(clipboard)
 		.use(upload)
 		.use(indent)
+		.config((ctx) => {
+			ctx.set(rootCtx, 'main')
+		})
 		.create()
+
+	load(editor)
+
+	let saver = setInterval(() => {
+		save(editor.action(getMarkdown()))
+		console.debug('Saved doc by timer')
+	}, saveInterval)
+
+	const editorElem = document.querySelector<HTMLDivElement>('.editor')
+	editorElem.focus()
+
+	editorElem.addEventListener('visibilitychange', () => {
+		if (document.hidden) {
+			clearInterval(saver)
+		} else {
+			saver = setInterval(() => {
+				save(editor.action(getMarkdown()))
+			}, saveInterval)
+		}
+	})
+
+	editorElem.addEventListener('keydown', (e) => {
+		console.debug(`Key ${e.key.toUpperCase()} pressed`)
+		if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+			e.preventDefault()
+			if (e.repeat) return
+			console.debug(`Key pressed: ${e.key}`)
+			if (e.shiftKey) {
+				exportFile(editor.action(getMarkdown()))
+				console.debug(`Exported note by shortcut`)
+			} else {
+				save(editor.action(getMarkdown()))
+				console.log(`Saved note by shortcut`)
+			}
+		}
+	})
 </script>

@@ -1,6 +1,6 @@
 ---
 import '@styles/milkdown/style.sass'
-import '@styles/editor.sass'
+import '@styles/crepe.sass'
 ---
 
 <script>
@@ -30,7 +30,7 @@ import '@styles/editor.sass'
 	crepe.editor.action(insert(localStorage.getItem('note')))
 
 	let saver = setInterval(() => {
-		save(crepe)
+		save(crepe.getMarkdown())
 		console.debug('Saved doc by timer')
 	}, saveInterval)
 
@@ -43,7 +43,7 @@ import '@styles/editor.sass'
 			clearInterval(saver)
 		} else {
 			saver = setInterval(() => {
-				save(crepe)
+				save(crepe.getMarkdown())
 			}, saveInterval)
 		}
 	})
@@ -55,10 +55,10 @@ import '@styles/editor.sass'
 			if (e.repeat) return
 			console.debug(`Key pressed: ${e.key}`)
 			if (e.shiftKey) {
-				exportFile(crepe)
+				exportFile(crepe.getMarkdown())
 				console.debug(`Exported note by shortcut`)
 			} else {
-				save(crepe)
+				save(crepe.getMarkdown())
 				console.log(`Saved note by shortcut`)
 			}
 		}
