@@ -53,13 +53,19 @@ div[class^="_rootContentEditableWrapper"]
 
     ul
         ul > li
-            // space-left: var(--space-xl)
+            padding-left: var(--space-xl)
     ul li:not(:has(ul:first-child))::before
             content: "·  "
 
     ol
         ol > li
-            space-left: var(--space-xl)
+            padding-left: var(--space-xl)
+    
+    p
+        color: 
+    li > p
+        color: blue
+        display: inline
 
 
 header.editor-header
