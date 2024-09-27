@@ -78,15 +78,26 @@ header.editor-header
 
     font-size: var(--font-size-xs)
 
+    button
+        opacity: .2
+
+        transition: opacity var(--transition-m)
+        &:hover
+            opacity: .3
+
     .export
         font-family: var(--font-sans)
         font-weight: 500
-        pointer-events: all
+        opacity: 0
+        pointer-events: none
 
-    &:has(~.milkdown .editor > p:only-child:not(.crepe-placeholder) > br:first-child)
+    &:not(:has(~.milkdown .editor > p:only-child:not(.crepe-placeholder) > br:first-child))
         .export
-            opacity: 0
-            pointer-events: none
+            opacity: .2
+            pointer-events: all
+            &:hover
+                opacity: .3
+    
 
     button
         opacity: .2
