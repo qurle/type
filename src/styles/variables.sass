@@ -1,59 +1,59 @@
 :root
-	--color-background: oklch(98% 0 0)
-	--color-main: oklch(8% 0 0)
-	--color-main-05: color-mix(in hsl, var(--color-main) 5%, transparent)
-	--color-main-25: color-mix(in hsl, var(--color-main) 25%, transparent)
-	--color-main-50: color-mix(in hsl, var(--color-main) 50%, transparent)
+    --color-background: oklch(98% 0 0)
+    --color-main: oklch(8% 0 0)
+    --color-main-05: color-mix(in hsl, var(--color-main) 5%, transparent)
+    --color-main-25: color-mix(in hsl, var(--color-main) 25%, transparent)
+    --color-main-50: color-mix(in hsl, var(--color-main) 50%, transparent)
 
-	--font-main: var(--font-serif)
-	--font-size: 1.25rem
-	--font-size-s: 1.15rem
-	--font-size-xs: 1rem
-	
-	--font-serif: 'PT Serif', Playfair, Georgia, serif
-	--font-mono: 'Fira Code', 'Space Mono', 'Source Code Pro', monospace
-	--font-sans: 'Mulish', Inter, 'Helvetica Neue', Helvetica, -apple-system, -system-ui, sans-serif
+    --font-main: var(--font-serif)
+    --font-size: 1.25rem
+    --font-size-s: 1.15rem
+    --font-size-xs: 1rem
+    
+    --font-serif: 'PT Serif', Playfair, Georgia, serif
+    --font-mono: 'Fira Code', 'Space Mono', 'Source Code Pro', monospace
+    --font-sans: 'Mulish', Inter, 'Helvetica Neue', Helvetica, -apple-system, -system-ui, sans-serif
 
-	--page-padding: 1.5rem
-	--page-padding-v: 3rem
-	--page-width: 640px
+    --page-padding: 1.5rem
+    --page-padding-v: 3rem
+    --page-width: 640px
 
-	--space-s: 0.25rem
-	--space-m: 0.5rem
-	--space-l: 1rem
-	--space-xl: 2rem
+    --space-s: 0.25rem
+    --space-m: 0.5rem
+    --space-l: 1rem
+    --space-xl: 2rem
 
-	--radius-l: 0.5rem
-	--radius-m: 0.25rem
+    --radius-l: 0.5rem
+    --radius-m: 0.25rem
 
-	--transition-easing: cubic-bezier(0.75, 0, 0.25, 1)
-	--transition-xs: 100ms linear
-	--transition-s: 175ms var(--transition-easing)
-	--transition-m: 300ms var(--transition-easing)
+    --transition-easing: cubic-bezier(0.75, 0, 0.25, 1)
+    --transition-xs: 100ms linear
+    --transition-s: 175ms var(--transition-easing)
+    --transition-m: 300ms var(--transition-easing)
 
 @media screen and (max-width: 640px)
-	:root
-		--font-size: 1.25rem
-		--page-padding: 1.3rem
-		--page-padding-v: 2rem
+    :root
+        --font-size: 1.25rem
+        --page-padding: 1.3rem
+        --page-padding-v: 2rem
 
 :root[data-font="serif"]
-	--font-main: var(--font-serif)
+    --font-main: var(--font-serif)
 
 :root[data-font="mono"]
-	--font-main: var(--font-mono)
+    --font-main: var(--font-mono)
 
 :root[data-font="sans"]
-	--font-main: var(--font-sans)
+    --font-main: var(--font-sans)
 
 :root[data-theme="dark"]
-	--color-background: oklch(20% 0 0)
-	--color-main: oklch(92% 0 0)
+    --color-background: oklch(20% 0 0)
+    --color-main: oklch(92% 0 0)
 
 :root[data-theme="sepia"]
-	--color-background: #c7b1a5
-	--color-main: #211109
+    --color-background: #c7b1a5
+    --color-main: #211109
 
 :root[data-theme="blue"]
-	--color-background: hsl(236deg 54.88% 34.02%)
-	--color-main: hsl(234deg, 18%, 85%)
+    --color-background: hsl(236deg 54.88% 34.02%)
+    --color-main: hsl(234deg, 18%, 85%)
