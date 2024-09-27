@@ -6,6 +6,7 @@ import Menu from './Menu.astro'
 	<button class="export"> save as file </button>
 	<Menu />
 </header>
+<main></main>
 <script>
 	import { Editor, rootCtx } from '@milkdown/kit/core'
 	import { clipboard } from '@milkdown/kit/plugin/clipboard'
@@ -45,7 +46,6 @@ import Menu from './Menu.astro'
 	editorElem.addEventListener('visibilitychange', toggleAutosave)
 
 	editorElem.addEventListener('keydown', (e) => {
-		console.debug(`Key ${e.key.toUpperCase()} pressed`)
 		if ((e.ctrlKey || e.metaKey) && e.key === 's') {
 			e.preventDefault()
 			if (e.repeat) return
