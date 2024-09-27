@@ -57,7 +57,7 @@ hr
     margin: 0 auto
 
     padding: var(--space-m)
-    > p:only-child:not(.crepe-placeholder):has(br:first-child)
+    > p:only-child:not(.crepe-placeholder):has(br:only-child)
         &::before
             content: 'Start typing...'
             position: absolute
@@ -91,14 +91,13 @@ header.editor-header
         opacity: 0
         pointer-events: none
 
-    &:not(:has(~.milkdown .editor > p:only-child:not(.crepe-placeholder) > br:first-child))
+    &:not(:has(~.milkdown .editor > p:only-child:not(.crepe-placeholder) > br:only-child))
         .export
             opacity: .2
             pointer-events: all
             &:hover
                 opacity: .3
     
-
     button
         opacity: .2
 
