@@ -81,10 +81,12 @@ header.editor-header
     .export
         font-family: var(--font-sans)
         font-weight: 500
+        pointer-events: all
 
-    // &:has(~div .editor > p:only-child:not(.crepe-placeholder)>br:first-child)
-    .export
-        opacity: 0
+    &:has(~.milkdown .editor > p:only-child:not(.crepe-placeholder) > br:first-child)
+        .export
+            opacity: 0
+            pointer-events: none
 
     button
         opacity: .2
