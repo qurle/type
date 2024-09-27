@@ -55,26 +55,6 @@ const base = Astro.url.pathname.endsWith('/')
     </main>
   </body>
 </html>
-
-<style>
-  html,
-  body {
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  body {
-    display: flex;
-    flex-direction: column;
-    padding: var(--page-padding-v) var(--page-padding);
-  }
-
-  main {
-    width: 100%;
-    max-width: var(--page-width);
-    margin: 0 auto;
-  }
-</style>
 <script>
   import { loadMode } from '@utils/loadMode'
 

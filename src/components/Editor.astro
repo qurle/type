@@ -1,3 +1,11 @@
+---
+import Menu from './Menu.astro'
+---
+
+<header class="editor-header">
+	<button class="export"> save as file </button>
+	<Menu />
+</header>
 <script>
 	import { Editor, rootCtx } from '@milkdown/kit/core'
 	import { clipboard } from '@milkdown/kit/plugin/clipboard'
@@ -10,7 +18,7 @@
 	import { load } from '@utils/load'
 	import { save } from '@utils/save'
 
-	const saveInterval = 5_000
+	const autosaveInterval = 5_000
 
 	const editor = await Editor.make()
 		.use(commonmark)
@@ -28,20 +36,13 @@
 	let saver = setInterval(() => {
 		save(editor.action(getMarkdown()))
 		console.debug('Saved doc by timer')
-	}, saveInterval)
+	}, autosaveInterval)
 
 	const editorElem = document.querySelector<HTMLDivElement>('.editor')
+	const exportButton = document.querySelector<HTMLButtonElement>('.export')
 	editorElem.focus()
 
-	editorElem.addEventListener('visibilitychange', () => {
-		if (document.hidden) {
-			clearInterval(saver)
-		} else {
-			saver = setInterval(() => {
-				save(editor.action(getMarkdown()))
-			}, saveInterval)
-		}
-	})
+	editorElem.addEventListener('visibilitychange', toggleAutosave)
 
 	editorElem.addEventListener('keydown', (e) => {
 		console.debug(`Key ${e.key.toUpperCase()} pressed`)
@@ -58,4 +59,14 @@
 			}
 		}
 	})
+
+	function toggleAutosave() {
+		if (document.hidden) {
+			clearInterval(saver)
+		} else {
+			saver = setInterval(() => {
+				save(editor.action(getMarkdown()))
+			}, autosaveInterval)
+		}
+	}
 </script>
