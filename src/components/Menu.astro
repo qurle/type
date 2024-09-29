@@ -31,8 +31,8 @@
 <script>
 	import { cycleModes } from '@utils/cycleModes'
 
-	const themeElem = document.querySelector<HTMLButtonElement>('.theme')
-	const fontElem = document.querySelector<HTMLButtonElement>('.font')
+	const themeElem = document.getElementsByClassName('theme')[0]
+	const fontElem = document.getElementsByClassName('font')[0]
 
 	themeElem.addEventListener('click', () => cycleModes('theme'))
 	fontElem.addEventListener('click', () => cycleModes('font'))

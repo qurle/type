@@ -44,9 +44,7 @@
     li > p
         display: inline
 
-main
-    // Not empty
-    &:not(:has(.editor > p:only-child > br:only-child))
+main:not(.notes-shown)
         ul.notes
             animation: none
             opacity: 0

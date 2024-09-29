@@ -26,8 +26,9 @@ import '@styles/notes.sass'
 	import { save } from '@utils/save'
 
 	const autosaveInterval = 5_000
-	const rootEl: HTMLElement = document.querySelector('main')
+	const rootEl: HTMLElement = document.getElementsByTagName('main')[0]
 	const notes = getNotes()
+	const hasNotes = notes?.length > 0
 
 	let updated = false
 	let editorEl: HTMLDivElement = null
@@ -55,7 +56,11 @@ import '@styles/notes.sass'
 			const listener = ctx.get(listenerCtx)
 
 			listener.mounted(() => {
-				editorEl = document.querySelector('.editor')
+				editorEl = (
+					document.getElementsByClassName(
+						'editor',
+					) as HTMLCollectionOf<HTMLDivElement>
+				)[0]
 				editorEl.dataset.empty = 'true'
 				editorEl.ariaLabel = 'Your note'
 			})
@@ -65,20 +70,25 @@ import '@styles/notes.sass'
 
 				if (doc.content.size <= 2) {
 					empty = true
+					if (hasNotes) editorEl.classList.add('collapsed')
+					setTimeout(() => {
+						rootEl.classList.add('notes-shown')
+					}, 25)
 				} else {
 					empty = false
+					if (hasNotes) rootEl.classList.remove('notes-shown')
 					setTimeout(() => {
 						editorEl.classList.remove('collapsed')
-					}, 150)
+					}, 25)
 				}
 			})
 		})
 		.create()
 
-	// editorEl = document.querySelector<HTMLDivElement>('.editor')
-	const exportButtonEl = document.querySelector<HTMLButtonElement>('.export')
+	const exportButtonEl = document.getElementsByClassName('export')[0]
 
 	if (notes?.length > 1) {
+		rootEl.classList.add('notes-shown')
 		editorEl.classList.add('collapsed')
 		renderNotes(notes)
 	} else {
@@ -104,6 +114,13 @@ import '@styles/notes.sass'
 			} else {
 				save(editor.action(getMarkdown()), 'shortcut')
 			}
+		}
+		if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
+			e.preventDefault()
+			if (e.repeat) return
+			rootEl.childNodes.forEach((el) =>
+				(el as HTMLElement).classList.toggle('bordered'),
+			)
 		}
 	})
 
