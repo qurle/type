@@ -46,6 +46,7 @@ import '@styles/notes.sass'
 			listener.mounted((ctx) => {
 				editorEl = document.querySelector('.editor')
 				editorEl.dataset.empty = 'true'
+				editorEl.ariaLabel = 'Your note'
 			})
 
 			listener.updated((ctx, doc, prevDoc) => {
