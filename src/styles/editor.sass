@@ -1,65 +1,30 @@
-
-header.editor-header
-    display: flex
-    justify-content: space-between
-
-    padding: var(--space-m)
-    margin-bottom: var(--space-m)
-
-    font-size: var(--font-size-xs)
-
-    button
-        opacity: .2
-
-        transition: opacity var(--transition-m)
-        &:hover
-            opacity: .3
-
-    .export
-        font-family: var(--font-sans)
-        font-weight: 500
-        opacity: 0
-        pointer-events: none
-
-    &:not(:has(~.milkdown .editor > p:only-child:not(.crepe-placeholder) > br:only-child))
-        .export
-            opacity: .2
-            pointer-events: all
-            &:hover
-                opacity: .3
-
-    button
-        opacity: .2
-
-        transition: opacity var(--transition-m)
-        &:hover
-            opacity: .3
-
-    .customization
-        button:not(:first-child)
-            margin-left: var(--space-l)
-
 .editor
     position: relative
 
     width: 100%
-    max-width: var(--page-width)
 
     height: 60vh
+    max-height: 100%
+
+    animation: 300ms fade-in linear
+
+    &.collapsed
+        height: 8rem
+
     margin: 0 auto
 
-    padding: var(--space-m)
-    > p:only-child:not(.crepe-placeholder):has(br:only-child)
-        &::before
-            content: 'Start typing...'
-            position: absolute
+    > p:only-child:not(.crepe-placeholder)
+        &:has(br:only-child), &:empty
+            &::before
+                content: 'Start typing...'
+                position: absolute
 
-            top: var(--space-m)
-            left: var(--space-m)
+                top: 0
+                left: 0
 
-            opacity: 0.33
+                color: var(--color-main-25)
 
-            pointer-events: none
+                pointer-events: none
 
     ul
         ul > li

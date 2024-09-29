@@ -1,10 +1,12 @@
 ---
 import Menu from './Menu.astro'
+import '@styles/header.sass'
 import '@styles/editor.sass'
+import '@styles/notes.sass'
 ---
 
 <header class="editor-header">
-	<button class="export"> save as file </button>
+	<button class="export">save as file</button>
 	<Menu />
 </header>
 <main></main>
@@ -16,11 +18,15 @@ import '@styles/editor.sass'
 	import { upload } from '@milkdown/kit/plugin/upload'
 	import { commonmark } from '@milkdown/kit/preset/commonmark'
 	import { getMarkdown } from '@milkdown/utils'
+	import { getNotes } from '@stubs/notes'
 	import { exportFile } from '@utils/exportFile'
+	import { getShortDate } from '@utils/getShortDate'
 	import { load } from '@utils/load'
 	import { save } from '@utils/save'
 
 	const autosaveInterval = 5_000
+	const rootEl: HTMLElement = document.querySelector('main')
+	const notes = getNotes()
 
 	const editor = await Editor.make()
 		.use(commonmark)
@@ -29,24 +35,25 @@ import '@styles/editor.sass'
 		.use(upload)
 		.use(indent)
 		.config((ctx) => {
-			ctx.set(rootCtx, 'main')
+			ctx.set(rootCtx, rootEl)
 		})
 		.create()
 
+	const editorEl = document.querySelector<HTMLDivElement>('.editor')
+	const exportButtonEl = document.querySelector<HTMLButtonElement>('.export')
+
+	if (notes?.length > 0) editorEl.classList.add('collapsed')
+	renderNotes(notes)
 	load(editor)
 
 	let saver = setInterval(() => {
 		save(editor.action(getMarkdown()))
-		console.debug('Saved doc by timer')
 	}, autosaveInterval)
 
-	const editorElem = document.querySelector<HTMLDivElement>('.editor')
-	const exportButton = document.querySelector<HTMLButtonElement>('.export')
-	editorElem.focus()
+	editorEl.focus()
+	editorEl.addEventListener('visibilitychange', toggleAutosave)
 
-	editorElem.addEventListener('visibilitychange', toggleAutosave)
-
-	editorElem.addEventListener('keydown', (e) => {
+	editorEl.addEventListener('keydown', (e) => {
 		if ((e.ctrlKey || e.metaKey) && e.key === 's') {
 			e.preventDefault()
 			if (e.repeat) return
@@ -61,9 +68,40 @@ import '@styles/editor.sass'
 		}
 	})
 
-	exportButton.addEventListener('click', () => {
+	exportButtonEl.addEventListener('click', () => {
 		exportFile(editor.action(getMarkdown()))
 	})
+
+	function renderNotes(notes: Note[]) {
+		const sortedNotes = notes.sort(
+			(a, b) => b.modified.getTime() - a.modified.getTime(),
+		)
+		if (sortedNotes?.length > 0) {
+			console.debug(sortedNotes)
+			const notesEl = document.createElement('ul')
+			notesEl.classList.add('notes')
+			notesEl.classList.add('unloaded')
+
+			rootEl.appendChild(notesEl)
+			for (const note of sortedNotes) {
+				const noteEl = document.createElement('li')
+				const noteNameEl = document.createElement('span')
+				const noteDateEl = document.createElement('span')
+				noteNameEl.className = 'name'
+				noteDateEl.className = 'date'
+				noteNameEl.innerText = note.name
+				noteDateEl.innerText = getShortDate(note.modified)
+
+				noteEl.appendChild(noteNameEl)
+				noteEl.appendChild(noteDateEl)
+				notesEl.appendChild(noteEl)
+			}
+			// Just a hack for animation idrk
+			setTimeout(() => {
+				notesEl.classList.remove('unloaded')
+			}, 0)
+		}
+	}
 
 	function toggleAutosave() {
 		if (document.hidden) {

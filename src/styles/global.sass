@@ -29,9 +29,6 @@ p
 
 
 // Elements
-body
-    transition: background-color var(--transition-s), color var(--transition-s)
-
 button
     cursor: pointer
 
@@ -47,3 +44,11 @@ hr
 ::selection
     background-color: var(--color-main-05)
     border-radius: 2px
+
+
+// Animations
+@keyframes fade-in
+    0%
+        opacity: 0
+    100%
+        opacity: 1    

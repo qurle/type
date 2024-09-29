@@ -26,6 +26,9 @@
       ],
       "@utils/*": [
         "src/utils/*"
+      ],
+      "@stubs/*": [
+        "src/stubs/*"
       ]
     },
     "jsx": "react-jsx",

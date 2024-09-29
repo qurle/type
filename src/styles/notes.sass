@@ -1,0 +1,46 @@
+ul.notes
+    list-style: none
+
+    display: flex
+    flex-direction: column
+    gap: var(--space-s)
+
+    animation: 300ms fade-in linear
+
+    &.unloaded
+        li
+            opacity: 0
+            transform: scale(0.98)
+
+    &::before
+        content: 'Or pick a note'
+        color: var(--color-main-25)
+        margin-bottom: var(--space-m)
+
+    li
+        display: flex
+        gap: var(--space-xl)
+        padding: var(--space-m) 0
+        
+        text-wrap: balance
+        cursor: pointer
+
+        opacity: 1
+        transform: scale(1)
+        transition: opacity var(--transition-m), transform var(--transition-m)
+        
+        @for $i from 1 to 30
+            &:nth-child(#{$i}) 
+                transition-delay: $i * 50ms
+
+        &:hover
+            opacity: 0.5
+
+        span
+            &.name
+                flex-grow: 1
+
+            &.date
+                transition: color var(--transition-s)
+                color: var(--color-main-50)
+                text-wrap: nowrap

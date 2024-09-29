@@ -6,5 +6,6 @@
 interface Note {
 	id: string,
 	name: string,
-	dateChanged: Date,
+	author: string,
+	modified: Date,
 }

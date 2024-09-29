@@ -4,7 +4,7 @@ import '@styles/global.sass'
 
 const {
   title = 'type.',
-  description = 'just type',
+  description = 'Markdown friendly zen-editor for just typing',
   class: className,
 } = Astro.props
 
@@ -46,23 +46,32 @@ const base = Astro.url.pathname.endsWith('/')
       sizes="16x16"
       href="/fav/favicon-16.png"
     />
+    <script is:inline>
+      // This thing comes inline to avoid flickering when your
+      // theme is not default. Sorry, just saving your eyes!
+
+      function loadMode(mode) {
+        const value = localStorage.getItem(mode)
+        if (value && value !== 'undefined') {
+          document.documentElement.dataset[mode] = value
+          console.debug(`Loaded ${mode} ${value}`)
+        }
+      }
+
+      loadMode('theme')
+      loadMode('font')
+    </script>
 
     <title>{title}</title>
   </head>
   <body class={className}>
-    <main>
-      <slot />
-    </main>
+    <!-- <h1 class="page-heading">Zen-editor for just typing</h1> -->
+    <slot />
   </body>
 </html>
 <script>
-  import { loadMode } from '@utils/loadMode'
-
   console.log(
     '%cHello 🤙🏻',
     'font-size: 1rem; background-color: #eee; padding: 0.5rem; border-radius: 0.25rem',
   )
-
-  loadMode('theme')
-  loadMode('font')
 </script>

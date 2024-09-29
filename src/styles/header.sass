@@ -1,0 +1,37 @@
+header.editor-header
+	display: flex
+	justify-content: space-between
+	width: 100%
+
+	margin-bottom: calc(var(--space-m) + var(--space-l))
+
+	font-size: var(--font-size-xs)
+
+	button
+		opacity: .2
+
+		transition: opacity var(--transition-s), transform var(--transition-m)
+		&:hover
+			opacity: .3
+		&:active
+			transform: scale(0.8)
+
+	.export
+		font-family: var(--font-sans)
+		font-weight: 500
+		opacity: 0
+		pointer-events: none
+
+	&:has(~main .milkdown):not(:has(~main .milkdown .editor > p:only-child:not(.crepe-placeholder) > br:only-child))
+		.export
+			opacity: .2
+			pointer-events: all
+			&:hover
+				opacity: .3
+
+	.customization
+		button:not(:first-child)
+			margin-left: var(--space-l)
+
+// header.editor-header ~:not(:has(.milkdown .editor > p:only-child:not(.crepe-placeholder) > br:only-child))
+// 		background: red
