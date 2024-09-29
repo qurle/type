@@ -61,29 +61,16 @@ import '@styles/notes.sass'
 			})
 
 			listener.updated((ctx, doc) => {
-				start = performance.now()
 				updated = true
-				const time = Math.round(performance.now() - startList) + ' ms'
-				console.debug(`Time from key hit: ${time}`)
-				times.listener.push(performance.now() - start)
 
-				start = performance.now()
-				if (doc.content.size <= 2) {
-					editorEl.dataset.empty = 'true'
-				} else editorEl.dataset.empty = 'false'
-				times.attribute.push(performance.now() - start)
-
-				start = performance.now()
-				if (doc.content.size <= 2) {
-					editorEl.classList.add('empty')
-				} else editorEl.classList.remove('empty')
-				times.class.push(performance.now() - start)
-
-				start = performance.now()
 				if (doc.content.size <= 2) {
 					empty = true
-				} else empty = false
-				times.variable.push(performance.now() - start)
+				} else {
+					empty = false
+					setTimeout(() => {
+						editorEl.classList.remove('collapsed')
+					}, 150)
+				}
 			})
 		})
 		.create()
@@ -91,9 +78,12 @@ import '@styles/notes.sass'
 	// editorEl = document.querySelector<HTMLDivElement>('.editor')
 	const exportButtonEl = document.querySelector<HTMLButtonElement>('.export')
 
-	if (notes?.length > 0) editorEl.classList.add('collapsed')
-	renderNotes(notes)
-	load(editor)
+	if (notes?.length > 1) {
+		editorEl.classList.add('collapsed')
+		renderNotes(notes)
+	} else {
+		load(editor)
+	}
 
 	let saver = setInterval(() => {
 		if (updated) {
@@ -105,12 +95,7 @@ import '@styles/notes.sass'
 	editorEl.focus()
 	editorEl.addEventListener('visibilitychange', toggleAutosave)
 
-	const averageTime = (array) =>
-		Math.trunc((array.reduce((a, b) => a + b) / array.length) * 1000) + 'μs'
-
 	editorEl.addEventListener('keydown', (e) => {
-		startList = performance.now()
-
 		if ((e.ctrlKey || e.metaKey) && e.key === 's') {
 			e.preventDefault()
 			if (e.repeat) return
@@ -119,14 +104,6 @@ import '@styles/notes.sass'
 			} else {
 				save(editor.action(getMarkdown()), 'shortcut')
 			}
-		}
-		if ((e.ctrlKey || e.metaKey) && e.key === 'l') {
-			e.preventDefault()
-			if (e.repeat) return
-			console.debug(`Listener: ${averageTime(times.listener)}`)
-			console.debug(`Attributes: ${averageTime(times.attribute)}`)
-			console.debug(`Classes: ${averageTime(times.class)}`)
-			console.debug(`Variables: ${averageTime(times.variable)}`)
 		}
 	})
 
