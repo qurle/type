@@ -49,7 +49,6 @@ const base = Astro.url.pathname.endsWith('/')
     <script is:inline>
       // This thing comes inline to avoid flickering when your
       // theme is not default. Sorry, just saving your eyes!
-
       function loadMode(mode) {
         const value = localStorage.getItem(mode)
         if (value && value !== 'undefined') {
@@ -72,6 +71,6 @@ const base = Astro.url.pathname.endsWith('/')
 <script>
   console.log(
     '%cHello 🤙🏻',
-    'font-size: 1rem; background-color: #eee; padding: 0.5rem; border-radius: 0.25rem',
+    'font-size: 1rem; background-color: #eee; padding: 0.5rem 1rem; border-radius: 0.25rem',
   )
 </script>

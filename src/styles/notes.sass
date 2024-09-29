@@ -5,12 +5,8 @@ ul.notes
     flex-direction: column
     gap: var(--space-s)
 
+    transition: opacity var(--transition-m)
     animation: 300ms fade-in linear
-
-    &.unloaded
-        li
-            opacity: 0
-            transform: scale(0.98)
 
     &::before
         content: 'Or pick a note'
@@ -21,26 +17,39 @@ ul.notes
         display: flex
         gap: var(--space-xl)
         padding: var(--space-m) 0
-        
+
         text-wrap: balance
         cursor: pointer
 
-        opacity: 1
-        transform: scale(1)
-        transition: opacity var(--transition-m), transform var(--transition-m)
-        
+        opacity: 0
+        animation: 300ms fade-in-scale linear
+        animation-fill-mode: both
+
+        transition: color var(--transition-xs)
+
         @for $i from 1 to 30
-            &:nth-child(#{$i}) 
-                transition-delay: $i * 50ms
+            &:nth-child(#{$i})
+                animation-delay: $i * 50ms
 
         &:hover
-            opacity: 0.5
+            .name
+                color: var(--color-main-50)
+            .date
+                color: var(--color-main-25)
 
         span
             &.name
                 flex-grow: 1
 
             &.date
-                transition: color var(--transition-s)
                 color: var(--color-main-50)
                 text-wrap: nowrap
+
+// Animations
+@keyframes fade-in-scale
+    0%
+        opacity: 0
+        transform: scale(0.98)
+    100%
+        opacity: 1
+        transform: scale(1)

@@ -2,29 +2,32 @@
     position: relative
 
     width: 100%
-
     height: 60vh
     max-height: 100%
 
+    margin: 0 auto
     animation: 300ms fade-in linear
 
+    // When we show notes
     &.collapsed
         height: 8rem
 
-    margin: 0 auto
+    > p:only-child::before
+        display: none
+        content: 'Start typing...'
 
-    > p:only-child:not(.crepe-placeholder)
-        &:has(br:only-child), &:empty
+        position: absolute
+        top: 0
+        left: 0
+
+        color: var(--color-main-25)
+        pointer-events: none
+
+    // Editor is empty
+    > p:only-child
+        &:has(br:only-child)
             &::before
-                content: 'Start typing...'
-                position: absolute
-
-                top: 0
-                left: 0
-
-                color: var(--color-main-25)
-
-                pointer-events: none
+                display: block
 
     ul
         ul > li
@@ -39,3 +42,14 @@
 
     li > p
         display: inline
+
+main
+    // Not empty
+    &:not(:has(.editor > p:only-child > br:only-child))
+        & ul.notes
+            animation: none
+            opacity: 0
+
+// Prosemirror asked me to do this
+.ProseMirror
+    white-space: pre-wrap

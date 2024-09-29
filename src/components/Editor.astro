@@ -15,6 +15,7 @@ import '@styles/notes.sass'
 	import { clipboard } from '@milkdown/kit/plugin/clipboard'
 	import { history } from '@milkdown/kit/plugin/history'
 	import { indent } from '@milkdown/kit/plugin/indent'
+	import { listener, listenerCtx } from '@milkdown/kit/plugin/listener'
 	import { upload } from '@milkdown/kit/plugin/upload'
 	import { commonmark } from '@milkdown/kit/preset/commonmark'
 	import { getMarkdown } from '@milkdown/utils'
@@ -28,18 +29,35 @@ import '@styles/notes.sass'
 	const rootEl: HTMLElement = document.querySelector('main')
 	const notes = getNotes()
 
+	let updated = false
+	let editorEl: HTMLDivElement = null
+
 	const editor = await Editor.make()
 		.use(commonmark)
 		.use(history)
 		.use(clipboard)
 		.use(upload)
 		.use(indent)
+		.use(listener)
 		.config((ctx) => {
 			ctx.set(rootCtx, rootEl)
+			const listener = ctx.get(listenerCtx)
+
+			listener.mounted((ctx) => {
+				editorEl = document.querySelector('.editor')
+				editorEl.dataset.empty = 'true'
+			})
+
+			listener.updated((ctx, doc, prevDoc) => {
+				updated = true
+				if (doc.content.size <= 2) {
+					editorEl.dataset.empty = 'true'
+				} else editorEl.dataset.empty = 'false'
+			})
 		})
 		.create()
 
-	const editorEl = document.querySelector<HTMLDivElement>('.editor')
+	// editorEl = document.querySelector<HTMLDivElement>('.editor')
 	const exportButtonEl = document.querySelector<HTMLButtonElement>('.export')
 
 	if (notes?.length > 0) editorEl.classList.add('collapsed')
@@ -47,7 +65,10 @@ import '@styles/notes.sass'
 	load(editor)
 
 	let saver = setInterval(() => {
-		save(editor.action(getMarkdown()))
+		if (updated) {
+			save(editor.action(getMarkdown()))
+			updated = false
+		}
 	}, autosaveInterval)
 
 	editorEl.focus()
@@ -57,13 +78,10 @@ import '@styles/notes.sass'
 		if ((e.ctrlKey || e.metaKey) && e.key === 's') {
 			e.preventDefault()
 			if (e.repeat) return
-			console.debug(`Key pressed: ${e.key}`)
 			if (e.shiftKey) {
 				exportFile(editor.action(getMarkdown()))
-				console.debug(`Exported note by shortcut`)
 			} else {
-				save(editor.action(getMarkdown()))
-				console.log(`Saved note by shortcut`)
+				save(editor.action(getMarkdown()), 'shortcut')
 			}
 		}
 	})
@@ -80,7 +98,6 @@ import '@styles/notes.sass'
 			console.debug(sortedNotes)
 			const notesEl = document.createElement('ul')
 			notesEl.classList.add('notes')
-			notesEl.classList.add('unloaded')
 
 			rootEl.appendChild(notesEl)
 			for (const note of sortedNotes) {
@@ -96,10 +113,6 @@ import '@styles/notes.sass'
 				noteEl.appendChild(noteDateEl)
 				notesEl.appendChild(noteEl)
 			}
-			// Just a hack for animation idrk
-			setTimeout(() => {
-				notesEl.classList.remove('unloaded')
-			}, 0)
 		}
 	}
 
