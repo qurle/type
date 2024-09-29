@@ -6,6 +6,7 @@
     max-height: 100%
 
     margin: 0 auto
+    transition: height 1ms 150ms
     animation: 300ms fade-in linear
 
     // When we show notes
@@ -46,9 +47,13 @@
 main
     // Not empty
     &:not(:has(.editor > p:only-child > br:only-child))
-        & ul.notes
+        .editor
+            height: 60vh
+        ul.notes
             animation: none
             opacity: 0
+            display: none
+            pointer-events: none
 
 // Prosemirror asked me to do this
 .ProseMirror
