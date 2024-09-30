@@ -21,12 +21,14 @@ import '@styles/notes.sass'
 	import { getMarkdown } from '@milkdown/utils'
 	import { getNotes } from '@stubs/notes'
 	import { buildEditor } from '@utils/buildEditor'
+	import { debug } from '@utils/debug'
 	import { exportFile } from '@utils/exportFile'
 	import { save } from '@utils/save'
 
 	// Utilities
 	const autosaveInterval = 5_000
 	// Other
+	const opfs = await navigator.storage.getDirectory()
 	const rootEl: HTMLElement = document.getElementsByTagName('main')[0]
 	const notes = getNotes()
 	const hasNotes = notes?.length > 0
@@ -84,31 +86,32 @@ import '@styles/notes.sass'
 
 	let saver = setInterval(() => {
 		if (updated) {
-			save(editor, editorEl)
+			save(editor, editorEl, opfs)
 			updated = false
 		}
 	}, autosaveInterval)
 
 	editorEl.focus()
-	editorEl.addEventListener('visibilitychange', toggleAutosave)
+	document.addEventListener('visibilitychange', toggleAutosave)
 
-	editorEl.addEventListener('keydown', (e) => {
+	document.addEventListener('keydown', (e) => {
 		if ((e.ctrlKey || e.metaKey) && e.key === 's') {
 			e.preventDefault()
 			if (e.repeat) return
 			if (e.shiftKey) {
 				exportFile(editor.action(getMarkdown()))
 			} else {
-				save(editor, editorEl)
+				save(editor, editorEl, opfs, 'shortcut')
 			}
 		}
 		if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
 			e.preventDefault()
 			if (e.repeat) return
-			;[...rootEl.children].forEach((el) =>
-				(el as HTMLElement).classList.toggle('bordered'),
-			)
+			debug(rootEl)
 		}
+	})
+
+	editorEl.addEventListener('keydown', (e) => {
 		if (e.key === 'ArrowDown' && empty && notesEl) {
 			;(
 				notesEl.firstElementChild.firstElementChild as HTMLButtonElement
@@ -151,7 +154,7 @@ import '@styles/notes.sass'
 			clearInterval(saver)
 		} else {
 			saver = setInterval(() => {
-				save(editor, editorEl)
+				save(editor, editorEl, opfs)
 			}, autosaveInterval)
 		}
 	}
