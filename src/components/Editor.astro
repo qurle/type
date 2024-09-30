@@ -34,16 +34,6 @@ import '@styles/notes.sass'
 	let editorEl: HTMLDivElement = null
 	let empty = true
 
-	let start: DOMHighResTimeStamp
-	let startList: DOMHighResTimeStamp
-
-	let times = {
-		listener: [],
-		attribute: [],
-		class: [],
-		variable: [],
-	}
-
 	const editor = await Editor.make()
 		.use(commonmark)
 		.use(history)
@@ -61,7 +51,7 @@ import '@styles/notes.sass'
 						'editor',
 					) as HTMLCollectionOf<HTMLDivElement>
 				)[0]
-				editorEl.dataset.empty = 'true'
+				if (hasNotes) editorEl.classList.add('collapsed')
 				editorEl.ariaLabel = 'Your note'
 			})
 
@@ -73,13 +63,13 @@ import '@styles/notes.sass'
 					if (hasNotes) editorEl.classList.add('collapsed')
 					setTimeout(() => {
 						rootEl.classList.add('notes-shown')
-					}, 25)
+					}, 50)
 				} else {
 					empty = false
 					if (hasNotes) rootEl.classList.remove('notes-shown')
 					setTimeout(() => {
 						editorEl.classList.remove('collapsed')
-					}, 25)
+					}, 50)
 				}
 			})
 		})
@@ -87,13 +77,7 @@ import '@styles/notes.sass'
 
 	const exportButtonEl = document.getElementsByClassName('export')[0]
 
-	if (notes?.length > 1) {
-		rootEl.classList.add('notes-shown')
-		editorEl.classList.add('collapsed')
-		renderNotes(notes)
-	} else {
-		load(editor)
-	}
+	buildEditor(editor, notes)
 
 	let saver = setInterval(() => {
 		if (updated) {
@@ -128,6 +112,20 @@ import '@styles/notes.sass'
 		exportFile(editor.action(getMarkdown()))
 	})
 
+	function toggleNotes(show: boolean) {
+		if (show) {
+			editorEl.classList.add('collapsed')
+			setTimeout(() => {
+				rootEl.classList.add('notes-shown')
+			}, 50)
+		} else {
+			rootEl.classList.remove('notes-shown')
+			setTimeout(() => {
+				editorEl.classList.remove('collapsed')
+			}, 50)
+		}
+	}
+
 	function renderNotes(notes: Note[]) {
 		const sortedNotes = notes.sort(
 			(a, b) => b.modified.getTime() - a.modified.getTime(),
@@ -151,6 +149,24 @@ import '@styles/notes.sass'
 				noteEl.appendChild(noteDateEl)
 				notesEl.appendChild(noteEl)
 			}
+		}
+	}
+
+	function buildEditor(
+		editor: Editor,
+		notes: Note[],
+		notesAreNotStub: boolean = false,
+	) {
+		if (notesAreNotStub) {
+			if (notes?.length > 1) {
+				renderNotes(notes)
+				toggleNotes(true)
+			} else load(editor)
+		} else {
+			// Remove this behaviour
+			// after multi-notes release
+			renderNotes(notes)
+			if (!load(editor)) toggleNotes(true)
 		}
 	}
 
