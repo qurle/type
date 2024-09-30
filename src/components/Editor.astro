@@ -24,13 +24,17 @@ import '@styles/notes.sass'
 	import { exportFile } from '@utils/exportFile'
 	import { save } from '@utils/save'
 
+	// Utilities
 	const autosaveInterval = 5_000
+	// Other
 	const rootEl: HTMLElement = document.getElementsByTagName('main')[0]
 	const notes = getNotes()
 	const hasNotes = notes?.length > 0
 
-	let updated = false
+	// Assinged selectors
 	let editorEl: HTMLDivElement = null
+	// States
+	let updated = false
 	let empty = true
 
 	const editor = await Editor.make()
@@ -76,7 +80,7 @@ import '@styles/notes.sass'
 
 	const exportButtonEl = document.getElementsByClassName('export')[0]
 
-	buildEditor(editor, notes, rootEl, editorEl)
+	const { notesEl } = buildEditor(editor, notes, rootEl, editorEl)
 
 	let saver = setInterval(() => {
 		if (updated) {
@@ -105,6 +109,37 @@ import '@styles/notes.sass'
 				(el as HTMLElement).classList.toggle('bordered'),
 			)
 		}
+		if (e.key === 'ArrowDown' && empty && notesEl) {
+			;(
+				notesEl.firstElementChild.firstElementChild as HTMLButtonElement
+			).focus()
+		}
+		if (e.key === 'ArrowUp' && empty && notesEl) {
+			;(
+				notesEl.lastElementChild.firstElementChild as HTMLButtonElement
+			).focus()
+		}
+	})
+
+	// Probably the worst code I ever wrote
+	;[...notesEl.getElementsByTagName('button')].forEach((noteEl) => {
+		noteEl.addEventListener('keydown', (e) => {
+			const buttonEl = e.target as HTMLButtonElement
+			if (e.key === 'ArrowDown' && empty && notesEl) {
+				const nextLi = buttonEl.parentElement
+					.nextElementSibling as HTMLLIElement
+				if (nextLi)
+					(nextLi.firstElementChild as HTMLButtonElement).focus()
+				else editorEl.focus()
+			}
+			if (e.key === 'ArrowUp' && empty && notesEl) {
+				const prevLi = buttonEl.parentElement
+					.previousElementSibling as HTMLLIElement
+				if (prevLi)
+					(prevLi.firstElementChild as HTMLButtonElement).focus()
+				else editorEl.focus()
+			}
+		})
 	})
 
 	exportButtonEl.addEventListener('click', () => {

@@ -14,13 +14,15 @@ ul.notes
         color: var(--color-main-25)
         margin-bottom: var(--space-m)
 
-    li
+    li > button
         display: flex
+        position: relative
+        width: 100%
+
         gap: var(--space-xl)
         padding: var(--space-m) 0
 
         text-wrap: balance
-        cursor: pointer
 
         opacity: 0
         animation: 300ms fade-in-scale linear
@@ -32,11 +34,25 @@ ul.notes
             &:nth-child(#{$i})
                 animation-delay: $i * 50ms
 
+        &::before
+            content: ''
+            position: absolute
+            inset: 0 calc(-1 * var(--space-l))
+            border-radius: var(--radius-m)
+            background: transparent
+            transform: scale(0.95)
+            transition: background-color var(--transition-s),transform var(--transition-s)
+
         &:hover
             .name
                 color: var(--color-main-50)
             .date
                 color: var(--color-main-25)
+
+        &:focus
+            &::before
+                transform: scale(1)
+                background: var(--color-main-05)
 
         span
             &.name

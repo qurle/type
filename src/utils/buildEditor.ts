@@ -10,15 +10,15 @@ export function buildEditor(
 	editorEl: HTMLElement,
 	notesAreNotStub: boolean = false,
 ) {
+	const notesEl = renderNotes(notes, rootEl)
 	if (notesAreNotStub) {
 		if (notes?.length > 1) {
-			renderNotes(notes, rootEl)
 			toggleNotes(true, editorEl, rootEl)
 		} else load(editor)
 	} else {
 		// Remove this behaviour
 		// after multi-notes release
-		renderNotes(notes, rootEl)
 		if (!load(editor)) toggleNotes(true, editorEl, rootEl)
 	}
+	return { notesEl: notesEl }
 }
