@@ -20,9 +20,8 @@ import '@styles/notes.sass'
 	import { commonmark } from '@milkdown/kit/preset/commonmark'
 	import { getMarkdown } from '@milkdown/utils'
 	import { getNotes } from '@stubs/notes'
+	import { buildEditor } from '@utils/buildEditor'
 	import { exportFile } from '@utils/exportFile'
-	import { getShortDate } from '@utils/getShortDate'
-	import { load } from '@utils/load'
 	import { save } from '@utils/save'
 
 	const autosaveInterval = 5_000
@@ -77,11 +76,11 @@ import '@styles/notes.sass'
 
 	const exportButtonEl = document.getElementsByClassName('export')[0]
 
-	buildEditor(editor, notes)
+	buildEditor(editor, notes, rootEl, editorEl)
 
 	let saver = setInterval(() => {
 		if (updated) {
-			save(editor.action(getMarkdown()))
+			save(editor, editorEl)
 			updated = false
 		}
 	}, autosaveInterval)
@@ -96,13 +95,13 @@ import '@styles/notes.sass'
 			if (e.shiftKey) {
 				exportFile(editor.action(getMarkdown()))
 			} else {
-				save(editor.action(getMarkdown()), 'shortcut')
+				save(editor, editorEl)
 			}
 		}
 		if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
 			e.preventDefault()
 			if (e.repeat) return
-			rootEl.childNodes.forEach((el) =>
+			;[...rootEl.children].forEach((el) =>
 				(el as HTMLElement).classList.toggle('bordered'),
 			)
 		}
@@ -112,70 +111,12 @@ import '@styles/notes.sass'
 		exportFile(editor.action(getMarkdown()))
 	})
 
-	function toggleNotes(show: boolean) {
-		if (show) {
-			editorEl.classList.add('collapsed')
-			setTimeout(() => {
-				rootEl.classList.add('notes-shown')
-			}, 50)
-		} else {
-			rootEl.classList.remove('notes-shown')
-			setTimeout(() => {
-				editorEl.classList.remove('collapsed')
-			}, 50)
-		}
-	}
-
-	function renderNotes(notes: Note[]) {
-		const sortedNotes = notes.sort(
-			(a, b) => b.modified.getTime() - a.modified.getTime(),
-		)
-		if (sortedNotes?.length > 0) {
-			console.debug(sortedNotes)
-			const notesEl = document.createElement('ul')
-			notesEl.classList.add('notes')
-
-			rootEl.appendChild(notesEl)
-			for (const note of sortedNotes) {
-				const noteEl = document.createElement('li')
-				const noteNameEl = document.createElement('span')
-				const noteDateEl = document.createElement('span')
-				noteNameEl.className = 'name'
-				noteDateEl.className = 'date'
-				noteNameEl.innerText = note.name
-				noteDateEl.innerText = getShortDate(note.modified)
-
-				noteEl.appendChild(noteNameEl)
-				noteEl.appendChild(noteDateEl)
-				notesEl.appendChild(noteEl)
-			}
-		}
-	}
-
-	function buildEditor(
-		editor: Editor,
-		notes: Note[],
-		notesAreNotStub: boolean = false,
-	) {
-		if (notesAreNotStub) {
-			if (notes?.length > 1) {
-				renderNotes(notes)
-				toggleNotes(true)
-			} else load(editor)
-		} else {
-			// Remove this behaviour
-			// after multi-notes release
-			renderNotes(notes)
-			if (!load(editor)) toggleNotes(true)
-		}
-	}
-
 	function toggleAutosave() {
 		if (document.hidden) {
 			clearInterval(saver)
 		} else {
 			saver = setInterval(() => {
-				save(editor.action(getMarkdown()))
+				save(editor, editorEl)
 			}, autosaveInterval)
 		}
 	}
