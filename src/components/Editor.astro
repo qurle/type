@@ -135,7 +135,11 @@ import '@styles/notes.sass'
 	function initNotesListeners() {
 		// Probably the worst code I ever wrote
 		if (hasNotes)
-			[...notesEl.getElementsByTagName('button')].forEach((noteEl) => {
+			[
+				...(notesEl.getElementsByClassName(
+					'note',
+				) as HTMLCollectionOf<HTMLButtonElement>),
+			].forEach((noteEl) => {
 				noteEl
 					.getElementsByClassName('delete')[0]
 					.addEventListener('click', (e) => {
