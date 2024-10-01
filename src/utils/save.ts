@@ -2,7 +2,7 @@ import { Editor } from '@milkdown/core'
 import { getMarkdown } from '@milkdown/utils'
 import { smartTrunc } from '@utils/smartTrunc'
 
-export async function save(editor: Editor, editorEl: HTMLElement, opfs: FileSystemDirectoryHandle, id: string, stateEl: HTMLElement, saveRef: 'autosave' | 'shortcut' | 'reload' = 'autosave') {
+export async function save(editor: Editor, editorEl: HTMLElement, opfs: FileSystemDirectoryHandle, id: string, stateEl: HTMLElement, saveRef: 'autosave' | 'shortcut' | 'reload' | 'clear' = 'autosave') {
 	const markdown = editor.action(getMarkdown())
 	if (markdown === '')
 		return

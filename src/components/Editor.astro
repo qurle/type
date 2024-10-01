@@ -192,6 +192,21 @@ import { modes } from '@utils/cycleModes'
 			if (e.repeat) return
 			debug(rootEl)
 		}
+		if (e.key === 'Escape') {
+			if (updated && !empty) {
+				if (!editorEl.dataset?.id) editorEl.dataset.id = nanoid(10)
+				save(
+					editor,
+					editorEl,
+					opfs,
+					editorEl.dataset.id,
+					stateEl,
+					'clear',
+				)
+				updated = false
+			}
+			editor.action(replaceAll(''))
+		}
 	})
 
 	editorEl.addEventListener('keydown', (e) => {
@@ -210,7 +225,7 @@ import { modes } from '@utils/cycleModes'
 	backEl.addEventListener('click', () => {
 		if (updated && !empty) {
 			if (!editorEl.dataset?.id) editorEl.dataset.id = nanoid(10)
-			save(editor, editorEl, opfs, editorEl.dataset.id, stateEl, 'reload')
+			save(editor, editorEl, opfs, editorEl.dataset.id, stateEl, 'clear')
 			updated = false
 		}
 		editor.action(replaceAll(''))
