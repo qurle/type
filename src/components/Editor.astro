@@ -47,20 +47,20 @@ import { modes } from '@utils/cycleModes'
 <main></main>
 <script>
 	import { Editor, rootCtx } from '@milkdown/kit/core'
-import { clipboard } from '@milkdown/kit/plugin/clipboard'
-import { history } from '@milkdown/kit/plugin/history'
-import { indent } from '@milkdown/kit/plugin/indent'
-import { listener, listenerCtx } from '@milkdown/kit/plugin/listener'
-import { upload } from '@milkdown/kit/plugin/upload'
-import { commonmark } from '@milkdown/kit/preset/commonmark'
-import { replaceAll } from '@milkdown/utils'
-import { buildEditor } from '@utils/buildEditor'
-import { debug } from '@utils/debug'
-import { del } from '@utils/del'
-import { exportFile } from '@utils/exportFile'
-import { getNotes } from '@utils/getNotes'
-import { save } from '@utils/save'
-import { nanoid } from 'nanoid/non-secure'
+	import { clipboard } from '@milkdown/kit/plugin/clipboard'
+	import { history } from '@milkdown/kit/plugin/history'
+	import { indent } from '@milkdown/kit/plugin/indent'
+	import { listener, listenerCtx } from '@milkdown/kit/plugin/listener'
+	import { upload } from '@milkdown/kit/plugin/upload'
+	import { commonmark } from '@milkdown/kit/preset/commonmark'
+	import { replaceAll } from '@milkdown/utils'
+	import { buildEditor } from '@utils/buildEditor'
+	import { debug } from '@utils/debug'
+	import { del } from '@utils/del'
+	import { exportFile } from '@utils/exportFile'
+	import { getNotes } from '@utils/getNotes'
+	import { save } from '@utils/save'
+	import { nanoid } from 'nanoid/non-secure'
 
 	// Utilities
 	const autosaveInterval = 5_000
@@ -222,15 +222,20 @@ import { nanoid } from 'nanoid/non-secure'
 
 	Array.from(fontsEl).forEach((button) =>
 		button.addEventListener('click', () => {
-			document.documentElement.dataset.font = button.className
+			activateMode('font', button.className)
 		}),
 	)
 
 	Array.from(themeEl).forEach((button) =>
 		button.addEventListener('click', () => {
-			document.documentElement.dataset.theme = button.className
+			activateMode('theme', button.className)
 		}),
 	)
+
+	function activateMode(scope: 'font' | 'theme', mode: string) {
+		document.documentElement.dataset[scope] = mode
+		localStorage.setItem(scope, mode)
+	}
 
 	initNotesListeners()
 
