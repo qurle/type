@@ -30,27 +30,51 @@
             &::before
                 display: block
 
-    ul
-        ul > li
-            margin-left: var(--space-xl)
+    ul ul > li
+                margin-left: var(--space-xl)
 
-    ol
-        ol > li
-            margin-left: var(--space-xl)
+    ol ol > li
+                margin-left: var(--space-xl)
 
     ul>li::marker
-        content: '· '
+                content: '· '
 
     li > p
-        display: inline
+                display: inline
+
+    pre
+        padding: var(--space-m) var(--space-l)
+        margin: var(--space-m) 0
+
+        font-size: var(--font-size-s)
+
+        background: var(--color-main-05)
+        border-radius: var(--radius-l)
+        
+        &[data-language]:not([data-language=""])::before
+            content: attr(data-language)
+            font-size: 0.75rem
+            padding: var(--space-m) 0
+            display: block
+            color: var(--color-main-50)
 
 main:not(.notes-shown)
-        ul.notes
-            animation: none
-            opacity: 0
-            display: none
-            pointer-events: none
+    ul.notes
+        animation: none
+        opacity: 0
+        display: none
+        pointer-events: none
 
+// Font-dependent adjustments
+:root[data-font="mono"]
+    code
+        border-radius: var(--radius-m)
+        background: var(--color-main-05)
+        padding: 2px 4px
+
+:root[data-font="serif"]
+    code, pre
+        font-size: 0.92em
 
 // Prosemirror asked me to do this
 .ProseMirror
