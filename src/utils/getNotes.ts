@@ -9,6 +9,7 @@ export async function getNotes(opfs: FileSystemDirectoryHandle = null) {
 
 export async function getLocalNotes(opfs: FileSystemDirectoryHandle) {
 	const notes: Note[] = []
+	// @ts-ignore
 	for await (let handle of opfs.values()) {
 		if (handle.kind === 'file') {
 			const file = await handle.getFile() as File
