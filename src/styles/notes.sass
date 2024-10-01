@@ -18,7 +18,7 @@ ul.notes
         @for $i from 1 to 30
             &:nth-child(#{$i}) > button
                 animation-delay: $i * 50ms
-       
+
         > button
 
             display: flex
@@ -63,6 +63,9 @@ ul.notes
             .name
                 transition: color var(--transition-xs)
                 flex-grow: 1
+                text-overflow: ellipsis
+                word-wrap: normal
+                overflow: auto
 
             .right
                 display: flex
