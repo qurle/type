@@ -12,6 +12,7 @@ export async function getLocalNotes(opfs: FileSystemDirectoryHandle) {
 	// @ts-ignore
 	for await (const handle of opfs.values()) {
 		if (handle.kind === 'file') {
+			// @ts-ignore
 			const file = await handle.getFile() as File
 			const note: Note = {
 				id: file.name,
