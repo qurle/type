@@ -185,6 +185,14 @@ import '@styles/notes.sass'
 		exportFile(editor, editorEl)
 	})
 
+	window.addEventListener('beforeunload', () => {
+		if (updated && !empty) {
+			if (!editorEl.dataset?.id) editorEl.dataset.id = nanoid(10)
+			save(editor, editorEl, opfs, editorEl.dataset.id, 'reload')
+		}
+		updated = false
+	})
+
 	function toggleAutosave() {
 		if (document.hidden) {
 			clearInterval(saver)
