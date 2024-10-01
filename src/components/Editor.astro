@@ -74,10 +74,20 @@ import '@styles/notes.sass'
 						rootEl.classList.add('notes-shown')
 					}, 50)
 					getNotes(opfs).then((notes) => {
+						hasNotes = notes?.length > 0
 						if (notesEl) {
 							rootEl.removeChild(notesEl)
 						}
-						location.reload()
+						notesEl = buildEditor(
+							editor,
+							notes,
+							rootEl,
+							editorEl,
+							true,
+						)
+						initNotesListeners()
+
+						// location.reload()
 					})
 					editorEl.dataset.id = ''
 				} else {
