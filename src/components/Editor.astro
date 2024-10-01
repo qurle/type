@@ -77,14 +77,7 @@ import '@styles/notes.sass'
 						if (notesEl) {
 							rootEl.removeChild(notesEl)
 						}
-						notesEl = buildEditor(
-							editor,
-							notes,
-							rootEl,
-							editorEl,
-							true,
-						)
-						initNotesListeners()
+						location.reload()
 					})
 					editorEl.dataset.id = ''
 				} else {
