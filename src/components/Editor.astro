@@ -18,26 +18,30 @@ import '@styles/notes.sass'
 	import { listener, listenerCtx } from '@milkdown/kit/plugin/listener'
 	import { upload } from '@milkdown/kit/plugin/upload'
 	import { commonmark } from '@milkdown/kit/preset/commonmark'
-	import { getMarkdown } from '@milkdown/utils'
-	import { getNotes } from '@stubs/notes'
 	import { buildEditor } from '@utils/buildEditor'
 	import { debug } from '@utils/debug'
+	import { del } from '@utils/del'
 	import { exportFile } from '@utils/exportFile'
+	import { getNotes } from '@utils/getNotes'
 	import { save } from '@utils/save'
+	import { nanoid } from 'nanoid/non-secure'
 
 	// Utilities
 	const autosaveInterval = 5_000
 	// Other
-	const opfs = await navigator.storage.getDirectory()
+	const opfs = await (
+		await navigator.storage.getDirectory()
+	).getDirectoryHandle('md', { create: true })
 	const rootEl: HTMLElement = document.getElementsByTagName('main')[0]
-	const notes = getNotes()
-	const hasNotes = notes?.length > 0
+	const notes = await getNotes(opfs)
 
 	// Assinged selectors
 	let editorEl: HTMLDivElement = null
+	let notesEl: HTMLUListElement = null
 	// States
 	let updated = false
 	let empty = true
+	let hasNotes = notes?.length > 0
 
 	const editor = await Editor.make()
 		.use(commonmark)
@@ -69,6 +73,20 @@ import '@styles/notes.sass'
 					setTimeout(() => {
 						rootEl.classList.add('notes-shown')
 					}, 50)
+					getNotes(opfs).then((notes) => {
+						if (notesEl) {
+							rootEl.removeChild(notesEl)
+						}
+						notesEl = buildEditor(
+							editor,
+							notes,
+							rootEl,
+							editorEl,
+							true,
+						)
+						initNotesListeners()
+					})
+					editorEl.dataset.id = ''
 				} else {
 					empty = false
 					if (hasNotes) rootEl.classList.remove('notes-shown')
@@ -80,16 +98,10 @@ import '@styles/notes.sass'
 		})
 		.create()
 
+	let saver = startAutosave()
+
 	const exportButtonEl = document.getElementsByClassName('export')[0]
-
-	const { notesEl } = buildEditor(editor, notes, rootEl, editorEl)
-
-	let saver = setInterval(() => {
-		if (updated) {
-			save(editor, editorEl, opfs)
-			updated = false
-		}
-	}, autosaveInterval)
+	notesEl = buildEditor(editor, notes, rootEl, editorEl, true)
 
 	editorEl.focus()
 	document.addEventListener('visibilitychange', toggleAutosave)
@@ -99,9 +111,10 @@ import '@styles/notes.sass'
 			e.preventDefault()
 			if (e.repeat) return
 			if (e.shiftKey) {
-				exportFile(editor.action(getMarkdown()))
+				exportFile(editor, editorEl)
 			} else {
-				save(editor, editorEl, opfs, 'shortcut')
+				if (!editorEl.dataset?.id) editorEl.dataset.id = nanoid(10)
+				save(editor, editorEl, opfs, editorEl.dataset.id, 'shortcut')
 			}
 		}
 		if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
@@ -124,38 +137,62 @@ import '@styles/notes.sass'
 		}
 	})
 
-	// Probably the worst code I ever wrote
-	;[...notesEl.getElementsByTagName('button')].forEach((noteEl) => {
-		noteEl.addEventListener('keydown', (e) => {
-			const buttonEl = e.target as HTMLButtonElement
-			if (e.key === 'ArrowDown' && empty && notesEl) {
-				const nextLi = buttonEl.parentElement
-					.nextElementSibling as HTMLLIElement
-				if (nextLi)
-					(nextLi.firstElementChild as HTMLButtonElement).focus()
-				else editorEl.focus()
-			}
-			if (e.key === 'ArrowUp' && empty && notesEl) {
-				const prevLi = buttonEl.parentElement
-					.previousElementSibling as HTMLLIElement
-				if (prevLi)
-					(prevLi.firstElementChild as HTMLButtonElement).focus()
-				else editorEl.focus()
-			}
-		})
-	})
+	initNotesListeners()
+
+	function initNotesListeners() {
+		// Probably the worst code I ever wrote
+		if (hasNotes)
+			[...notesEl.getElementsByTagName('button')].forEach((noteEl) => {
+				noteEl
+					.getElementsByClassName('delete')[0]
+					.addEventListener('click', (e) => {
+						console.debug(`Clicked on ${noteEl.dataset.id}`)
+						e.stopPropagation()
+						del(noteEl.dataset.id, opfs)
+					})
+				noteEl.addEventListener('keydown', (e) => {
+					const buttonEl = e.target as HTMLButtonElement
+					if (e.key === 'ArrowDown' && empty && notesEl) {
+						const nextLi = buttonEl.parentElement
+							.nextElementSibling as HTMLLIElement
+						if (nextLi)
+							(
+								nextLi.firstElementChild as HTMLButtonElement
+							).focus()
+						else editorEl.focus()
+					}
+					if (e.key === 'ArrowUp' && empty && notesEl) {
+						const prevLi = buttonEl.parentElement
+							.previousElementSibling as HTMLLIElement
+						if (prevLi)
+							(
+								prevLi.firstElementChild as HTMLButtonElement
+							).focus()
+						else editorEl.focus()
+					}
+				})
+			})
+	}
 
 	exportButtonEl.addEventListener('click', () => {
-		exportFile(editor.action(getMarkdown()))
+		exportFile(editor, editorEl)
 	})
 
 	function toggleAutosave() {
 		if (document.hidden) {
 			clearInterval(saver)
 		} else {
-			saver = setInterval(() => {
-				save(editor, editorEl, opfs)
-			}, autosaveInterval)
+			saver = startAutosave()
 		}
+	}
+
+	function startAutosave() {
+		return setInterval(() => {
+			if (updated && !empty) {
+				if (!editorEl.dataset?.id) editorEl.dataset.id = nanoid(10)
+				save(editor, editorEl, opfs, editorEl.dataset.id)
+			}
+			updated = false
+		}, autosaveInterval)
 	}
 </script>

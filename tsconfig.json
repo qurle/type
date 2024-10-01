@@ -1,37 +1,40 @@
 {
-  "extends": "astro/tsconfigs/base",
   "compilerOptions": {
-    "baseUrl": ".",
     "allowJs": true,
+    "baseUrl": ".",
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "lib": [
+      "ES2016",
+      "DOM",
+      "DOM.Iterable",
+      "DOM.AsyncIterable"
+    ],
     "noImplicitAny": false,
-    "target": "ES2016",
     "paths": {
       "@components/*": [
         "src/components/*"
       ],
+      "@data/*": [
+        "src/data/*"
+      ],
       "@images/*": [
         "src/assets/images/*"
-      ],
-      "@pages/*": [
-        "src/pages/*"
       ],
       "@layouts/*": [
         "src/layouts/*"
       ],
+      "@pages/*": [
+        "src/pages/*"
+      ],
       "@styles/*": [
         "src/styles/*"
       ],
-      "@data/*": [
-        "src/data/*"
-      ],
       "@utils/*": [
         "src/utils/*"
-      ],
-      "@stubs/*": [
-        "src/stubs/*"
       ]
     },
-    "jsx": "react-jsx",
-    "jsxImportSource": "react"
-  }
+    "target": "ES2016"
+  },
+  "extends": "astro/tsconfigs/base"
 }

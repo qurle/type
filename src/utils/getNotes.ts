@@ -1,8 +1,35 @@
 import { nanoid } from 'nanoid/non-secure';
 
-export function getNotes(minCount = 0): Note[] {
+export async function getNotes(opfs: FileSystemDirectoryHandle = null) {
+	if (opfs)
+		return await getLocalNotes(opfs)
+	else
+		return getStubNotes()
+}
+
+export async function getLocalNotes(opfs: FileSystemDirectoryHandle) {
+	const notes: Note[] = []
+	for await (let handle of opfs.values()) {
+		if (handle.kind === 'file') {
+			const file = await handle.getFile() as File
+			const note: Note = {
+				id: file.name,
+				name: null,
+				author: 'type.local',
+				modified: new Date(file.lastModified)
+			}
+			note.content = await file.text()
+			note.name = localStorage.getItem(`name-${file.name}`) || note.content.slice(0, 50) || 'Empty note'
+			notes.push(note)
+		}
+	}
+	console.debug(notes)
+	return notes
+}
+
+function getStubNotes(): Note[] {
 	const notes = []
-	const randomNames = shuffle(names).slice(0, randomCount(minCount))
+	const randomNames = shuffle(names).slice(0, randomCount())
 	for (const name of randomNames) {
 		notes.push({
 			'id': id(),
@@ -28,9 +55,8 @@ function date() {
 	return new Date(from.getTime() + Math.random() * (new Date().getTime() - from.getTime()))
 }
 
-function randomCount(minCount) {
-	return Math.max(minCount, Math.floor(Math.random() * (names.length - minCount + 1) + minCount))
-
+function randomCount() {
+	return Math.floor(Math.random() * (names.length + 1))
 }
 
 function shuffle(a) {

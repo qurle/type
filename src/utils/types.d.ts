@@ -8,4 +8,5 @@ interface Note {
 	name: string,
 	author: string,
 	modified: Date,
+	content?: string,
 }
