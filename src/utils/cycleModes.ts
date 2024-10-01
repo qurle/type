@@ -1,4 +1,4 @@
-const modes = {
+export const modes = {
 	font: ['serif', 'mono', 'sans'],
 	theme: ['light', 'dark', 'sepia', 'blue']
 }

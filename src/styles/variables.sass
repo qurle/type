@@ -6,13 +6,18 @@
     --color-main-50: color-mix(in hsl, var(--color-main) 50%, transparent)
 
     --font-main: var(--font-serif)
-    --font-size: 1.25rem
+    --font-size-m: 1.25rem
     --font-size-s: 1.15rem
     --font-size-xs: 1rem
     
     --font-serif: 'PT Serif', Playfair, Georgia, serif
     --font-mono: 'Fira Code', 'Space Mono', 'Source Code Pro', monospace
     --font-sans: -apple-system, BlinkMacSystemFont, 'Mulish', Inter, 'Helvetica Neue', Helvetica, -apple-system, -system-ui, sans-serif
+
+    --color-light: oklch(98% 0 0)
+    --color-dark: oklch(20% 0 0)
+    --color-sepia: oklch(77.59% 0.031 50.51)
+    --color-blue: oklch(35.57% 0.146 273.17)
 
     --page-padding: 1.5rem
     --page-padding-v: 3rem
@@ -47,13 +52,13 @@
     --font-main: var(--font-sans)
 
 :root[data-theme="dark"]
-    --color-background: oklch(20% 0 0)
+    --color-background: var(--color-dark)
     --color-main: oklch(92% 0 0)
 
 :root[data-theme="sepia"]
-    --color-background: #c7b1a5
-    --color-main: #211109
+    --color-background: var(--color-sepia)
+    --color-main: oklch(19.79% 0.031 47.06)
 
 :root[data-theme="blue"]
-    --color-background: hsl(236deg 54.88% 34.02%)
-    --color-main: hsl(234deg, 18%, 85%)
+    --color-background: var(--color-blue)
+    --color-main: oklch(87.02% 0.017 280.97)

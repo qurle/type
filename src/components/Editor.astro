@@ -3,28 +3,64 @@ import Menu from './Menu.astro'
 import '@styles/header.sass'
 import '@styles/editor.sass'
 import '@styles/notes.sass'
+import { Icon } from 'astro-icon/components'
+import { modes } from '@utils/cycleModes'
 ---
 
 <header class="editor-header">
-	<button class="export">save as file</button>
-	<Menu />
+	<div class="left" data-context="notes">
+		<button class="back"><Icon name="back" /></button>
+		<button class="add"><Icon name="add" /></button>
+	</div>
+	<div class="right">
+		<div class="state">saved</div>
+		<div class="more">
+			<button class="show-more"><Icon name="more" /></button>
+			<ul class="more-menu">
+				{
+					Object.entries(modes).map(([name, values]) => (
+						<li>
+							<span>
+								{name.charAt(0).toUpperCase() +
+									name.substring(1).toLowerCase()}
+							</span>
+							<menu class={name}>
+								{values.map((value) => (
+									<li>
+										<button class={value}>
+											{name === 'font'
+												? `${value.charAt(0).toUpperCase()}${value.substring(1).toLowerCase()}`
+												: ''}
+										</button>
+									</li>
+								))}
+							</menu>
+						</li>
+					))
+				}
+				<hr />
+				<button class="export">Export file</button>
+			</ul>
+		</div>
+	</div>
 </header>
 <main></main>
 <script>
 	import { Editor, rootCtx } from '@milkdown/kit/core'
-	import { clipboard } from '@milkdown/kit/plugin/clipboard'
-	import { history } from '@milkdown/kit/plugin/history'
-	import { indent } from '@milkdown/kit/plugin/indent'
-	import { listener, listenerCtx } from '@milkdown/kit/plugin/listener'
-	import { upload } from '@milkdown/kit/plugin/upload'
-	import { commonmark } from '@milkdown/kit/preset/commonmark'
-	import { buildEditor } from '@utils/buildEditor'
-	import { debug } from '@utils/debug'
-	import { del } from '@utils/del'
-	import { exportFile } from '@utils/exportFile'
-	import { getNotes } from '@utils/getNotes'
-	import { save } from '@utils/save'
-	import { nanoid } from 'nanoid/non-secure'
+import { clipboard } from '@milkdown/kit/plugin/clipboard'
+import { history } from '@milkdown/kit/plugin/history'
+import { indent } from '@milkdown/kit/plugin/indent'
+import { listener, listenerCtx } from '@milkdown/kit/plugin/listener'
+import { upload } from '@milkdown/kit/plugin/upload'
+import { commonmark } from '@milkdown/kit/preset/commonmark'
+import { replaceAll } from '@milkdown/utils'
+import { buildEditor } from '@utils/buildEditor'
+import { debug } from '@utils/debug'
+import { del } from '@utils/del'
+import { exportFile } from '@utils/exportFile'
+import { getNotes } from '@utils/getNotes'
+import { save } from '@utils/save'
+import { nanoid } from 'nanoid/non-secure'
 
 	// Utilities
 	const autosaveInterval = 5_000
@@ -32,7 +68,28 @@ import '@styles/notes.sass'
 	const opfs = await (
 		await navigator.storage.getDirectory()
 	).getDirectoryHandle('md', { create: true })
-	const rootEl: HTMLElement = document.getElementsByTagName('main')[0]
+	const headerEl = document.getElementsByTagName('header')[0] as HTMLElement
+	const headerLeftEl = headerEl.getElementsByClassName(
+		'left',
+	)[0] as HTMLElement
+	const addEl = headerLeftEl.getElementsByClassName(
+		'add',
+	)[0] as HTMLButtonElement
+	const backEl = headerEl.getElementsByClassName(
+		'back',
+	)[0] as HTMLButtonElement
+	const stateEl = headerEl.getElementsByClassName('state')[0] as HTMLElement
+	const showMoreEl = headerEl.getElementsByClassName(
+		'show-more',
+	)[0] as HTMLButtonElement
+	const fontsEl = headerEl
+		.getElementsByClassName('font')[0]
+		.getElementsByTagName('button')
+	const themeEl = headerEl
+		.getElementsByClassName('theme')[0]
+		.getElementsByTagName('button')
+
+	const rootEl = document.getElementsByTagName('main')[0] as HTMLElement
 	const notes = await getNotes(opfs)
 
 	// Assinged selectors
@@ -42,6 +99,7 @@ import '@styles/notes.sass'
 	let updated = false
 	let empty = true
 	let hasNotes = notes?.length > 0
+	let lastSave = Date.now()
 
 	const editor = await Editor.make()
 		.use(commonmark)
@@ -73,6 +131,7 @@ import '@styles/notes.sass'
 					setTimeout(() => {
 						rootEl.classList.add('notes-shown')
 					}, 50)
+					headerLeftEl.dataset.context = 'notes'
 					getNotes(opfs).then((notes) => {
 						hasNotes = notes?.length > 0
 						if (notesEl) {
@@ -86,8 +145,6 @@ import '@styles/notes.sass'
 							true,
 						)
 						initNotesListeners()
-
-						// location.reload()
 					})
 					editorEl.dataset.id = ''
 				} else {
@@ -96,6 +153,8 @@ import '@styles/notes.sass'
 					setTimeout(() => {
 						editorEl.classList.remove('collapsed')
 					}, 50)
+					headerLeftEl.dataset.context = 'editor'
+					showMoreEl.classList.remove('active')
 				}
 			})
 		})
@@ -103,7 +162,7 @@ import '@styles/notes.sass'
 
 	let saver = startAutosave()
 
-	const exportButtonEl = document.getElementsByClassName('export')[0]
+	const exportButtonEl = headerEl.getElementsByClassName('export')[0]
 	notesEl = buildEditor(editor, notes, rootEl, editorEl, true)
 
 	editorEl.focus()
@@ -117,7 +176,15 @@ import '@styles/notes.sass'
 				exportFile(editor, editorEl)
 			} else {
 				if (!editorEl.dataset?.id) editorEl.dataset.id = nanoid(10)
-				save(editor, editorEl, opfs, editorEl.dataset.id, 'shortcut')
+				save(
+					editor,
+					editorEl,
+					opfs,
+					editorEl.dataset.id,
+					stateEl,
+					'shortcut',
+				)
+				updated = false
 			}
 		}
 		if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
@@ -139,6 +206,31 @@ import '@styles/notes.sass'
 			).focus()
 		}
 	})
+
+	backEl.addEventListener('click', () => {
+		if (updated && !empty) {
+			if (!editorEl.dataset?.id) editorEl.dataset.id = nanoid(10)
+			save(editor, editorEl, opfs, editorEl.dataset.id, stateEl, 'reload')
+			updated = false
+		}
+		editor.action(replaceAll(''))
+	})
+
+	showMoreEl.addEventListener('click', () => {
+		showMoreEl.classList.toggle('active')
+	})
+
+	Array.from(fontsEl).forEach((button) =>
+		button.addEventListener('click', () => {
+			document.documentElement.dataset.font = button.className
+		}),
+	)
+
+	Array.from(themeEl).forEach((button) =>
+		button.addEventListener('click', () => {
+			document.documentElement.dataset.theme = button.className
+		}),
+	)
 
 	initNotesListeners()
 
@@ -188,9 +280,9 @@ import '@styles/notes.sass'
 	window.addEventListener('beforeunload', () => {
 		if (updated && !empty) {
 			if (!editorEl.dataset?.id) editorEl.dataset.id = nanoid(10)
-			save(editor, editorEl, opfs, editorEl.dataset.id, 'reload')
+			save(editor, editorEl, opfs, editorEl.dataset.id, stateEl, 'reload')
+			updated = false
 		}
-		updated = false
 	})
 
 	function toggleAutosave() {
@@ -203,11 +295,11 @@ import '@styles/notes.sass'
 
 	function startAutosave() {
 		return setInterval(() => {
-			if (updated && !empty) {
+			if (updated && !empty && Date.now() - lastSave > 3000) {
 				if (!editorEl.dataset?.id) editorEl.dataset.id = nanoid(10)
-				save(editor, editorEl, opfs, editorEl.dataset.id)
+				save(editor, editorEl, opfs, editorEl.dataset.id, stateEl)
+				updated = false
 			}
-			updated = false
 		}, autosaveInterval)
 	}
 </script>

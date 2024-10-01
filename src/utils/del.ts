@@ -3,5 +3,6 @@ export function del(noteId: string, opfs: FileSystemDirectoryHandle) {
 	// if (confirmation)
 	opfs.removeEntry(noteId)
 	location.reload()
+
 	// return confirmation
 }

@@ -2,7 +2,7 @@ import { Editor } from '@milkdown/core'
 import { getMarkdown } from '@milkdown/utils'
 import { smartTrunc } from '@utils/smartTrunc'
 
-export async function save(editor: Editor, editorEl: HTMLElement, opfs: FileSystemDirectoryHandle, id: string, saveRef: 'autosave' | 'shortcut' | 'reload' = 'autosave') {
+export async function save(editor: Editor, editorEl: HTMLElement, opfs: FileSystemDirectoryHandle, id: string, stateEl: HTMLElement, saveRef: 'autosave' | 'shortcut' | 'reload' = 'autosave') {
 	const markdown = editor.action(getMarkdown())
 	if (markdown === '')
 		return
@@ -28,6 +28,12 @@ export async function save(editor: Editor, editorEl: HTMLElement, opfs: FileSyst
 	await writable.write(markdown)
 	await writable.close()
 
+	stateEl.innerText = 'saved'
+	stateEl.animate(
+		[{ opacity: 0 }, { opacity: 1, offset: 0.4 }, { opacity: 1, offset: 0.6 }, { opacity: 0 }],
+		2000,
+	);
+
 	// opfs.getFileHandle(id, {
 	// 	create: true,
 	// }).then(handle => {
@@ -40,5 +46,5 @@ export async function save(editor: Editor, editorEl: HTMLElement, opfs: FileSyst
 	// 		})
 	// })
 
-	return savedNote
+	return Date.now()
 }

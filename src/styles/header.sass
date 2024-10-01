@@ -1,37 +1,146 @@
 header.editor-header
-	display: flex
-	justify-content: space-between
-	width: 100%
+    display: flex
+    justify-content: space-between
+    width: 100%
 
-	margin-bottom: calc(var(--space-m) + var(--space-l))
+    margin-bottom: calc(var(--space-m) + var(--space-l))
 
-	font-size: var(--font-size-xs)
+    font-size: var(--font-size-xs)
+    font-family: var(--font-sans)
 
-	button
-		opacity: .2
+    button
+        display: block
+        opacity: .25
 
-		transition: opacity var(--transition-s), transform var(--transition-m)
-		&:hover
-			opacity: .3
-		&:active
-			transform: scale(0.8)
+        transition: opacity var(--transition-s), transform var(--transition-m)
+        &:hover
+            opacity: .5
+        &:active
+            transform: scale(0.8)
 
-	.export
-		font-family: var(--font-sans)
-		font-weight: 500
-		opacity: 0
-		pointer-events: none
+    svg
+        display: block
+        height: 24px
+        width: 24px
 
-	&:has(~main .milkdown):not(:has(~main .milkdown .editor > p:only-child:not(.crepe-placeholder) > br:only-child))
-		.export
-			opacity: .2
-			pointer-events: all
-			&:hover
-				opacity: .3
+    .left
+        .add, .back
+            position: absolute
+            transition: opacity var(--transition-m), transform var(--transition-m)
+            transform: scale(1)
+            opacity: 0
+            pointer-events: none
+            transform: scale(0.65)
+        
+        // No functionality yet
+        .add
+            display: none
+           
 
-	.customization
-		button:not(:first-child)
-			margin-left: var(--space-l)
+        &[data-context='editor'] .back, &[data-context='notes'] .add
+                opacity: .25
+                &:hover
+                    opacity: .5
+                pointer-events: all
+                transform: scale(1)
 
-// header.editor-header ~:not(:has(.milkdown .editor > p:only-child:not(.crepe-placeholder) > br:only-child))
-// 		background: red
+    .right
+        display: flex
+        align-items: center
+        gap: var(--space-l)
+
+    .state
+        font-family: var(--font-sans)
+        color: var(--color-main-25)
+        opacity: 0
+
+    div.more
+        position: relative
+        .more-menu
+            position: absolute
+            top: calc(100% + var(--space-l)) 
+            right: 0
+
+            display: flex
+            flex-direction: column
+            gap: var(--space-l)
+
+            opacity: 0
+            pointer-events: none
+            transform: scale(.5)
+            transform-origin: top right
+            transition: opacity var(--transition-s), transform var(--transition-m)
+
+            padding: var(--space-l)
+            padding-right: calc(var(--space-l) + var(--space-m))
+            border: 1px solid var(--color-main-05)
+
+            z-index: 2
+            border-radius: var(--radius-l)
+            background: var(--color-background)
+
+            span
+                color: var(--color-main-50)
+
+            menu
+                display: flex
+                gap: var(--space-m)
+                margin-top: var(--space-m)
+                font-size: var(--font-size-s)
+
+                li
+                    list-style: none
+
+                button
+                    opacity: 1
+
+                &.font
+                    li>button
+                        &.serif
+                            font-family: var(--font-serif)
+                        &.sans
+                            font-family: var(--font-sans)
+                        &.mono
+                            font-family: var(--font-mono)
+                &.theme
+                    li>button
+                        width: 28px
+                        height: 28px
+                        border-radius: 50%
+                        border: 1px solid var(--color-main-25)
+
+                        &.light
+                            background: var(--color-light)
+                        &.dark
+                            background: var(--color-dark)
+                        &.sepia
+                            background: var(--color-sepia)
+                        &.blue
+                            background: var(--color-blue)
+
+            hr
+                border-color: var(--color-main-05)
+            button
+                opacity: 1 
+                &:active
+                    transform: scale(.95)
+
+
+    .export 
+        font-size: var(--font-size-m)
+
+    .show-more.active
+       + .more-menu
+            opacity: 1
+            transform: scale(1)
+            pointer-events: all
+
+
+// Animations
+@keyframes fade-in-with-stop
+    0%
+        opacity: 0
+    80%
+        opacity: 1
+    100%
+        opacity: 1
