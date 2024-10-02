@@ -1,8 +1,10 @@
 export function del(noteId: string, opfs: FileSystemDirectoryHandle) {
-	// const confirmation = confirm("Delete note?")
-	// if (confirmation)
-	opfs.removeEntry(noteId)
-	location.reload()
+	const name = localStorage.getItem(`note-${noteId}`)
+	const confirmation = confirm(`Delete ${name? name: "note"}?`)
+	if (confirmation){
+	    opfs.removeEntry(noteId)
+	    location.reload()
+	}
 
-	// return confirmation
+	return confirmation
 }
