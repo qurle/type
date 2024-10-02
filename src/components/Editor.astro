@@ -83,12 +83,16 @@ import { modes } from '@utils/cycleModes'
 	const showMoreEl = headerEl.getElementsByClassName(
 		'show-more',
 	)[0] as HTMLButtonElement
-	const fontsEl = headerEl
-		.getElementsByClassName('font')[0]
-		.getElementsByTagName('button')
-	const themeEl = headerEl
-		.getElementsByClassName('theme')[0]
-		.getElementsByTagName('button')
+	const fontsEl = Array.from(
+		headerEl
+			.getElementsByClassName('font')[0]
+			.getElementsByTagName('button'),
+	)
+	const themeEl = Array.from(
+		headerEl
+			.getElementsByClassName('theme')[0]
+			.getElementsByTagName('button'),
+	)
 
 	const rootEl = document.getElementsByTagName('main')[0] as HTMLElement
 	const notes = await getNotes(opfs)
@@ -236,22 +240,7 @@ import { modes } from '@utils/cycleModes'
 		showMoreEl.classList.toggle('active')
 	})
 
-	Array.from(fontsEl).forEach((button) =>
-		button.addEventListener('click', () => {
-			activateMode('font', button.className)
-		}),
-	)
-
-	Array.from(themeEl).forEach((button) =>
-		button.addEventListener('click', () => {
-			activateMode('theme', button.className)
-		}),
-	)
-
-	function activateMode(scope: 'font' | 'theme', mode: string) {
-		document.documentElement.dataset[scope] = mode
-		localStorage.setItem(scope, mode)
-	}
+	initModeSwitchListeners()
 
 	initNotesListeners()
 
@@ -322,5 +311,39 @@ import { modes } from '@utils/cycleModes'
 				updated = false
 			}
 		}, autosaveInterval)
+	}
+
+	function initModeSwitchListeners() {
+		fontsEl
+			.find((el) =>
+				el.classList.contains(document.documentElement.dataset.font),
+			)
+			.classList.add('current')
+		themeEl
+			.find((el) =>
+				el.classList.contains(document.documentElement.dataset.theme),
+			)
+			.classList.add('current')
+
+		fontsEl.forEach((button) => {
+			button.addEventListener('click', () => {
+				fontsEl.forEach((el) => el.classList.remove('current'))
+				activateMode('font', button.className)
+				button.classList.add('current')
+			})
+		})
+
+		themeEl.forEach((button) => {
+			button.addEventListener('click', () => {
+				themeEl.forEach((el) => el.classList.remove('current'))
+				activateMode('theme', button.className)
+				button.classList.add('current')
+			})
+		})
+	}
+
+	function activateMode(scope: 'font' | 'theme', mode: string) {
+		document.documentElement.dataset[scope] = mode
+		localStorage.setItem(scope, mode)
 	}
 </script>

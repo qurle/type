@@ -4,9 +4,6 @@ const addResourcesToCache = async (resources) => {
 };
 
 const putInCache = async (request, response) => {
-	if (!event.request.url.startsWith('http')) {
-		return
-	}
 	const cache = await caches.open('v1');
 	await cache.put(request, response);
 };
@@ -57,6 +54,9 @@ const enableNavigationPreload = async () => {
 };
 
 self.addEventListener('activate', (event) => {
+	if (!event.request?.url.startsWith('http')) {
+		return
+	}
 	event.waitUntil(enableNavigationPreload());
 });
 
@@ -70,6 +70,9 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+	if (!event.request?.url.startsWith('http')) {
+		return
+	}
 	event.respondWith(
 		networkFirst({
 			request: event.request,
