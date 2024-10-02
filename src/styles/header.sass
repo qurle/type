@@ -31,16 +31,15 @@ header.editor-header
             opacity: 0
             pointer-events: none
             transform: scale(0.65)
-        
+
         // No functionality yet
         .add
             display: none
-           
 
         &[data-context='editor'] .back, &[data-context='notes'] .add
-                opacity: .25
-                &:hover
-                    opacity: .5
+            opacity: .25
+            &:hover
+                opacity: .5
                 pointer-events: all
                 transform: scale(1)
 
@@ -58,7 +57,7 @@ header.editor-header
         position: relative
         .more-menu
             position: absolute
-            top: calc(100% + var(--space-l)) 
+            top: calc(100% + var(--space-m))
             right: 0
 
             display: flex
@@ -71,13 +70,21 @@ header.editor-header
             transform-origin: top right
             transition: opacity var(--transition-s), transform var(--transition-m)
 
-            padding: var(--space-l)
-            padding-right: calc(var(--space-l) + var(--space-m))
+            padding: calc(var(--space-m) + var(--space-s))
             border: 1px solid var(--color-main-05)
 
             z-index: 2
-            border-radius: var(--radius-l)
+            border-radius: calc(calc(var(--space-m) + var(--space-s)) + var(--radius-l))
             background: var(--color-background)
+
+            > li
+                display: flex
+                align-items: center
+                gap: var(--space-m)
+                justify-content: space-between
+
+                &:not(:has(>button))
+                    padding: 0 var(--space-m)
 
             span
                 color: var(--color-main-50)
@@ -85,8 +92,8 @@ header.editor-header
             menu
                 display: flex
                 gap: var(--space-m)
-                margin-top: var(--space-m)
                 font-size: var(--font-size-s)
+                padding-left: var(--space-l)
 
                 li
                     list-style: none
@@ -96,12 +103,13 @@ header.editor-header
 
                 &.font
                     li>button
-                        &.serif
-                            font-family: var(--font-serif)
+                    &.serif
+                        font-family: var(--font-serif)
                         &.sans
                             font-family: var(--font-sans)
                         &.mono
                             font-family: var(--font-mono)
+
                 &.theme
                     li>button
                         width: 28px
@@ -111,30 +119,44 @@ header.editor-header
 
                         &.light
                             background: var(--color-light)
+
                         &.dark
                             background: var(--color-dark)
+
                         &.sepia
                             background: var(--color-sepia)
+
                         &.blue
                             background: var(--color-blue)
 
             hr
                 border-color: var(--color-main-05)
             button
-                opacity: 1 
+                opacity: 1
                 &:active
                     transform: scale(.95)
 
+            .export
+                width: 100%
+                padding: var(--space-m)
 
-    .export 
-        font-size: var(--font-size-m)
+                border-radius: var(--radius-l)
+                background: var(--color-main-05)
 
-    .show-more.active
-       + .more-menu
-            opacity: 1
-            transform: scale(1)
-            pointer-events: all
+                font-size: var(--font-size-s)
+                text-align: center
 
+            .credit
+                display: block
+
+                width: 100%
+                text-align: center
+                color: var(--color-main-25)
+
+    .show-more.active + .more-menu
+        opacity: 1
+        transform: scale(1)
+        pointer-events: all
 
 // Animations
 @keyframes fade-in-with-stop

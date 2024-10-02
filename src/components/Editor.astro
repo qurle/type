@@ -17,6 +17,7 @@ import { modes } from '@utils/cycleModes'
 		<div class="more">
 			<button class="show-more"><Icon name="more" /></button>
 			<ul class="more-menu">
+				<li><button class="export">Export file</button></li>
 				{
 					Object.entries(modes).map(([name, values]) => (
 						<li>
@@ -38,8 +39,7 @@ import { modes } from '@utils/cycleModes'
 						</li>
 					))
 				}
-				<hr />
-				<button class="export">Export file</button>
+				<li class="credit">by <a href="https://qurle.net">qurle</a></li>
 			</ul>
 		</div>
 	</div>
@@ -173,7 +173,7 @@ import { modes } from '@utils/cycleModes'
 			e.preventDefault()
 			if (e.repeat) return
 			if (e.shiftKey) {
-				exportFile(editor, editorEl)
+				exportFile(editor, editorEl, stateEl)
 			} else {
 				if (!editorEl.dataset?.id) editorEl.dataset.id = nanoid(10)
 				save(
@@ -294,7 +294,7 @@ import { modes } from '@utils/cycleModes'
 	}
 
 	exportButtonEl.addEventListener('click', () => {
-		exportFile(editor, editorEl)
+		exportFile(editor, editorEl, stateEl)
 	})
 
 	window.addEventListener('beforeunload', () => {

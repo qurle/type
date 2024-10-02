@@ -32,7 +32,7 @@ export async function save(editor: Editor, editorEl: HTMLElement, opfs: FileSyst
 	stateEl.animate(
 		[{ opacity: 0 }, { opacity: 1, offset: 0.25 }, { opacity: 1, offset: 0.75 }, { opacity: 0 }],
 		2500,
-	);
+	)
 
 	// opfs.getFileHandle(id, {
 	// 	create: true,
