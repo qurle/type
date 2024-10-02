@@ -38,10 +38,11 @@ header.editor-header
 
         &[data-context='editor'] .back, &[data-context='notes'] .add
             opacity: .25
+            pointer-events: all
+            transform: scale(1)
+
             &:hover
                 opacity: .5
-                pointer-events: all
-                transform: scale(1)
 
     .right
         display: flex
