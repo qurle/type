@@ -40,6 +40,7 @@ header.editor-header
             opacity: .25
             pointer-events: all
             transform: scale(1)
+            transition: opacity var(--transition-s), transform var(--transition-s)
 
             &:hover
                 opacity: .5
@@ -102,10 +103,9 @@ header.editor-header
                 button
                     opacity: 1
 
-                &.font
-                    li>button
-                    &.serif
-                        font-family: var(--font-serif)
+                &.font li>button
+                        &.serif
+                            font-family: var(--font-serif)
                         &.sans
                             font-family: var(--font-sans)
                         &.mono

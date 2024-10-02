@@ -58,6 +58,7 @@ import { modes } from '@utils/cycleModes'
 	import { debug } from '@utils/debug'
 	import { del } from '@utils/del'
 	import { exportFile } from '@utils/exportFile'
+	import { focusToEnd } from '@utils/focusToEnd'
 	import { getNotes } from '@utils/getNotes'
 	import { save } from '@utils/save'
 	import { nanoid } from 'nanoid/non-secure'
@@ -165,7 +166,7 @@ import { modes } from '@utils/cycleModes'
 	const exportButtonEl = headerEl.getElementsByClassName('export')[0]
 	notesEl = buildEditor(editor, notes, rootEl, editorEl, true)
 
-	editorEl.focus()
+	focusToEnd(editorEl)
 	document.addEventListener('visibilitychange', toggleAutosave)
 
 	document.addEventListener('keydown', (e) => {
