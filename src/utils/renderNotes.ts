@@ -11,6 +11,7 @@ export function renderNotes(notes: Note[], rootEl: HTMLElement, editor: Editor, 
 	const sortedNotes = notes.sort(
 		(a, b) => b.modified.getTime() - a.modified.getTime(),
 	)
+
 	if (sortedNotes?.length > 0) {
 		console.debug(sortedNotes)
 		const notesEl = document.createElement('ul')
@@ -38,7 +39,7 @@ export function renderNotes(notes: Note[], rootEl: HTMLElement, editor: Editor, 
 			noteDateEl.innerText = getShortDate(note.modified)
 			noteDelEl.innerText = 'delete'
 
-			noteButtonEl.addEventListener('click', () => load(editor, editorEl, note))
+			noteButtonEl.addEventListener('click', () => { load(editor, editorEl, note) })
 			noteButtonEl.dataset.id = note.id
 
 			noteRightEl.appendChild(noteDelEl)
@@ -48,7 +49,6 @@ export function renderNotes(notes: Note[], rootEl: HTMLElement, editor: Editor, 
 			noteEl.appendChild(noteButtonEl)
 			notesEl.appendChild(noteEl)
 		}
-
 
 		return notesEl
 	}

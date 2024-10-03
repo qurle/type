@@ -151,6 +151,7 @@ import { modes } from '@utils/cycleModes'
 						)
 						initNotesListeners()
 					})
+
 					editorEl.dataset.id = ''
 				} else {
 					empty = false
@@ -241,24 +242,56 @@ import { modes } from '@utils/cycleModes'
 	})
 
 	initModeSwitchListeners()
-
 	initNotesListeners()
+
+	function initModeSwitchListeners() {
+		fontsEl
+			.find((el) =>
+				el.classList.contains(document.documentElement.dataset.font),
+			)
+			.classList.add('current')
+
+		themeEl
+			.find((el) => {
+				return el.classList.contains(
+					document.documentElement.dataset.theme,
+				)
+			})
+			.classList.add('current')
+
+		fontsEl.forEach((button) => {
+			button.addEventListener('click', () => {
+				fontsEl.forEach((el) => el.classList.remove('current'))
+				activateMode('font', button.className)
+				button.classList.add('current')
+			})
+		})
+
+		themeEl.forEach((button) => {
+			button.addEventListener('click', () => {
+				themeEl.forEach((el) => el.classList.remove('current'))
+				activateMode('theme', button.className)
+				button.classList.add('current')
+			})
+		})
+	}
 
 	function initNotesListeners() {
 		// Probably the worst code I ever wrote
-		if (hasNotes)
-			[
+		if (hasNotes) {
+			;[
 				...(notesEl.getElementsByClassName(
 					'note',
 				) as HTMLCollectionOf<HTMLButtonElement>),
 			].forEach((noteEl) => {
 				noteEl
 					.getElementsByClassName('delete')[0]
-					.addEventListener('click', (e) => {
-						console.debug(`Clicked on ${noteEl.dataset.id}`)
+					.addEventListener('click', (e: MouseEvent) => {
 						e.stopPropagation()
-						del(noteEl.dataset.id, opfs)
+						const confirmed = e.shiftKey
+						del(noteEl.dataset.id, opfs, confirmed)
 					})
+
 				noteEl.addEventListener('keydown', (e) => {
 					const buttonEl = e.target as HTMLButtonElement
 					if (e.key === 'ArrowDown' && empty && notesEl) {
@@ -281,6 +314,7 @@ import { modes } from '@utils/cycleModes'
 					}
 				})
 			})
+		}
 	}
 
 	exportButtonEl.addEventListener('click', () => {
@@ -311,35 +345,6 @@ import { modes } from '@utils/cycleModes'
 				updated = false
 			}
 		}, autosaveInterval)
-	}
-
-	function initModeSwitchListeners() {
-		fontsEl
-			.find((el) =>
-				el.classList.contains(document.documentElement.dataset.font),
-			)
-			.classList.add('current')
-		themeEl
-			.find((el) =>
-				el.classList.contains(document.documentElement.dataset.theme),
-			)
-			.classList.add('current')
-
-		fontsEl.forEach((button) => {
-			button.addEventListener('click', () => {
-				fontsEl.forEach((el) => el.classList.remove('current'))
-				activateMode('font', button.className)
-				button.classList.add('current')
-			})
-		})
-
-		themeEl.forEach((button) => {
-			button.addEventListener('click', () => {
-				themeEl.forEach((el) => el.classList.remove('current'))
-				activateMode('theme', button.className)
-				button.classList.add('current')
-			})
-		})
 	}
 
 	function activateMode(scope: 'font' | 'theme', mode: string) {

@@ -20,7 +20,9 @@ export async function getLocalNotes(opfs: FileSystemDirectoryHandle) {
 				author: 'type.local',
 				modified: new Date(file.lastModified)
 			}
+
 			note.content = await file.text()
+			console.log(`Content (blob): ${note.content}`)
 			note.name = localStorage.getItem(`name-${file.name}`) || note.content.slice(0, 50) || 'Empty note'
 			notes.push(note)
 		}

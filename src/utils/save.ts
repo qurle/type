@@ -10,7 +10,7 @@ export async function save(editor: Editor, editorEl: HTMLElement, opfs: FileSyst
 	const defaultLength = 80
 	const name = smartTrunc(editorEl.children[0].textContent, defaultLength)
 
-	console.debug(`Saved "${name}" by ${saveRef}`)
+	console.debug(`Saving "${name}" by ${saveRef}`)
 
 	const savedNote: Note = {
 		id: id,
@@ -18,33 +18,48 @@ export async function save(editor: Editor, editorEl: HTMLElement, opfs: FileSyst
 		author: 'type.local',
 		modified: null,
 	}
-
 	localStorage.setItem(`name-${id}`, name)
+
 	// Write to file
-	const handle = await opfs.getFileHandle(id, { create: true, })
-	const file = await handle.getFile()
-	savedNote.modified = new Date(file.lastModified)
-	const writable = await handle.createWritable()
-	await writable.write(markdown)
-	await writable.close()
+	try {
+		const handle = await opfs.getFileHandle(id, { create: true, })
+		const file = await handle.getFile()
+		savedNote.modified = new Date(file.lastModified)
+		const writable = await handle.createWritable()
+		await writable.write(markdown)
+		await writable.close()
+	}
+	catch {
+		// stateEl.innerText = 'can\'t save'
+		// stateEl.animate(
+		// 	[{ opacity: 0 }, { opacity: 1, offset: 0.25 }, { opacity: 1, offset: 0.75 }, { opacity: 0 }],
+		// 	1250,
+		// )
+		// setTimeout(() => {
+		// 	stateEl.innerText = 'on safari'
+		// 	stateEl.animate(
+		// 		[{ opacity: 0 }, { opacity: 1, offset: 0.25 }, { opacity: 1, offset: 0.75 }, { opacity: 0 }],
+		// 		1250,
+		// 	)
+		// }, 1250)
+
+		// opfs.removeEntry(id)
+		// return
+
+		let worker = new Worker('./safari.js')
+
+		worker.postMessage({
+			ref: 'save',
+			fileName: id,
+			content: markdown
+		})
+	}
 
 	stateEl.innerText = 'saved'
 	stateEl.animate(
 		[{ opacity: 0 }, { opacity: 1, offset: 0.25 }, { opacity: 1, offset: 0.75 }, { opacity: 0 }],
 		2500,
 	)
-
-	// opfs.getFileHandle(id, {
-	// 	create: true,
-	// }).then(handle => {
-	// 	handle.getFile().then(file => {
-	// 		savedNote.modified = new Date(file.lastModified)
-	// 	})
-	// 	handle.createWritable()
-	// 		.then(writable => {
-	// 			writable.write(markdown)
-	// 		})
-	// })
 
 	return Date.now()
 }
