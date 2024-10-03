@@ -1,5 +1,4 @@
 ---
-import Menu from './Menu.astro'
 import '@styles/header.sass'
 import '@styles/editor.sass'
 import '@styles/notes.sass'
@@ -20,7 +19,7 @@ import { modes } from '@utils/cycleModes'
 		<div class="more">
 			<button class="show-more"><Icon name="more" /></button>
 			<ul class="more-menu">
-				<li><button class="export">Export file</button></li>
+				<li><button class="export">Export all</button></li>
 				{
 					Object.entries(modes).map(([name, values]) => (
 						<li>
@@ -60,7 +59,7 @@ import { modes } from '@utils/cycleModes'
 	import { buildEditor } from '@utils/buildEditor'
 	import { debug } from '@utils/debug'
 	import { del } from '@utils/del'
-	import { exportFile } from '@utils/exportFile'
+	import { exportAll, exportFile } from '@utils/export'
 	import { focusToEnd } from '@utils/focusToEnd'
 	import { getNotes } from '@utils/getNotes'
 	import { showState } from '@utils/showState'
@@ -87,6 +86,7 @@ import { modes } from '@utils/cycleModes'
 	const showMoreEl = headerEl.getElementsByClassName(
 		'show-more',
 	)[0] as HTMLButtonElement
+	const exportButtonEl = headerEl.getElementsByClassName('export')[0]
 	const fontsEl = Array.from(
 		headerEl
 			.getElementsByClassName('font')[0]
@@ -112,6 +112,7 @@ import { modes } from '@utils/cycleModes'
 	let empty = true
 	let hasNotes = notes?.length > 0
 	let lastSave = Date.now()
+	let menuCloseTimeout
 
 	const editor = await Editor.make()
 		.use(commonmark)
@@ -138,6 +139,8 @@ import { modes } from '@utils/cycleModes'
 				updated = true
 				const isEmpty = doc.content.size <= 2
 
+				showMoreEl.classList.remove('active')
+
 				if (isEmpty) {
 					empty = true
 					if (hasNotes) editorEl.classList.add('collapsed')
@@ -154,8 +157,7 @@ import { modes } from '@utils/cycleModes'
 						initNotesListeners()
 					})
 					document.title = 'type.'
-
-					editorEl.dataset.id = ''
+					exportButtonEl.textContent = 'Export all'
 				} else {
 					empty = false
 					notesEl.style.visibility = 'hidden'
@@ -165,7 +167,7 @@ import { modes } from '@utils/cycleModes'
 						editorEl.classList.remove('collapsed')
 					}, 50)
 					headerLeftEl.dataset.context = 'editor'
-					showMoreEl.classList.remove('active')
+					exportButtonEl.textContent = 'Export file'
 				}
 			})
 		})
@@ -173,7 +175,6 @@ import { modes } from '@utils/cycleModes'
 
 	let saver = startAutosave()
 
-	const exportButtonEl = headerEl.getElementsByClassName('export')[0]
 	notesEl = buildEditor(editor, notes, rootEl, editorEl)
 
 	focusToEnd(editorEl)
@@ -231,7 +232,8 @@ import { modes } from '@utils/cycleModes'
 	})
 
 	exportButtonEl.addEventListener('click', () => {
-		exportFile(editor, editorEl, stateEl)
+		if (!empty) exportFile(editor, editorEl, stateEl)
+		else exportAll(opfs, stateEl)
 	})
 
 	window.addEventListener('beforeunload', () => {
@@ -422,5 +424,6 @@ import { modes } from '@utils/cycleModes'
 		editor.action(replaceAll(''))
 		empty = true
 		window.history.pushState({ page: null }, '', '')
+		editorEl.dataset.id = ''
 	}
 </script>
