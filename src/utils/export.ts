@@ -29,7 +29,10 @@ export async function exportAll(opfs: FileSystemDirectoryHandle, stateEl: HTMLEl
 			files.push(file)
 		}
 	}
-	downloadBlob('typed.zip', await downloadZip(files).blob())
+	if (files.length > 0)
+		downloadBlob('typed.zip', await downloadZip(files).blob())
+	else
+		showState(stateEl, 'nothing to export')
 }
 
 function downloadBlob(filename, blob) {
