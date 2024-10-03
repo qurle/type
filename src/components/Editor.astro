@@ -274,7 +274,7 @@ import { modes } from '@utils/cycleModes'
 	}
 
 	function initDragAndDrop() {
-		editorEl.addEventListener('dragover', () => {
+		editorEl.addEventListener('dragover', (e) => {
 			editorEl.classList.add('dragover')
 		})
 		editorEl.addEventListener('dragleave', () => {

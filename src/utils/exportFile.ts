@@ -1,20 +1,16 @@
 import { Editor } from '@milkdown/core';
 import { getMarkdown } from '@milkdown/utils';
 import { smartTrunc } from '@utils/smartTrunc';
+import { showState } from './showState';
 
-export function exportFile(editor: Editor, editorEl: HTMLElement, stateEl: HTMLElement, filename = null) {
-	const markdown = editor.action(getMarkdown())
-	if (!markdown) {
-		stateEl.innerText = 'file\'s empty'
-		stateEl.animate(
-			[{ opacity: 0 }, { opacity: 1, offset: 0.25 }, { opacity: 1, offset: 0.75 }, { opacity: 0 }],
-			2500,
-		)
+export function exportFile(editor: Editor, editorEl: HTMLElement, stateEl: HTMLElement, filename = null, markdown: string = editor.action(getMarkdown()) || '') {
+	if (markdown === '') {
+		showState(stateEl, 'file\'s empty')
 		return
 	}
 
 	const defaultLength = 40
-	filename = filename || smartTrunc(editorEl.children[0].textContent, defaultLength)
+	filename = filename || smartTrunc(editorEl.children[0].textContent || markdown.split('\n')[0], defaultLength) || 'note'
 
 
 	console.debug(`Downloading. Filename is ${filename}. Text has ${markdown.length} symbols`)

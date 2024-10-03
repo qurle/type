@@ -4,6 +4,8 @@ export function smartTrunc(
 	overflowLimit: number = length + 6,
 	underflowLimit: number = Math.round(length * 0.85),
 ) {
+	text = text.replace('\n', '')
+	if (text === '') return 'Untitled note'
 	if (text.length <= overflowLimit) return text
 	const slice = text.slice(underflowLimit, overflowLimit)
 
