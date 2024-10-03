@@ -86,6 +86,9 @@ import { modes } from '@utils/cycleModes'
 	const showMoreEl = headerEl.getElementsByClassName(
 		'show-more',
 	)[0] as HTMLButtonElement
+	const menuEl = headerEl.getElementsByClassName(
+		'more-menu',
+	)[0] as HTMLButtonElement
 	const exportButtonEl = headerEl.getElementsByClassName('export')[0]
 	const fontsEl = Array.from(
 		headerEl
@@ -234,7 +237,10 @@ import { modes } from '@utils/cycleModes'
 
 	// Hide menu
 	document.documentElement.addEventListener('click', (e: MouseEvent) => {
-		if (!showMoreEl.contains(e.target as Node))
+		if (
+			!menuEl.contains(e.target as Node) &&
+			!showMoreEl.contains(e.target as Node)
+		)
 			showMoreEl.classList.remove('active')
 	})
 
