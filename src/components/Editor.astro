@@ -49,22 +49,23 @@ import { modes } from '@utils/cycleModes'
 <main></main>
 <script>
 	import { Editor, rootCtx } from '@milkdown/kit/core'
-	import { clipboard } from '@milkdown/kit/plugin/clipboard'
-	import { history } from '@milkdown/kit/plugin/history'
-	import { indent } from '@milkdown/kit/plugin/indent'
-	import { listener, listenerCtx } from '@milkdown/kit/plugin/listener'
-	import { upload } from '@milkdown/kit/plugin/upload'
-	import { commonmark } from '@milkdown/kit/preset/commonmark'
-	import { replaceAll } from '@milkdown/utils'
-	import { buildEditor } from '@utils/buildEditor'
-	import { debug } from '@utils/debug'
-	import { del } from '@utils/del'
-	import { exportAll, exportFile } from '@utils/export'
-	import { focusToEnd } from '@utils/focusToEnd'
-	import { getNotes } from '@utils/getNotes'
-	import { showState } from '@utils/showState'
-	import { writeToFile, type SaveRef } from '@utils/writeToFile'
-	import { nanoid } from 'nanoid/non-secure'
+import { clipboard } from '@milkdown/kit/plugin/clipboard'
+import { history } from '@milkdown/kit/plugin/history'
+import { indent } from '@milkdown/kit/plugin/indent'
+import { listener, listenerCtx } from '@milkdown/kit/plugin/listener'
+import { upload } from '@milkdown/kit/plugin/upload'
+import { commonmark } from '@milkdown/kit/preset/commonmark'
+import { automd } from '@milkdown/plugin-automd'
+import { replaceAll } from '@milkdown/utils'
+import { buildEditor } from '@utils/buildEditor'
+import { debug } from '@utils/debug'
+import { del } from '@utils/del'
+import { exportAll, exportFile } from '@utils/export'
+import { focusToEnd } from '@utils/focusToEnd'
+import { getNotes } from '@utils/getNotes'
+import { showState } from '@utils/showState'
+import { writeToFile, type SaveRef } from '@utils/writeToFile'
+import { nanoid } from 'nanoid/non-secure'
 
 	// Utilities
 	const autosaveInterval = 5_000
@@ -123,8 +124,10 @@ import { modes } from '@utils/cycleModes'
 		.use(upload)
 		.use(indent)
 		.use(listener)
+		.use(automd)
 		.config((ctx) => {
 			ctx.set(rootCtx, rootEl)
+
 			const listener = ctx.get(listenerCtx)
 
 			listener.mounted(() => {
@@ -133,6 +136,7 @@ import { modes } from '@utils/cycleModes'
 						'editor',
 					) as HTMLCollectionOf<HTMLDivElement>
 				)[0]
+				editorEl.spellcheck = false
 				if (hasNotes) editorEl.classList.add('collapsed')
 				editorEl.ariaLabel = 'Your note'
 			})

@@ -13,6 +13,7 @@
     "@astrojs/check": "^0.9.3",
     "@mdxeditor/editor": "^3.11.5",
     "@milkdown/crepe": "^7.5.7",
+    "@milkdown/plugin-automd": "^7.5.0",
     "astro": "^4.15.5",
     "astro-icon": "^1.1.1",
     "client-zip": "^2.4.5",

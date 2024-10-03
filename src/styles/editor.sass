@@ -44,6 +44,11 @@
     li > p
                 display: inline
 
+    a
+        text-decoration: underline
+        text-decoration-color: var(--color-main-15)
+        text-underline-offset: 4px
+
     pre
         padding: var(--space-m) var(--space-l)
         margin: var(--space-m) 0
@@ -87,6 +92,9 @@ main:not(.notes-shown)
         opacity: 0
         display: none
         pointer-events: none
+
+.milkdown
+    position: relative
 
 // Font-dependent adjustments
 :root[data-font="mono"]
