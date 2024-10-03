@@ -158,7 +158,9 @@ import { modes } from '@utils/cycleModes'
 					editorEl.dataset.id = ''
 				} else {
 					empty = false
+					notesEl.style.visibility = 'hidden'
 					if (hasNotes) rootEl.classList.remove('notes-shown')
+					notesEl.style.visibility = 'visible'
 					setTimeout(() => {
 						editorEl.classList.remove('collapsed')
 					}, 50)
