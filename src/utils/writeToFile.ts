@@ -1,14 +1,17 @@
 import { Editor } from '@milkdown/core'
 import { getMarkdown } from '@milkdown/utils'
 import { smartTrunc } from '@utils/smartTrunc'
+import { showState } from './showState'
 
-export async function save(editor: Editor, editorEl: HTMLElement, opfs: FileSystemDirectoryHandle, id: string, stateEl: HTMLElement, saveRef: 'autosave' | 'shortcut' | 'reload' | 'clear' = 'autosave') {
-	const markdown = editor.action(getMarkdown())
+export type SaveRef = 'autosave' | 'shortcut' | 'unload' | 'clear' | 'overwrite' | 'multiple-drop'
+
+export async function writeToFile(editor: Editor, editorEl: HTMLElement, opfs: FileSystemDirectoryHandle, id: string, stateEl: HTMLElement, saveRef: SaveRef = 'autosave', markdown: string = editor.action(getMarkdown()) || '') {
 	if (markdown === '')
 		return
 
 	const defaultLength = 80
-	const name = smartTrunc(editorEl.children[0].textContent, defaultLength)
+	const firstBlock = editorEl.children[0].textContent
+	const name = smartTrunc(firstBlock || markdown.split('\n')[0], defaultLength)
 
 	console.debug(`Saving "${name}" by ${saveRef}`)
 
@@ -55,11 +58,11 @@ export async function save(editor: Editor, editorEl: HTMLElement, opfs: FileSyst
 		})
 	}
 
-	stateEl.innerText = 'saved'
-	stateEl.animate(
-		[{ opacity: 0 }, { opacity: 1, offset: 0.25 }, { opacity: 1, offset: 0.75 }, { opacity: 0 }],
-		2500,
-	)
+	switch (saveRef) {
+		case 'multiple-drop': break
+		case 'overwrite': showState(stateEl, 'previous file saved'); break
+		default: showState(stateEl, 'saved')
+	}
 
 	return Date.now()
 }

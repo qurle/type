@@ -5,8 +5,10 @@
     height: 60vh
     max-height: 100%
 
+    border-radius: var(--radius-l)
+
     margin: 0 auto
-    transition: height 1ms 150ms
+    transition: height 1ms 150ms, background-color var(--transition-s)
     animation: 300ms fade-in linear
 
     // When we show notes
@@ -57,6 +59,22 @@
             padding: var(--space-m) 0
             display: block
             color: var(--color-main-50)
+
+    &::after
+        transition: opacity var(--transition-m)
+        content: 'Drop .md files to edit'
+        position: absolute
+        top: 50%
+        left: 50%
+        transform: translate(-50%, -50%)
+        font-size: var(--font-size-xs)
+        opacity: 0
+
+    &.dragover
+        background-color: var(--color-main-05)
+        position: relative
+        &::after
+            opacity: 0.33
 
 main:not(.notes-shown)
     ul.notes

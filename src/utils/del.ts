@@ -1,3 +1,4 @@
+
 export function del(noteId: string, opfs: FileSystemDirectoryHandle, confirmed = false) {
 	const name = localStorage.getItem(`name-${noteId}`) || "note"
 	console.debug(`Deleting ${noteId} called ${name}`)
@@ -5,7 +6,7 @@ export function del(noteId: string, opfs: FileSystemDirectoryHandle, confirmed =
 	if (confirmation){
 	    opfs.removeEntry(noteId)
 		localStorage.removeItem(`note-${noteId}`)
-	    location.reload()
+		location.reload()
 	}
 
 	return confirmation

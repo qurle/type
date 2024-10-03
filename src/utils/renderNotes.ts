@@ -1,13 +1,13 @@
 import { Editor } from '@milkdown/core'
 import { getShortDate } from '@utils/getShortDate'
-import { load } from '@utils/load'
+import { loadToEditor } from '@utils/loadToEditor'
 
 /**
  * Addes notes to DOM (if any)
  * @param notes Array of notes from storage
  * @param rootEl Root element (usually <main> tag)
  */
-export function renderNotes(notes: Note[], rootEl: HTMLElement, editor: Editor, editorEl) {
+export function renderNotes(notes: Note[], rootEl: HTMLElement, editor: Editor, editorEl: HTMLElement) {
 	const sortedNotes = notes.sort(
 		(a, b) => b.modified.getTime() - a.modified.getTime(),
 	)
@@ -39,7 +39,7 @@ export function renderNotes(notes: Note[], rootEl: HTMLElement, editor: Editor, 
 			noteDateEl.innerText = getShortDate(note.modified)
 			noteDelEl.innerText = 'delete'
 
-			noteButtonEl.addEventListener('click', () => { load(editor, editorEl, note) })
+			noteButtonEl.addEventListener('click', () => { loadToEditor(editor, editorEl, rootEl, note) })
 			noteButtonEl.dataset.id = note.id
 
 			noteRightEl.appendChild(noteDelEl)

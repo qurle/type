@@ -9,6 +9,9 @@ import { modes } from '@utils/cycleModes'
 
 <header class="editor-header">
 	<div class="left" data-context="notes">
+		<form>
+			<input type="file" multiple accept=".md,.txt" id="upload" />
+		</form>
 		<button class="back"><Icon name="back" /></button>
 		<button class="add"><Icon name="add" /></button>
 	</div>
@@ -60,19 +63,20 @@ import { modes } from '@utils/cycleModes'
 	import { exportFile } from '@utils/exportFile'
 	import { focusToEnd } from '@utils/focusToEnd'
 	import { getNotes } from '@utils/getNotes'
-	import { save } from '@utils/save'
+	import { showState } from '@utils/showState'
+	import { writeToFile, type SaveRef } from '@utils/writeToFile'
 	import { nanoid } from 'nanoid/non-secure'
 
 	// Utilities
 	const autosaveInterval = 5_000
-	// Other
-	const opfs = await (
-		await navigator.storage.getDirectory()
-	).getDirectoryHandle('md', { create: true })
+	// Elements
 	const headerEl = document.getElementsByTagName('header')[0] as HTMLElement
 	const headerLeftEl = headerEl.getElementsByClassName(
 		'left',
 	)[0] as HTMLElement
+	const uploadInput = headerLeftEl.getElementsByTagName(
+		'input',
+	)[0] as HTMLInputElement
 	const addEl = headerLeftEl.getElementsByClassName(
 		'add',
 	)[0] as HTMLButtonElement
@@ -93,8 +97,11 @@ import { modes } from '@utils/cycleModes'
 			.getElementsByClassName('theme')[0]
 			.getElementsByTagName('button'),
 	)
-
 	const rootEl = document.getElementsByTagName('main')[0] as HTMLElement
+	// Other
+	const opfs = await (
+		await navigator.storage.getDirectory()
+	).getDirectoryHandle('md', { create: true })
 	const notes = await getNotes(opfs)
 
 	// Assinged selectors
@@ -129,8 +136,9 @@ import { modes } from '@utils/cycleModes'
 
 			listener.updated((ctx, doc) => {
 				updated = true
+				const isEmpty = doc.content.size <= 2
 
-				if (doc.content.size <= 2) {
+				if (isEmpty) {
 					empty = true
 					if (hasNotes) editorEl.classList.add('collapsed')
 					setTimeout(() => {
@@ -142,15 +150,10 @@ import { modes } from '@utils/cycleModes'
 						if (notesEl) {
 							rootEl.removeChild(notesEl)
 						}
-						notesEl = buildEditor(
-							editor,
-							notes,
-							rootEl,
-							editorEl,
-							true,
-						)
+						notesEl = buildEditor(editor, notes, rootEl, editorEl)
 						initNotesListeners()
 					})
+					document.title = 'type.'
 
 					editorEl.dataset.id = ''
 				} else {
@@ -169,7 +172,7 @@ import { modes } from '@utils/cycleModes'
 	let saver = startAutosave()
 
 	const exportButtonEl = headerEl.getElementsByClassName('export')[0]
-	notesEl = buildEditor(editor, notes, rootEl, editorEl, true)
+	notesEl = buildEditor(editor, notes, rootEl, editorEl)
 
 	focusToEnd(editorEl)
 	document.addEventListener('visibilitychange', toggleAutosave)
@@ -181,16 +184,7 @@ import { modes } from '@utils/cycleModes'
 			if (e.shiftKey) {
 				exportFile(editor, editorEl, stateEl)
 			} else {
-				if (!editorEl.dataset?.id) editorEl.dataset.id = nanoid(10)
-				save(
-					editor,
-					editorEl,
-					opfs,
-					editorEl.dataset.id,
-					stateEl,
-					'shortcut',
-				)
-				updated = false
+				save('shortcut')
 			}
 		}
 		if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
@@ -199,19 +193,8 @@ import { modes } from '@utils/cycleModes'
 			debug(rootEl)
 		}
 		if (e.key === 'Escape') {
-			if (updated && !empty) {
-				if (!editorEl.dataset?.id) editorEl.dataset.id = nanoid(10)
-				save(
-					editor,
-					editorEl,
-					opfs,
-					editorEl.dataset.id,
-					stateEl,
-					'clear',
-				)
-				updated = false
-			}
-			editor.action(replaceAll(''))
+			save('clear')
+			clearEditor()
 		}
 	})
 
@@ -229,20 +212,34 @@ import { modes } from '@utils/cycleModes'
 	})
 
 	backEl.addEventListener('click', () => {
-		if (updated && !empty) {
-			if (!editorEl.dataset?.id) editorEl.dataset.id = nanoid(10)
-			save(editor, editorEl, opfs, editorEl.dataset.id, stateEl, 'clear')
-			updated = false
-		}
-		editor.action(replaceAll(''))
+		save('clear')
+		clearEditor()
+	})
+
+	addEl.addEventListener('click', () => {
+		uploadInput.click()
+	})
+
+	uploadInput.addEventListener('change', (e: InputEvent) => {
+		processFiles(uploadInput.files)
 	})
 
 	showMoreEl.addEventListener('click', () => {
 		showMoreEl.classList.toggle('active')
 	})
 
+	exportButtonEl.addEventListener('click', () => {
+		exportFile(editor, editorEl, stateEl)
+	})
+
+	window.addEventListener('beforeunload', () => {
+		save('unload')
+	})
+
+	initNavigationListener()
 	initModeSwitchListeners()
 	initNotesListeners()
+	initDragAndDrop()
 
 	function initModeSwitchListeners() {
 		fontsEl
@@ -273,6 +270,20 @@ import { modes } from '@utils/cycleModes'
 				activateMode('theme', button.className)
 				button.classList.add('current')
 			})
+		})
+	}
+
+	function initDragAndDrop() {
+		editorEl.addEventListener('dragover', () => {
+			editorEl.classList.add('dragover')
+		})
+		editorEl.addEventListener('dragleave', () => {
+			editorEl.classList.remove('dragover')
+		})
+		editorEl.addEventListener('drop', (e) => {
+			editorEl.classList.remove('dragover')
+			e.preventDefault()
+			processFiles(e.dataTransfer.files)
 		})
 	}
 
@@ -317,17 +328,50 @@ import { modes } from '@utils/cycleModes'
 		}
 	}
 
-	exportButtonEl.addEventListener('click', () => {
-		exportFile(editor, editorEl, stateEl)
-	})
+	function initNavigationListener() {
+		// router.on('?id=:id', function (e) {
+		// 	console.debug(e)
+		// 	const note = notes.find((note) => note.id === e.params.id)
+		// 	console.debug(`Note: ${note.name}`)
+		// 	loadToEditor(editor, editorEl, rootEl, router, note)
+		// })
+		// router.on('/', function (e) {
+		// 	if (e.params === null) {
+		// 		console.debug(e)
+		// 		console.debug(`Clearing`)
+		// 		if (!empty) save('clear')
+		// 		clearEditor()
+		// 	}
+		// })
+		window.addEventListener('popstate', (e) => {
+			e.preventDefault()
+			console.debug(e)
+			if (e.state.page === null) {
+				save('clear')
+				clearEditor()
+			}
+		})
 
-	window.addEventListener('beforeunload', () => {
-		if (updated && !empty) {
-			if (!editorEl.dataset?.id) editorEl.dataset.id = nanoid(10)
-			save(editor, editorEl, opfs, editorEl.dataset.id, stateEl, 'reload')
+		// router.resolve()
+	}
+
+	function save(ref: SaveRef) {
+		if (!empty && (ref !== 'autosave' || updated)) {
+			console.debug(`Current ID: ${editorEl.dataset?.id}`)
+			const id = editorEl.dataset?.id || newId()
+			editorEl.dataset.id = id
+			writeToFile(editor, editorEl, opfs, id, stateEl, ref)
 			updated = false
+			return true
 		}
-	})
+		return false
+	}
+
+	function newId(length = 10) {
+		const id = nanoid(10)
+		console.debug(`Generated new ID: ${id}`)
+		return id
+	}
 
 	function toggleAutosave() {
 		if (document.hidden) {
@@ -339,10 +383,8 @@ import { modes } from '@utils/cycleModes'
 
 	function startAutosave() {
 		return setInterval(() => {
-			if (updated && !empty && Date.now() - lastSave > 3000) {
-				if (!editorEl.dataset?.id) editorEl.dataset.id = nanoid(10)
-				save(editor, editorEl, opfs, editorEl.dataset.id, stateEl)
-				updated = false
+			if (Date.now() - lastSave > 3000) {
+				save('autosave')
 			}
 		}, autosaveInterval)
 	}
@@ -350,5 +392,48 @@ import { modes } from '@utils/cycleModes'
 	function activateMode(scope: 'font' | 'theme', mode: string) {
 		document.documentElement.dataset[scope] = mode
 		localStorage.setItem(scope, mode)
+	}
+
+	async function processFiles(fileList: FileList) {
+		console.debug('File(s) uploading')
+		const allowedFiles = ['md', 'txt']
+		const files = [...fileList].filter((file) =>
+			allowedFiles.includes(file.name.split('.').pop()),
+		)
+		if (files?.length === 0) return
+		if (files.length === 1) {
+			save('overwrite')
+			files[0].text().then((t) => {
+				console.debug(`Replacing`)
+				// Generating new ID to avoid overwrites
+				editorEl.dataset.id = newId()
+				editor.action(replaceAll(t))
+			})
+		} else {
+			for (const file of files) {
+				if (!empty) {
+					save('overwrite')
+					clearEditor()
+				}
+				console.debug(`Writing file ${file.name}`)
+				writeToFile(
+					editor,
+					editorEl,
+					opfs,
+					newId(),
+					stateEl,
+					'multiple-drop',
+					await file.text(),
+				)
+				location.reload()
+			}
+			showState(stateEl, `uploaded ${files.length} files`)
+		}
+	}
+
+	function clearEditor() {
+		editor.action(replaceAll(''))
+		empty = true
+		window.history.pushState({ page: null }, '', '')
 	}
 </script>

@@ -8,6 +8,8 @@ header.editor-header
     font-size: var(--font-size-xs)
     font-family: var(--font-sans)
 
+    z-index: 2
+
     button
         display: block
         opacity: .25
@@ -24,6 +26,9 @@ header.editor-header
         width: 24px
 
     .left
+        form
+            display: none
+
         .add, .back
             position: absolute
             transition: opacity var(--transition-m), transform var(--transition-m)
@@ -31,10 +36,6 @@ header.editor-header
             opacity: 0
             pointer-events: none
             transform: scale(0.65)
-
-        // No functionality yet
-        .add
-            display: none
 
         &[data-context='editor'] .back, &[data-context='notes'] .add
             opacity: .25
