@@ -112,7 +112,6 @@ import { modes } from '@utils/cycleModes'
 	let empty = true
 	let hasNotes = notes?.length > 0
 	let lastSave = Date.now()
-	let menuCloseTimeout
 
 	const editor = await Editor.make()
 		.use(commonmark)
@@ -160,9 +159,11 @@ import { modes } from '@utils/cycleModes'
 					exportButtonEl.textContent = 'Export all'
 				} else {
 					empty = false
-					notesEl.style.visibility = 'hidden'
-					if (hasNotes) rootEl.classList.remove('notes-shown')
-					notesEl.style.visibility = 'visible'
+					if (hasNotes) {
+						notesEl.style.visibility = 'hidden'
+						rootEl.classList.remove('notes-shown')
+						notesEl.style.visibility = 'visible'
+					}
 					setTimeout(() => {
 						editorEl.classList.remove('collapsed')
 					}, 50)
@@ -229,6 +230,12 @@ import { modes } from '@utils/cycleModes'
 
 	showMoreEl.addEventListener('click', () => {
 		showMoreEl.classList.toggle('active')
+	})
+
+	// Hide menu
+	document.documentElement.addEventListener('click', (e: MouseEvent) => {
+		if (!showMoreEl.contains(e.target as Node))
+			showMoreEl.classList.remove('active')
 	})
 
 	exportButtonEl.addEventListener('click', () => {
