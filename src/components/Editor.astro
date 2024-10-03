@@ -329,30 +329,15 @@ import { modes } from '@utils/cycleModes'
 	}
 
 	function initNavigationListener() {
-		// router.on('?id=:id', function (e) {
-		// 	console.debug(e)
-		// 	const note = notes.find((note) => note.id === e.params.id)
-		// 	console.debug(`Note: ${note.name}`)
-		// 	loadToEditor(editor, editorEl, rootEl, router, note)
-		// })
-		// router.on('/', function (e) {
-		// 	if (e.params === null) {
-		// 		console.debug(e)
-		// 		console.debug(`Clearing`)
-		// 		if (!empty) save('clear')
-		// 		clearEditor()
-		// 	}
-		// })
 		window.addEventListener('popstate', (e) => {
 			e.preventDefault()
 			console.debug(e)
 			if (e.state.page === null) {
 				save('clear')
 				clearEditor()
+				location.reload()
 			}
 		})
-
-		// router.resolve()
 	}
 
 	function save(ref: SaveRef) {
