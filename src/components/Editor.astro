@@ -58,6 +58,7 @@ import { modes } from '@utils/cycleModes'
 	import { automd } from '@milkdown/plugin-automd'
 	import { replaceAll } from '@milkdown/utils'
 	import { buildEditor } from '@utils/buildEditor'
+	import { getCurrent, setCurrent } from '@utils/current'
 	import { debug } from '@utils/debug'
 	import { del } from '@utils/del'
 	import { exportAll, exportFile } from '@utils/export'
@@ -164,6 +165,7 @@ import { modes } from '@utils/cycleModes'
 					})
 					document.title = 'type.'
 					exportButtonEl.textContent = 'Export all'
+					setCurrent('', editorEl)
 				} else {
 					empty = false
 					if (hasNotes) {
@@ -184,6 +186,12 @@ import { modes } from '@utils/cycleModes'
 	let saver = startAutosave()
 
 	notesEl = buildEditor(editor, notes, rootEl, editorEl)
+	const current = getCurrent()
+	if (current) {
+		editor.action(
+			replaceAll(notes.find((note) => note.id === current).content),
+		)
+	}
 
 	focusToEnd(editorEl)
 	document.addEventListener('visibilitychange', toggleAutosave)
@@ -363,10 +371,9 @@ import { modes } from '@utils/cycleModes'
 
 	function save(ref: SaveRef) {
 		if (!empty && (ref !== 'autosave' || updated)) {
-			console.debug(`Current ID: ${editorEl.dataset?.id}`)
-			const id = editorEl.dataset?.id || newId()
-			editorEl.dataset.id = id
-			writeToFile(editor, editorEl, opfs, id, stateEl, ref)
+			const currentId = getCurrent() || setCurrent(newId(), editorEl)
+			console.debug(`Current ID: ${currentId}`)
+			writeToFile(editor, editorEl, opfs, currentId, stateEl, ref)
 			updated = false
 			return true
 		}
@@ -374,7 +381,7 @@ import { modes } from '@utils/cycleModes'
 	}
 
 	function newId(length = 10) {
-		const id = nanoid(10)
+		const id = nanoid(length)
 		console.debug(`Generated new ID: ${id}`)
 		return id
 	}
@@ -441,6 +448,6 @@ import { modes } from '@utils/cycleModes'
 		editor.action(replaceAll(''))
 		empty = true
 		window.history.pushState({ page: null }, '', '')
-		editorEl.dataset.id = ''
+		setCurrent('', editorEl)
 	}
 </script>

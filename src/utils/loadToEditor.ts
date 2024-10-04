@@ -1,6 +1,7 @@
 import { Editor } from '@milkdown/core'
 import { insert } from '@milkdown/utils'
 import { focusToEnd } from '@utils/focusToEnd'
+import { setCurrent } from './current'
 
 export function loadToEditor(editor: Editor, editorEl: HTMLElement, rootEl: HTMLElement, note: Note = null) {
 	if (!note)
@@ -14,6 +15,8 @@ export function loadToEditor(editor: Editor, editorEl: HTMLElement, rootEl: HTML
 
 	window.history.pushState({ page: note.id }, '')
 	document.title = note.name
+
+	setCurrent(note.id, editorEl)
 
 	return note.id
 }
