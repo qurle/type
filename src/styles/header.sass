@@ -79,7 +79,9 @@ header.editor-header
 
             z-index: 2
             border-radius: calc(calc(var(--space-m) + var(--space-s)) + var(--radius-l))
-            background: var(--color-background)
+            background: color-mix(in hsl, var(--color-background) 50%, transparent)
+            backdrop-filter: blur(50px)
+            
 
             > li
                 display: flex
