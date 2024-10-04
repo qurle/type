@@ -326,10 +326,10 @@ import { modes } from '@utils/cycleModes'
 
 		spellEl.forEach((button) => {
 			button.addEventListener('click', () => {
-				const state = button.className
+				const state = button.className === 'true'
 				spellEl.forEach((el) => el.classList.remove('current'))
-				editorEl.spellcheck = Boolean(state)
-				localStorage.setItem('spell', state)
+				editorEl.spellcheck = state
+				localStorage.setItem('spell', state.toString())
 				button.classList.add('current')
 			})
 		})
