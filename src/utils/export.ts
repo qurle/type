@@ -53,6 +53,4 @@ function downloadText(filename: string, content: string) {
 
 	link.click()
 	link.remove()
-
-	document.body.removeChild(link)
 }

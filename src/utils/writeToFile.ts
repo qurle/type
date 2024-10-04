@@ -6,11 +6,13 @@ import { showState } from './showState'
 export type SaveRef = 'autosave' | 'shortcut' | 'unload' | 'clear' | 'overwrite' | 'multiple-drop'
 
 export async function writeToFile(editor: Editor, editorEl: HTMLElement, opfs: FileSystemDirectoryHandle, id: string, stateEl: HTMLElement, saveRef: SaveRef = 'autosave', markdown: string = editor.action(getMarkdown()) || '') {
-	if (markdown === '')
+	if (/^\s*$/g.test(markdown))
 		return
 
 	const defaultLength = 80
-	const firstBlock = editorEl.children[0].textContent
+	const firstBlock = (editorEl.children[0] as HTMLElement).innerText
+	console.debug(`Saving:\n${firstBlock}`)
+	console.debug(`Or:\n${markdown.split('\n')[0]}`)
 	const name = smartTrunc(firstBlock || markdown.split('\n')[0], defaultLength)
 
 	console.debug(`Saving "${name}" by ${saveRef}`)

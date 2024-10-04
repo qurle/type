@@ -2,9 +2,10 @@ export function smartTrunc(
 	text: string,
 	length: number,
 	overflowLimit: number = length + 6,
-	underflowLimit: number = Math.round(length * 0.85),
+	underflowLimit: number = Math.round(length * 0.75),
 ) {
-	text = text.replace('\n', '')
+	console.debug('Trunc:\n' + text)
+	text = text.split('\n')[0]
 	if (text === '') return 'Untitled note'
 	if (text.length <= overflowLimit) return text
 	const slice = text.slice(underflowLimit, overflowLimit)

@@ -32,16 +32,17 @@ header.editor-header
         .add, .back
             position: absolute
             transition: opacity var(--transition-m), transform var(--transition-m)
-            transform: scale(1)
             opacity: 0
             pointer-events: none
             transform: scale(0.65)
+            transition-delay: 0
 
         &[data-context='editor'] .back, &[data-context='notes'] .add
             opacity: .25
             pointer-events: all
             transform: scale(1)
             transition: opacity var(--transition-s), transform var(--transition-s)
+            transition-delay: 100ms
 
             &:hover
                 opacity: .5
