@@ -13,7 +13,7 @@ Zen editor for those who love simplicity.
 ![notebook in comparison with type](https://github.com/qurle/type/blob/main/.github/notebook.png)
 
 
-Distractions and interfaces may restrain your thought. Unleash your creativity and just type your thoughts / blog posts / notes / docs.
+Distractions and interfaces may restrain your thoughts. Unleash your creativity and just type your thoughts / blog posts / notes / docs.
 Fast and simple. 
 
 You can also switch between themes and fonts. Every wish to have notebook with colored pages?
