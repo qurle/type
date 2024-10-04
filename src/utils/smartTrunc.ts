@@ -4,7 +4,6 @@ export function smartTrunc(
 	overflowLimit: number = length + 6,
 	underflowLimit: number = Math.round(length * 0.75),
 ) {
-	console.debug('Trunc:\n' + text)
 	text = text.split('\n')[0]
 	if (text === '') return 'Untitled note'
 	if (text.length <= overflowLimit) return text

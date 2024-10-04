@@ -11,8 +11,6 @@ export async function writeToFile(editor: Editor, editorEl: HTMLElement, opfs: F
 
 	const defaultLength = 80
 	const firstBlock = (editorEl.children[0] as HTMLElement).innerText
-	console.debug(`Saving:\n${firstBlock}`)
-	console.debug(`Or:\n${markdown.split('\n')[0]}`)
 	const name = smartTrunc(firstBlock || markdown.split('\n')[0], defaultLength)
 
 	console.debug(`Saving "${name}" by ${saveRef}`)

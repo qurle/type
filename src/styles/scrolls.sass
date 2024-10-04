@@ -1,0 +1,24 @@
+body
+    --scrollbar-color: var(--color-main-25)
+    --scrollbar-color-hover: var(--color-main-50)
+    --scrollbar-backround: var(--color-background)
+    --scrollbar-radius: var(--radius-m)
+
+    scrollbar-color: var(--scrollbar-color) var(--scrollbar-backround)
+    &::-webkit-scrollbar
+        width: 24px
+    &::-webkit-scrollbar-thumb
+        background: var(--scrollbar-color)
+        border-radius: var(--scrollbar-radius)
+        border: 8px solid var(--scrollbar-backround)
+        transition: background var(--transition-s)
+        &:hover
+            background: var(--scrollbar-color-hover)
+    &::-webkit-scrollbar-track
+        background: var(--scrollbar-backround)
+        border-radius: var(--scrollbar-radius)
+    &::-webkit-scrollbar-corner
+        background: var(--scrollbar-backround)
+    &::-webkit-resizer
+        color: var(--scrollbar-color)
+        background: var(--scrollbar-backround)
