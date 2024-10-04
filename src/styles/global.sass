@@ -28,7 +28,6 @@ p
     &:not(:first-child)
         padding-top: var(--space-l)
 
-
 // Elements
 button
     cursor: pointer
@@ -46,6 +45,11 @@ hr
     background-color: var(--color-main-15)
     border-radius: 2px
 
+::spelling-error
+    text-decoration: dotted coral underline
+    text-decoration-thickness: 2px
+    text-underline-offset: 2px
+
 .bordered
     outline: 1px dashed var(--color-main-50)
 
@@ -54,4 +58,4 @@ hr
     0%
         opacity: 0
     100%
-        opacity: 1    
+        opacity: 1
