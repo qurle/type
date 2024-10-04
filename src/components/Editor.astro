@@ -153,7 +153,7 @@ import { modes } from '@utils/cycleModes'
 					) as HTMLCollectionOf<HTMLDivElement>
 				)[0]
 				editorEl.spellcheck =
-					Boolean(localStorage.getItem('spell')) || true
+					localStorage.getItem('spell') === 'true' || true
 				if (hasNotes) editorEl.classList.add('collapsed')
 				editorEl.ariaLabel = 'Your note'
 			})
