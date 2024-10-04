@@ -41,7 +41,16 @@ import { modes } from '@utils/cycleModes'
 						</li>
 					))
 				}
-				<li class="credit">by <a href="https://qurle.net">qurle</a></li>
+				<li>
+					<span>Spellcheck</span><menu class="spell"
+						><li><button class="false">Off</button></li><li>
+							<button class="true">On</button>
+						</li></menu
+					>
+				</li>
+				<li class="credit">
+					by <a href="https://qurle.net">qurle</a>
+				</li>
 			</ul>
 		</div>
 	</div>
@@ -64,6 +73,7 @@ import { modes } from '@utils/cycleModes'
 	import { exportAll, exportFile } from '@utils/export'
 	import { focusToEnd } from '@utils/focusToEnd'
 	import { getNotes } from '@utils/getNotes'
+	import { getOpfs } from '@utils/getOpfs'
 	import { showState } from '@utils/showState'
 	import { writeToFile, type SaveRef } from '@utils/writeToFile'
 	import { nanoid } from 'nanoid/non-secure'
@@ -102,11 +112,14 @@ import { modes } from '@utils/cycleModes'
 			.getElementsByClassName('theme')[0]
 			.getElementsByTagName('button'),
 	)
+	const spellEl = Array.from(
+		headerEl
+			.getElementsByClassName('spell')[0]
+			.getElementsByTagName('button'),
+	)
 	const rootEl = document.getElementsByTagName('main')[0] as HTMLElement
 	// Other
-	const opfs = await (
-		await navigator.storage.getDirectory()
-	).getDirectoryHandle('md', { create: true })
+	const opfs = await getOpfs()
 	const notes = await getNotes(opfs)
 
 	// Assinged selectors
@@ -117,6 +130,8 @@ import { modes } from '@utils/cycleModes'
 	let empty = true
 	let hasNotes = notes?.length > 0
 	let lastSave = Date.now()
+
+	console.debug(`Loading editor`)
 
 	const editor = await Editor.make()
 		.use(commonmark)
@@ -137,7 +152,8 @@ import { modes } from '@utils/cycleModes'
 						'editor',
 					) as HTMLCollectionOf<HTMLDivElement>
 				)[0]
-				editorEl.spellcheck = false
+				editorEl.spellcheck =
+					Boolean(localStorage.getItem('spell')) || true
 				if (hasNotes) editorEl.classList.add('collapsed')
 				editorEl.ariaLabel = 'Your note'
 			})
@@ -285,6 +301,13 @@ import { modes } from '@utils/cycleModes'
 			})
 			.classList.add('current')
 
+		spellEl
+			.find((el) => {
+				return el.classList.contains(editorEl.spellcheck.toString())
+			})
+			.classList.add('current')
+		console.debug(spellEl)
+
 		fontsEl.forEach((button) => {
 			button.addEventListener('click', () => {
 				fontsEl.forEach((el) => el.classList.remove('current'))
@@ -297,6 +320,16 @@ import { modes } from '@utils/cycleModes'
 			button.addEventListener('click', () => {
 				themeEl.forEach((el) => el.classList.remove('current'))
 				activateMode('theme', button.className)
+				button.classList.add('current')
+			})
+		})
+
+		spellEl.forEach((button) => {
+			button.addEventListener('click', () => {
+				const state = button.className
+				spellEl.forEach((el) => el.classList.remove('current'))
+				editorEl.spellcheck = Boolean(state)
+				localStorage.setItem('spell', state)
 				button.classList.add('current')
 			})
 		})

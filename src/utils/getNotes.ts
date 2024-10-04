@@ -4,7 +4,7 @@ export async function getNotes(opfs: FileSystemDirectoryHandle = null) {
 	if (opfs)
 		return await getLocalNotes(opfs)
 	else
-		return getStubNotes()
+		return []
 }
 
 export async function getLocalNotes(opfs: FileSystemDirectoryHandle) {

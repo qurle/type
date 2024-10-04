@@ -102,52 +102,53 @@ header.editor-header
                 li
                     list-style: none
 
-                &.font li > button
-                    color: var(--color-main-25)
-                    transition: color var(--transition-s)
-
-                    &:hover:not(.current)
-                        color: var(--color-main-50)
-                    &.current
-                        color: var(--color-main)
-                        
-                    &.serif
-                        font-family: var(--font-serif)
-                    &.sans
-                        font-family: var(--font-sans)
-                    &.mono
-                        font-family: var(--font-mono)
-
-                &.theme
-                    li > button
-                        width: 28px
-                        height: 28px
-
-                        border-radius: var(--radius-l)
-                        outline: 1px solid var(--color-main-15)
-                        transform: scale(.75)
-
-                        transition: transform var(--transition-m)
+                &.font, &.spell
+                     li > button
+                        color: var(--color-main-25)
+                        transition: color var(--transition-s)
 
                         &:hover:not(.current)
-                            transform: scale()
-
+                            color: var(--color-main-50)
                         &.current
-                            // outline-width: calc(28px * .5 + 1px)
-                            transform: scale(1)
-                            background-color: var(--color-main-50)
+                            color: var(--color-main)
+                            
+                &.font li > button           
+                        &.serif
+                            font-family: var(--font-serif)
+                        &.sans
+                            font-family: var(--font-sans)
+                        &.mono
+                            font-family: var(--font-mono)
 
-                        &.light
-                            background-color: var(--color-light)
+                &.theme li > button
+                    width: 28px
+                    height: 28px
 
-                        &.dark
-                            background-color: var(--color-dark)
+                    border-radius: var(--radius-l)
+                    outline: 1px solid var(--color-main-15)
+                    transform: scale(.75)
 
-                        &.sepia
-                            background-color: var(--color-sepia)
+                    transition: transform var(--transition-m)
 
-                        &.blue
-                            background-color: var(--color-blue)
+                    &:hover:not(.current)
+                        transform: scale()
+
+                    &.current
+                        // outline-width: calc(28px * .5 + 1px)
+                        transform: scale(1)
+                        background-color: var(--color-main-50)
+
+                    &.light
+                        background-color: var(--color-light)
+
+                    &.dark
+                        background-color: var(--color-dark)
+
+                    &.sepia
+                        background-color: var(--color-sepia)
+
+                    &.blue
+                        background-color: var(--color-blue)
                             
             hr
                 border-color: var(--color-main-05)
