@@ -32,7 +32,7 @@ Markdown is easy markup language which makes **type.** more than plain text edit
 For example, there are things like `# Headings`, `**bold texts**` and <code>\`code\`</code>. You can check more rules [here](https://www.markdownguide.org/basic-syntax/).
 
 ## technologies
-Shout out to [Milkdown](https://milkdown.dev/) — core engine of **type.**. There is [Astro](https://github.com/withastro/astro) framework under the hood.
+Shout out to [Milkdown](https://milkdown.dev/) — core engine of **type.** There is [Astro](https://github.com/withastro/astro) framework under the hood.
 
 
 ## special thanks
