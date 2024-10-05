@@ -25,8 +25,9 @@ export async function exportAll(opfs: FileSystemDirectoryHandle, stateEl: HTMLEl
 	// @ts-ignore
 	for await (const handle of opfs.values()) {
 		if (handle.kind === 'file') {
+			const name = localStorage.getItem(`name-${handle.name}`) || handle.name
 			// @ts-ignore
-			const file = new File([await handle.getFile()], handle.name + '.md')
+			const file = new File([await handle.getFile()], name + '.md')
 			files.push(file)
 		}
 	}
