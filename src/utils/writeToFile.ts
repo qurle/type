@@ -9,6 +9,9 @@ export async function writeToFile(editor: Editor, editorEl: HTMLElement, opfs: F
 	if (/^\s*$/g.test(markdown))
 		return
 
+	// Removing space HTML entities
+	markdown = markdown.replace('&#x20;', ' ')
+
 	const defaultLength = 80
 	const firstBlock = (editorEl.children[0] as HTMLElement).innerText
 	const name = smartTrunc(firstBlock || markdown.split('\n')[0], defaultLength)

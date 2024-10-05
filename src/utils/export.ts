@@ -47,7 +47,10 @@ function downloadBlob(filename, blob) {
 }
 
 function downloadText(filename: string, content: string) {
-	var link = document.createElement('a')
+	// Removing space HTML entities
+	content = content.replace('&#x20;', ' ')
+
+	const link = document.createElement('a')
 	link.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(content)
 	link.download = filename
 
