@@ -1,9 +1,9 @@
 {
   "name": "type",
   "description": "Zen markdown-friendly editor for just typing",
-  "type": "module",
   "author": "qurle",
-  "version": "1.0.1",
+  "type": "module",
+  "version": "1.0.2",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
