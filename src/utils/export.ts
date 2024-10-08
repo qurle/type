@@ -5,13 +5,14 @@ import { downloadZip } from 'client-zip';
 import { showState } from './showState';
 
 export function exportFile(editor: Editor, editorEl: HTMLElement, stateEl: HTMLElement, filename = null, markdown: string = editor.action(getMarkdown()) || '') {
-	if (markdown === '') {
+	if (/^\s*$/g.test(markdown)) {
 		showState(stateEl, 'file\'s empty')
 		return
 	}
 
 	const defaultLength = 40
-	filename = filename || smartTrunc(editorEl.children[0].textContent || markdown.split('\n')[0], defaultLength) || 'note'
+	const firstBlock = (editorEl.children[0] as HTMLElement).innerText
+	filename = filename || smartTrunc(firstBlock || markdown.split('\n')[0], defaultLength) || 'note'
 
 
 	console.debug(`Downloading. Filename is ${filename}. Text has ${markdown.length} symbols`)
@@ -24,8 +25,9 @@ export async function exportAll(opfs: FileSystemDirectoryHandle, stateEl: HTMLEl
 	// @ts-ignore
 	for await (const handle of opfs.values()) {
 		if (handle.kind === 'file') {
+			const name = localStorage.getItem(`name-${handle.name}`) || handle.name
 			// @ts-ignore
-			const file = new File([await handle.getFile()], handle.name + '.md')
+			const file = new File([await handle.getFile()], name + '.md')
 			files.push(file)
 		}
 	}

@@ -59,27 +59,26 @@ import { modes } from '@utils/modes'
 <script>
 	// Sorry for writing almost EVERYTHING here
 	import { Editor, rootCtx } from '@milkdown/kit/core'
-	import { clipboard } from '@milkdown/kit/plugin/clipboard'
-	import { history } from '@milkdown/kit/plugin/history'
-	import { indent } from '@milkdown/kit/plugin/indent'
-	import { listener, listenerCtx } from '@milkdown/kit/plugin/listener'
-	import { upload } from '@milkdown/kit/plugin/upload'
-	import { commonmark } from '@milkdown/kit/preset/commonmark'
-	import { automd } from '@milkdown/plugin-automd'
-	import { replaceAll } from '@milkdown/utils'
-	import { buildEditor } from '@utils/buildEditor'
-	import { getCurrent, setCurrent } from '@utils/current'
-	import { debug } from '@utils/debug'
-	import { del } from '@utils/del'
-	import { exportAll, exportFile } from '@utils/export'
-	import { focusToEnd } from '@utils/focusToEnd'
-	import { getByClass, getByTag } from '@utils/getElement'
-	import { getNotes } from '@utils/getNotes'
-	import { getOpfs } from '@utils/getOpfs'
-	import { currentMode, cycleModes } from '@utils/modes'
-	import { showState } from '@utils/showState'
-	import { writeToFile, type SaveRef } from '@utils/writeToFile'
-	import { nanoid } from 'nanoid/non-secure'
+import { clipboard } from '@milkdown/kit/plugin/clipboard'
+import { history } from '@milkdown/kit/plugin/history'
+import { indent } from '@milkdown/kit/plugin/indent'
+import { listener, listenerCtx } from '@milkdown/kit/plugin/listener'
+import { upload } from '@milkdown/kit/plugin/upload'
+import { commonmark } from '@milkdown/kit/preset/commonmark'
+import { automd } from '@milkdown/plugin-automd'
+import { replaceAll } from '@milkdown/utils'
+import { buildEditor } from '@utils/buildEditor'
+import { getCurrent, setCurrent } from '@utils/current'
+import { del } from '@utils/del'
+import { exportAll, exportFile } from '@utils/export'
+import { focusToEnd } from '@utils/focusToEnd'
+import { getByClass, getByTag } from '@utils/getElement'
+import { getNotes } from '@utils/getNotes'
+import { getOpfs } from '@utils/getOpfs'
+import { currentMode, cycleModes } from '@utils/modes'
+import { showState } from '@utils/showState'
+import { writeToFile, type SaveRef } from '@utils/writeToFile'
+import { nanoid } from 'nanoid/non-secure'
 
 	// Utilities
 	const autosaveInterval = 5_000
@@ -195,26 +194,7 @@ import { modes } from '@utils/modes'
 	focusToEnd(editorEl)
 	document.addEventListener('visibilitychange', toggleAutosave)
 
-	document.addEventListener('keydown', (e) => {
-		if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-			e.preventDefault()
-			if (e.repeat) return
-			if (e.shiftKey) {
-				exportFile(editor, editorEl, stateEl)
-			} else {
-				save('shortcut')
-			}
-		}
-		if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
-			e.preventDefault()
-			if (e.repeat) return
-			debug(rootEl)
-		}
-		if (e.key === 'Escape') {
-			save('clear')
-			clearEditor()
-		}
-	})
+	initShortcuts()
 
 	editorEl.addEventListener('keydown', (e) => {
 		if (e.key === 'ArrowDown' && empty && notesEl) {
