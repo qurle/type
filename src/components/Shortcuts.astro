@@ -1,0 +1,81 @@
+---
+import Modal from './Modal.astro'
+
+const shortcutDict = [
+	{ shortcut: ['Ctrl', 'S'], action: `Force save` },
+	{ shortcut: ['Ctrl', 'Shift', 'S'], action: `Download file(s)` },
+	{ shortcut: ['Ctrl', 'O'], action: `Open file(s)` },
+	{ shortcut: ['Ctrl', 'B'], action: `Bold / unbold` },
+	{ shortcut: ['Ctrl', 'I'], action: `Italic / unitalic` },
+	{ shortcut: ['Ctrl', 'E'], action: `Code / uncode` },
+	{ shortcut: ['Esc'], action: `Back to notes` },
+	{
+		shortcut: ['Shift', 'delete'],
+		action: `Delete w/o confirmation`,
+	},
+]
+---
+
+<Modal name="shortcuts" title="Shortcuts"
+	><dl id="shortcuts-list" class="shortcuts">
+		{
+			shortcutDict.map((x) => (
+				<div>
+					<dt>
+						{x.shortcut.map((key) => (
+							<kbd>{key}</kbd>
+						))}
+					</dt>
+					<dd>{x.action}</dd>
+				</div>
+			))
+		}
+	</dl>
+</Modal>
+<style lang="scss">
+	@import '@styles/blocks.sass';
+	@include blocks;
+
+	.shortcuts {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		width: 100%;
+		gap: var(--space-xl) var(--space-l);
+		padding-right: var(--space-xl);
+		padding-bottom: var(--space-l);
+	}
+
+	kbd {
+		display: inline-block;
+		min-width: 2rem;
+		padding: var(--space-s) var(--space-m);
+
+		font-size: var(--font-size-xs);
+		text-align: center;
+
+		border-radius: var(--radius-m);
+		border: 1px solid var(--color-main-15);
+		background: var(--color-main-05);
+		box-shadow:
+			inset 4px 4px 4px #fff,
+			inset -2px -2px 0px #00000020;
+
+		&:not(:first-child) {
+			margin-left: var(--space-s);
+		}
+	}
+
+	dd {
+		margin-top: calc(var(--space-m) + var(--space-s));
+	}
+</style>
+<script>
+	if (navigator.appVersion.includes('Mac')) {
+		const shortcuts = document
+			.getElementById('shortcuts-list')
+			.getElementsByTagName('kbd')
+		for (const el of shortcuts) {
+			el.textContent = el.textContent.replace('Ctrl', '⌘')
+		}
+	}
+</script>

@@ -4,6 +4,8 @@ import '@styles/editor.sass'
 import '@styles/notes.sass'
 import { Icon } from 'astro-icon/components'
 import { modes } from '@utils/modes'
+import Instructions from './Instructions.astro'
+import Shortcuts from './Shortcuts.astro'
 ---
 
 <header class="editor-header">
@@ -44,12 +46,20 @@ import { modes } from '@utils/modes'
 					>
 				</li>
 				<li><hr /></li>
-				<!-- <li>
-					<button class="md-help">How to markdown</button>
+				<li>
+					<button
+						class="md-help"
+						data-micromodal-trigger="modal-instructions"
+						>How to markdown</button
+					>
 				</li>
 				<li>
-					<button class="shortcuts">Shortcuts</button>
-				</li> -->
+					<button
+						class="shortcuts"
+						data-micromodal-trigger="modal-shortcuts"
+						>Shortcuts</button
+					>
+				</li>
 				<li class="credit">
 					by <a href="https://qurle.net">qurle</a>
 				</li>
@@ -58,6 +68,9 @@ import { modes } from '@utils/modes'
 	</div>
 </header>
 <main></main>
+<Instructions />
+<Shortcuts />
+
 <script>
 	// Sorry for writing almost EVERYTHING here
 	import { Editor, rootCtx } from '@milkdown/kit/core'
@@ -81,7 +94,10 @@ import { modes } from '@utils/modes'
 	import { currentMode, cycleModes } from '@utils/modes'
 	import { showState } from '@utils/showState'
 	import { writeToFile, type SaveRef } from '@utils/writeToFile'
+	import MicroModal from 'micromodal'
 	import { nanoid } from 'nanoid/non-secure'
+
+	MicroModal.init()
 
 	// Utilities
 	const autosaveInterval = 5_000
@@ -153,7 +169,7 @@ import { modes } from '@utils/modes'
 					setTimeout(() => {
 						rootEl.classList.add('notes-shown')
 					}, 50)
-					notesEl.dataset.context = 'notes'
+					headerLeftEl.dataset.context = 'notes'
 					getNotes(opfs).then((notes) => {
 						hasNotes = notes?.length > 0
 						if (notesEl) {

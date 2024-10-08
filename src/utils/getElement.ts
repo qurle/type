@@ -7,10 +7,6 @@ export function getByClass(
 	parent: HTMLElement = document.documentElement,
 	multiple = false,
 ) {
-	console.log(parent)
-	console.log(parent.getElementsByClassName(
-		className,
-	))
 	const elements = parent.getElementsByClassName(
 		className,
 	) as HTMLCollectionOf<HTMLElement>
