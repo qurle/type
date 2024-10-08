@@ -20,7 +20,9 @@ import { modes } from '@utils/modes'
 			<button class="show-more"><Icon name="more" /></button>
 			<ul class="more-menu">
 				<li><button class="export-all">Export all</button></li>
-				<li><button class="download hidden">Download</button></li>
+				<li class="hidden">
+					<button class="download">Download</button>
+				</li>
 				<li><hr /></li>
 				{
 					Object.entries(modes).map(([name, values]) => (
