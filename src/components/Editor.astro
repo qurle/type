@@ -3,7 +3,7 @@ import '@styles/header.sass'
 import '@styles/editor.sass'
 import '@styles/notes.sass'
 import { Icon } from 'astro-icon/components'
-import { modes } from '@utils/cycleModes'
+import { modes } from '@utils/modes'
 ---
 
 <header class="editor-header">
@@ -19,35 +19,35 @@ import { modes } from '@utils/cycleModes'
 		<div class="more">
 			<button class="show-more"><Icon name="more" /></button>
 			<ul class="more-menu">
-				<li><button class="export">Export all</button></li>
+				<li><button class="export-all">Export all</button></li>
+				<li><button class="download hidden">Download</button></li>
+				<li><hr /></li>
 				{
 					Object.entries(modes).map(([name, values]) => (
 						<li>
-							<span>
-								{name.charAt(0).toUpperCase() +
-									name.substring(1).toLowerCase()}
-							</span>
-							<menu class={name}>
-								{values.map((value) => (
-									<li>
-										<button class={value}>
-											{name === 'font'
-												? `${value.charAt(0).toUpperCase()}${value.substring(1).toLowerCase()}`
-												: ''}
-										</button>
-									</li>
-								))}
-							</menu>
+							<button class={name}>
+								<span>
+									{name.charAt(0).toUpperCase() +
+										name.substring(1).toLowerCase()}
+								</span>
+								<span class="value">{values[0]}</span>
+							</button>
 						</li>
 					))
 				}
 				<li>
-					<span>Spellcheck</span><menu class="spell"
-						><li><button class="false">Off</button></li><li>
-							<button class="true">On</button>
-						</li></menu
+					<button class="spell"
+						><span>Spellcheck</span><span class="value">on</span
+						></button
 					>
 				</li>
+				<li><hr /></li>
+				<!-- <li>
+					<button class="md-help">How to markdown</button>
+				</li>
+				<li>
+					<button class="shortcuts">Shortcuts</button>
+				</li> -->
 				<li class="credit">
 					by <a href="https://qurle.net">qurle</a>
 				</li>
@@ -57,6 +57,7 @@ import { modes } from '@utils/cycleModes'
 </header>
 <main></main>
 <script>
+	// Sorry for writing almost EVERYTHING here
 	import { Editor, rootCtx } from '@milkdown/kit/core'
 	import { clipboard } from '@milkdown/kit/plugin/clipboard'
 	import { history } from '@milkdown/kit/plugin/history'
@@ -72,8 +73,10 @@ import { modes } from '@utils/cycleModes'
 	import { del } from '@utils/del'
 	import { exportAll, exportFile } from '@utils/export'
 	import { focusToEnd } from '@utils/focusToEnd'
+	import { getByClass, getByTag } from '@utils/getElement'
 	import { getNotes } from '@utils/getNotes'
 	import { getOpfs } from '@utils/getOpfs'
+	import { currentMode, cycleModes } from '@utils/modes'
 	import { showState } from '@utils/showState'
 	import { writeToFile, type SaveRef } from '@utils/writeToFile'
 	import { nanoid } from 'nanoid/non-secure'
@@ -81,43 +84,21 @@ import { modes } from '@utils/cycleModes'
 	// Utilities
 	const autosaveInterval = 5_000
 	// Elements
-	const headerEl = document.getElementsByTagName('header')[0] as HTMLElement
-	const headerLeftEl = headerEl.getElementsByClassName(
-		'left',
-	)[0] as HTMLElement
-	const uploadInput = headerLeftEl.getElementsByTagName(
-		'input',
-	)[0] as HTMLInputElement
-	const addEl = headerLeftEl.getElementsByClassName(
-		'add',
-	)[0] as HTMLButtonElement
-	const backEl = headerEl.getElementsByClassName(
-		'back',
-	)[0] as HTMLButtonElement
-	const stateEl = headerEl.getElementsByClassName('state')[0] as HTMLElement
-	const showMoreEl = headerEl.getElementsByClassName(
-		'show-more',
-	)[0] as HTMLButtonElement
-	const menuEl = headerEl.getElementsByClassName(
-		'more-menu',
-	)[0] as HTMLButtonElement
-	const exportButtonEl = headerEl.getElementsByClassName('export')[0]
-	const fontsEl = Array.from(
-		headerEl
-			.getElementsByClassName('font')[0]
-			.getElementsByTagName('button'),
-	)
-	const themeEl = Array.from(
-		headerEl
-			.getElementsByClassName('theme')[0]
-			.getElementsByTagName('button'),
-	)
-	const spellEl = Array.from(
-		headerEl
-			.getElementsByClassName('spell')[0]
-			.getElementsByTagName('button'),
-	)
-	const rootEl = document.getElementsByTagName('main')[0] as HTMLElement
+	const headerEl = getByTag('header')
+	const headerLeftEl = getByClass('left', headerEl)
+	const uploadInput = getByTag('input', headerLeftEl) as HTMLInputElement
+	const addEl = getByClass('add', headerLeftEl)
+	const backEl = getByClass('back', headerLeftEl)
+	const stateEl = getByClass('state', headerEl)
+	const showMoreEl = getByClass('show-more', headerEl)
+	const menuEl = getByClass('more-menu', headerEl)
+	const downloadEl = getByClass('download', headerEl)
+	const exportAllEl = getByClass('export-all', headerEl)
+	const fontEl = getByClass('font', menuEl)
+	const themeEl = getByClass('theme', menuEl)
+	const spellEl = getByClass('spell', menuEl)
+	const rootEl = getByTag('main')
+
 	// Other
 	const opfs = await getOpfs()
 	const notes = await getNotes(opfs)
@@ -170,7 +151,7 @@ import { modes } from '@utils/cycleModes'
 					setTimeout(() => {
 						rootEl.classList.add('notes-shown')
 					}, 50)
-					headerLeftEl.dataset.context = 'notes'
+					notesEl.dataset.context = 'notes'
 					getNotes(opfs).then((notes) => {
 						hasNotes = notes?.length > 0
 						if (notesEl) {
@@ -180,7 +161,8 @@ import { modes } from '@utils/cycleModes'
 						initNotesListeners()
 					})
 					document.title = 'type.'
-					exportButtonEl.textContent = 'Export all'
+					downloadEl.parentElement.classList.add('hidden')
+					exportAllEl.parentElement.classList.remove('hidden')
 					setCurrent('', editorEl)
 				} else {
 					empty = false
@@ -193,7 +175,8 @@ import { modes } from '@utils/cycleModes'
 						editorEl.classList.remove('collapsed')
 					}, 50)
 					headerLeftEl.dataset.context = 'editor'
-					exportButtonEl.textContent = 'Export file'
+					downloadEl.parentElement.classList.remove('hidden')
+					exportAllEl.parentElement.classList.add('hidden')
 				}
 			})
 		})
@@ -272,9 +255,12 @@ import { modes } from '@utils/cycleModes'
 			showMoreEl.classList.remove('active')
 	})
 
-	exportButtonEl.addEventListener('click', () => {
-		if (!empty) exportFile(editor, editorEl, stateEl)
-		else exportAll(opfs, stateEl)
+	downloadEl.addEventListener('click', () => {
+		if (empty) return
+		exportFile(editor, editorEl, stateEl)
+	})
+	exportAllEl.addEventListener('click', () => {
+		exportAll(opfs, stateEl)
 	})
 
 	window.addEventListener('beforeunload', () => {
@@ -282,56 +268,29 @@ import { modes } from '@utils/cycleModes'
 	})
 
 	initNavigationListener()
-	initModeSwitchListeners()
+	initModeCyclersListenters()
 	initNotesListeners()
 	initDragAndDrop()
 
-	function initModeSwitchListeners() {
-		fontsEl
-			.find((el) =>
-				el.classList.contains(document.documentElement.dataset.font),
-			)
-			.classList.add('current')
+	function initModeCyclersListenters() {
+		const fontValueEl = getByClass('value', fontEl)
+		const themeValueEl = getByClass('value', themeEl)
+		const spellValueEl = getByClass('value', spellEl)
 
-		themeEl
-			.find((el) => {
-				return el.classList.contains(
-					document.documentElement.dataset.theme,
-				)
-			})
-			.classList.add('current')
+		fontValueEl.textContent = currentMode('font')
+		themeValueEl.textContent = currentMode('theme')
+		spellValueEl.textContent = editorEl.spellcheck ? 'on' : 'off'
 
-		spellEl
-			.find((el) => {
-				return el.classList.contains(editorEl.spellcheck.toString())
-			})
-			.classList.add('current')
-		console.debug(spellEl)
-
-		fontsEl.forEach((button) => {
-			button.addEventListener('click', () => {
-				fontsEl.forEach((el) => el.classList.remove('current'))
-				activateMode('font', button.className)
-				button.classList.add('current')
-			})
+		fontEl.addEventListener('click', () => {
+			fontValueEl.textContent = cycleModes('font')
 		})
-
-		themeEl.forEach((button) => {
-			button.addEventListener('click', () => {
-				themeEl.forEach((el) => el.classList.remove('current'))
-				activateMode('theme', button.className)
-				button.classList.add('current')
-			})
+		themeEl.addEventListener('click', () => {
+			themeValueEl.textContent = cycleModes('theme')
 		})
-
-		spellEl.forEach((button) => {
-			button.addEventListener('click', () => {
-				const state = button.className === 'true'
-				spellEl.forEach((el) => el.classList.remove('current'))
-				editorEl.spellcheck = state
-				localStorage.setItem('spell', state.toString())
-				button.classList.add('current')
-			})
+		spellEl.addEventListener('click', () => {
+			editorEl.spellcheck = !editorEl.spellcheck
+			spellValueEl.textContent = editorEl.spellcheck ? 'on' : 'off'
+			localStorage.setItem('spell', editorEl.spellcheck.toString())
 		})
 	}
 

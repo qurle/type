@@ -5,8 +5,8 @@ header.editor-header
 
     margin-bottom: calc(var(--space-m) + var(--space-l))
 
-    font-size: var(--font-size-xs)
     font-family: var(--font-sans)
+    font-size: var(--font-size-xs)
 
     z-index: 2
 
@@ -66,121 +66,55 @@ header.editor-header
 
             display: flex
             flex-direction: column
-            gap: var(--space-l)
+            gap: var(--space-s)
+
+            font-size: var(--font-size-s)
+            text-wrap: nowrap
 
             opacity: 0
             pointer-events: none
             transform: scale(.5)
             transform-origin: top right
-            transition: opacity var(--transition-s), transform var(--transition-m)
+            transition: opacity var(--transition-s), background-color var(--transition-s), transform var(--transition-m)
 
-            padding: calc(var(--space-m) + var(--space-s))
+            padding: var(--space-m) 0
             border: 1px solid var(--color-main-05)
+            // box-shadow: 0 16px 32px -20px var(--color-main-25)
 
             z-index: 2
-            border-radius: calc(calc(var(--space-m) + var(--space-s)) + var(--radius-l))
+            border-radius: var(--radius-xl)
             background: color-mix(in hsl, var(--color-background) 50%, transparent)
+            -webkit-backdrop-filter: blur(50px)
             backdrop-filter: blur(50px)
             
-
-            > li
-                display: flex
-                align-items: center
-                gap: var(--space-m)
-                justify-content: space-between
-
-                &:not(:has(>button))
-                    padding: 0 var(--space-m)
-
-            span
-                color: var(--color-main-50)
-
-            menu
-                display: flex
-                gap: var(--space-m)
-                align-items: baseline
-
-                padding-left: var(--space-l)
-                font-size: var(--font-size-s)
-
-                li
-                    list-style: none
-
-                &.font, &.spell
-                     li > button
-                        color: var(--color-main-25)
-                        transition: color var(--transition-s)
-
-                        &:hover:not(.current)
-                            color: var(--color-main-50)
-                        &.current
-                            color: var(--color-main)
-                            
-                &.font li > button           
-                        &.serif
-                            font-family: var(--font-serif)
-                        &.sans
-                            font-family: var(--font-sans)
-                        &.mono
-                            font-family: var(--font-mono)
-
-                &.theme li > button
-                    width: 28px
-                    height: 28px
-
-                    border-radius: var(--radius-l)
-                    outline: 1px solid var(--color-main-15)
-                    transform: scale(.75)
-
-                    transition: transform var(--transition-m)
-
-                    &:hover:not(.current)
-                        transform: scale()
-
-                    &.current
-                        // outline-width: calc(28px * .5 + 1px)
-                        transform: scale(1)
-                        background-color: var(--color-main-50)
-
-                    &.light
-                        background-color: var(--color-light)
-
-                    &.dark
-                        background-color: var(--color-dark)
-
-                    &.sepia
-                        background-color: var(--color-sepia)
-
-                    &.blue
-                        background-color: var(--color-blue)
-                            
-            hr
-                border-color: var(--color-main-05)
             button
+                display: flex
+                justify-content: space-between
+                gap: var(--space-xl)
+
                 opacity: 1
+                transition: color var(--transition-s), transform var(--transition-s)
+
+                &:hover
+                    color: var(--color-main-50)
                 &:active
                     transform: scale(.95)
 
-            .export
+                > .value
+                    width: 6ch
+                    text-align: right
+                    color: var(--color-main-50)
+
+            button, .credit
                 width: 100%
-                padding: var(--space-m)
+                padding: var(--space-m) var(--space-l)
 
-                border-radius: var(--radius-l)
-                background: var(--color-main-05)
-
-                font-size: var(--font-size-s)
-                text-align: center
-
-                transition: background var(--transition-s)
-
-                &:hover
-                    background: var(--color-main-15)
+            hr
+                margin: var(--space-s) var(--space-l)
+                border-color: var(--color-main-15)
 
             .credit
                 display: block
-
-                width: 100%
-                text-align: center
                 color: var(--color-main-25)
 
     .show-more.active + .more-menu
