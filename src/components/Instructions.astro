@@ -68,11 +68,12 @@ const markdownDict = [
         gap: var(--space-m);
         padding-right: var(--space-xl);
         padding-bottom: var(--space-l);
-    }
 
-    code {
-        font-size: var(--font-size-xs);
-        display: inline-block;
+        > dt > code {
+            font-size: var(--font-size-xs);
+            padding: var(--space-l);
+            display: inline-block;
+        }
     }
 
     dt:not(:first-child) {
