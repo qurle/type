@@ -369,7 +369,7 @@ import Shortcuts from './Shortcuts.astro'
 						}
 						save('clear')
 						if (
-							[location.origin, location.origin + '/'].includes(
+							![location.origin, location.origin + '/'].includes(
 								location.href,
 							)
 						) {
