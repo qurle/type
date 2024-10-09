@@ -16,6 +16,9 @@
         text-decoration-color: var(--color-main-15)
         text-underline-offset: 4px
         text-decoration-thickness: 1.5px
+        transition: text-decoration-color var(--transition-s)
+        &:hover
+            text-decoration-color: var(--color-main-50)
 
     :not(pre)>code
         border-radius: var(--radius-m)
@@ -51,6 +54,11 @@
 
     hr
         margin: var(--space-m) 0
+
+    img 
+        ~ br.ProseMirror-trailingBreak
+        ~ .ProseMirror-separator
+            display: none
 
 .blocks
     @include blocks

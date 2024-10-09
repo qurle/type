@@ -333,6 +333,13 @@ import Shortcuts from './Shortcuts.astro'
 							return
 						}
 					}
+					case 'KeyE': {
+						if (e.repeat) return
+						if (e.shiftKey) {
+							unlock()
+							return
+						}
+					}
 					case 'KeyD': {
 						e.preventDefault()
 						if (e.repeat) return
