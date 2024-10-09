@@ -1,6 +1,6 @@
 export const modes = {
 	font: ['serif', 'mono', 'sans'],
-	theme: ['light', 'dark', 'sepia', 'blue', 'digital']
+	theme: ['light', 'dark', 'blue', 'digital']
 }
 
 export function cycleModes(mode: keyof typeof modes) {

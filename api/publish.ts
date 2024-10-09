@@ -16,6 +16,10 @@ interface NoteBody {
 	author?: string,
 }
 
+function encode(str: string) {
+	return Buffer.from(str, 'utf8').toString('base64url')
+}
+
 export default async (req: Request) => {
 	switch (req.method) {
 		case 'POST':
@@ -35,12 +39,23 @@ export default async (req: Request) => {
 			const from = new Date()
 			from.setDate(from.getDate() - 14)
 
-			const existing = (await supabase.from('notes').select('id').eq('client_id', clientId).gte('modified', from.toISOString()).limit(1).single())?.data?.id
+			const existing = (await supabase.
+				from('notes')
+				.select('id')
+				.eq('client_id', clientId)
+				.gte('modified', from.toISOString())
+				.limit(1)
+				.single())?.data?.id
+
 			let result
 			if (existing) {
 				result = await supabase
 					.from('notes')
-					.update({ note: note, modified: new Date().toISOString() })
+					.update({
+						note: encode(note),
+						modified: new Date().toISOString(),
+						encoded: true
+					})
 					.eq('id', existing)
 					.order('modified', { ascending: false })
 					.limit(1)
@@ -49,7 +64,14 @@ export default async (req: Request) => {
 			} else {
 				result = await supabase
 					.from('notes')
-					.insert({ id: nanoid(12), note: note, author: author || 'type.', client_id: clientId, modified: new Date().toISOString() })
+					.insert({
+						id: nanoid(12),
+						note: encode(note),
+						author: author || 'type.',
+						client_id: clientId,
+						modified: new Date().toISOString(),
+						encoded: true
+					})
 					.order('id', { ascending: false })
 					.limit(1)
 					.select()
