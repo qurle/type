@@ -13,7 +13,7 @@ const { id } = Astro.params
 <span id="id-storage" data-id={id} style="display: none;"></span>
 <script>
 	const idEl = document.getElementById('id-storage')
-	const note = await fetch(`api/getNote?id=${idEl.dataset.id}`)
+	const note = await fetch(`/api/getNote?id=${idEl.dataset.id}`)
 		.then((response) => response.json())
 		.then((body) => body.data[0].note)
 	idEl.remove()
