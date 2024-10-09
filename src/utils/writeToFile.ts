@@ -3,9 +3,9 @@ import { getMarkdown } from '@milkdown/utils'
 import { smartTrunc } from '@utils/smartTrunc'
 import { showState } from './showState'
 
-export type SaveRef = 'autosave' | 'shortcut' | 'unload' | 'clear' | 'overwrite' | 'multiple-drop'
+export type SaveRef = 'autosave' | 'shortcut' | 'unload' | 'clear' | 'overwrite' | 'multiple-drop' | 'publish'
 
-export async function writeToFile(editor: Editor, editorEl: HTMLElement, opfs: FileSystemDirectoryHandle, id: string, stateEl: HTMLElement, saveRef: SaveRef = 'autosave', markdown: string = editor.action(getMarkdown()) || '') {
+export async function writeToFile(editor: Editor, editorEl: HTMLElement, opfs: FileSystemDirectoryHandle, id: string, stateEl: HTMLElement, saveRef: SaveRef = 'autosave', hidden = false, markdown: string = editor.action(getMarkdown()) || '') {
 	if (/^\s*$/g.test(markdown))
 		return
 
@@ -47,8 +47,8 @@ export async function writeToFile(editor: Editor, editorEl: HTMLElement, opfs: F
 
 	switch (saveRef) {
 		case 'multiple-drop': break
-		case 'overwrite': showState(stateEl, 'previous note saved'); break
-		default: showState(stateEl, 'saved')
+		case 'overwrite': if (!hidden) showState(stateEl, 'previous note saved'); break
+		default: if (!hidden) showState(stateEl, 'saved')
 	}
 
 	return Date.now()

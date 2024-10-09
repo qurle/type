@@ -76,29 +76,29 @@ import Shortcuts from './Shortcuts.astro'
 <script>
 	// Sorry for writing almost EVERYTHING here
 	import { Editor, rootCtx } from '@milkdown/kit/core'
-	import { clipboard } from '@milkdown/kit/plugin/clipboard'
-	import { history } from '@milkdown/kit/plugin/history'
-	import { indent } from '@milkdown/kit/plugin/indent'
-	import { listener, listenerCtx } from '@milkdown/kit/plugin/listener'
-	import { upload } from '@milkdown/kit/plugin/upload'
-	import { commonmark } from '@milkdown/kit/preset/commonmark'
-	import { automd } from '@milkdown/plugin-automd'
-	import { replaceAll } from '@milkdown/utils'
-	import { buildEditor } from '@utils/buildEditor'
-	import { getCurrent, setCurrent } from '@utils/current'
-	import { debug } from '@utils/debug'
-	import { del } from '@utils/del'
-	import { exportAll, exportFile } from '@utils/export'
-	import { focusToEnd } from '@utils/focusToEnd'
-	import { getByClass, getByTag } from '@utils/getElement'
-	import { getNotes } from '@utils/getNotes'
-	import { getOpfs } from '@utils/getOpfs'
-	import { currentMode, cycleModes } from '@utils/modes'
-	import { publish } from '@utils/publish'
-	import { showState } from '@utils/showState'
-	import { writeToFile, type SaveRef } from '@utils/writeToFile'
-	import MicroModal from 'micromodal'
-	import { nanoid } from 'nanoid/non-secure'
+import { clipboard } from '@milkdown/kit/plugin/clipboard'
+import { history } from '@milkdown/kit/plugin/history'
+import { indent } from '@milkdown/kit/plugin/indent'
+import { listener, listenerCtx } from '@milkdown/kit/plugin/listener'
+import { upload } from '@milkdown/kit/plugin/upload'
+import { commonmark } from '@milkdown/kit/preset/commonmark'
+import { automd } from '@milkdown/plugin-automd'
+import { replaceAll } from '@milkdown/utils'
+import { buildEditor } from '@utils/buildEditor'
+import { getCurrent, setCurrent } from '@utils/current'
+import { debug } from '@utils/debug'
+import { del } from '@utils/del'
+import { exportAll, exportFile } from '@utils/export'
+import { focusToEnd } from '@utils/focusToEnd'
+import { getByClass, getByTag } from '@utils/getElement'
+import { getNotes } from '@utils/getNotes'
+import { getOpfs } from '@utils/getOpfs'
+import { currentMode, cycleModes } from '@utils/modes'
+import { publish } from '@utils/publish'
+import { showState } from '@utils/showState'
+import { writeToFile, type SaveRef } from '@utils/writeToFile'
+import MicroModal from 'micromodal'
+import { nanoid } from 'nanoid/non-secure'
 
 	MicroModal.init()
 
@@ -267,7 +267,8 @@ import Shortcuts from './Shortcuts.astro'
 
 	publishEl.addEventListener('click', () => {
 		if (empty) return
-		publish(editor, editorEl, stateEl)
+		save('publish', true)
+		publish(editor, editorEl, stateEl, current)
 	})
 
 	downloadEl.addEventListener('click', () => {
@@ -292,7 +293,7 @@ import Shortcuts from './Shortcuts.astro'
 			// Ctrl / Cmd actions
 			if (e.ctrlKey || e.metaKey) {
 				switch (e.code) {
-					case 'keyS': {
+					case 'KeyS': {
 						e.preventDefault()
 						if (e.repeat) return
 
@@ -304,14 +305,14 @@ import Shortcuts from './Shortcuts.astro'
 						}
 						return
 					}
-					case 'keyD': {
+					case 'KeyD': {
 						e.preventDefault()
 						if (e.repeat) return
 						debug(rootEl)
 						return
 					}
 					// Mortal combat mode
-					case 'keyO': {
+					case 'KeyO': {
 						e.preventDefault()
 						if (e.repeat) return
 						uploadInput.click()
@@ -420,11 +421,11 @@ import Shortcuts from './Shortcuts.astro'
 		})
 	}
 
-	function save(ref: SaveRef) {
+	function save(ref: SaveRef, hidden = false) {
 		if (!empty && (ref !== 'autosave' || updated)) {
 			const currentId = getCurrent() || setCurrent(newId(), editorEl)
 			console.debug(`Current ID: ${currentId}`)
-			writeToFile(editor, editorEl, opfs, currentId, stateEl, ref)
+			writeToFile(editor, editorEl, opfs, currentId, stateEl, ref, hidden)
 			updated = false
 			return true
 		}
@@ -487,6 +488,7 @@ import Shortcuts from './Shortcuts.astro'
 					newId(),
 					stateEl,
 					'multiple-drop',
+					false,
 					await file.text(),
 				)
 				location.reload()
