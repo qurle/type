@@ -25,7 +25,10 @@ export function publish(editor: Editor, editorEl: HTMLElement, stateEl: HTMLElem
 		const id = body.id
 		console.debug(`Got ID: ${id}`)
 		const url = `${location.origin}/note/${id}`
+		try {
 		navigator.clipboard.writeText(url)
-		showState(stateEl, 'note url is copied', true)
+			showState(stateEl, 'note url is copied', true)
+		} catch { }
+
 	})
 }
