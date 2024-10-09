@@ -23,11 +23,11 @@ export default async (req: Request) => {
 					}
 				})
 			}
-			const result = await supabase.from('notes').select('note, author').eq('id', id)
+			const result = await supabase.from('notes').select('note, author').eq('id', id).maybeSingle()
 			console.log(`Result:`)
 			console.log(result)
 			return new Response(JSON.stringify({
-				id: result.data[0].note
+				note: result.data?.note
 			}), { status: 200, statusText: "Returning URL" })
 	}
 }
