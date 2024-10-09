@@ -359,6 +359,14 @@ import Shortcuts from './Shortcuts.astro'
 				switch (e.code) {
 					case 'Escape': {
 						e.preventDefault()
+						if (getByClass('is-open', document.body)) {
+							return
+						}
+						if (showMoreEl.classList.contains('active')) {
+							showMoreEl.classList.remove('active')
+							editorEl.focus()
+							return
+						}
 						save('clear')
 						if (location.href !== location.origin)
 							location.href = location.origin
