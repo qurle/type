@@ -282,18 +282,22 @@ import Shortcuts from './Shortcuts.astro'
 	publishEl.addEventListener('click', () => {
 		if (empty) return
 		save('publish', true)
+		showMoreEl.classList.remove('active')
 		publish(editor, editorEl, stateEl, current)
 	})
 
 	downloadEl.addEventListener('click', () => {
 		if (empty) return
+		showMoreEl.classList.remove('active')
 		exportFile(editor, editorEl, stateEl)
 	})
 	exportAllEl.addEventListener('click', () => {
+		showMoreEl.classList.remove('active')
 		exportAll(opfs, stateEl)
 	})
 
 	editEl.addEventListener('click', () => {
+		showMoreEl.classList.remove('active')
 		unlock()
 	})
 
