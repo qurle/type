@@ -245,6 +245,7 @@ import Shortcuts from './Shortcuts.astro'
 
 	backEl.addEventListener('click', () => {
 		save('clear')
+		if (location.href !== location.origin) location.href = location.origin
 		clearEditor()
 	})
 
@@ -328,6 +329,8 @@ import Shortcuts from './Shortcuts.astro'
 					case 'Escape': {
 						e.preventDefault()
 						save('clear')
+						if (location.href !== location.origin)
+							location.href = location.origin
 						clearEditor()
 						return
 					}
