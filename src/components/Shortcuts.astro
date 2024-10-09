@@ -56,9 +56,14 @@ const shortcutDict = [
 		border-radius: var(--radius-m);
 		border: 1px solid var(--color-main-15);
 		background: var(--color-main-05);
+		transition: transform var(--transition-s);
 		box-shadow:
-			inset 4px 4px 4px #fff,
+			inset 4px 4px 4px #ffffff80,
 			inset -2px -2px 0px #00000020;
+
+		&:active {
+			transform: scale(0.75);
+		}
 
 		&:not(:first-child) {
 			margin-left: var(--space-s);
