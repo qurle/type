@@ -216,6 +216,7 @@ import Shortcuts from './Shortcuts.astro'
 	const idEl = document.getElementById('id-storage')
 	if (idEl && idEl.dataset.id) {
 		editorEl.contentEditable = 'false'
+		setCurrent('', editorEl)
 		lock()
 		const note = await fetch(`/api/getNote?id=${idEl.dataset.id}`)
 			.then((response) => response.json())
