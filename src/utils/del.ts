@@ -6,7 +6,7 @@ export function del(noteId: string, opfs: FileSystemDirectoryHandle, confirmed =
 	if (confirmation){
 	    opfs.removeEntry(noteId)
 		localStorage.removeItem(`note-${noteId}`)
-		location.reload()
+		location.href = location.origin
 	}
 
 	return confirmation
