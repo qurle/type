@@ -47,7 +47,7 @@ export async function writeToFile(editor: Editor, editorEl: HTMLElement, opfs: F
 
 	switch (saveRef) {
 		case 'multiple-drop': break
-		case 'overwrite': showState(stateEl, 'previous file saved'); break
+		case 'overwrite': showState(stateEl, 'previous note saved'); break
 		default: showState(stateEl, 'saved')
 	}
 

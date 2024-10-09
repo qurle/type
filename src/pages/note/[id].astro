@@ -1,0 +1,46 @@
+---
+export const prerender = false
+
+import Editor from '@components/Editor.astro'
+import Layout from '@layouts/Layout.astro'
+
+const { id } = Astro.params
+---
+
+<Layout>
+	<Editor />
+</Layout>
+<span id="id-storage" data-id={id} style="display: none;"></span>
+<script>
+	const idEl = document.getElementById('id-storage')
+	const note = await fetch(`api/getNote?id=${idEl.dataset.id}`)
+		.then((response) => response.json())
+		.then((body) => body.data[0].note)
+	idEl.remove()
+
+	sessionStorage.setItem('loaded', note)
+
+	const registerServiceWorker = async (name) => {
+		if ('serviceWorker' in navigator) {
+			try {
+				const registration = await navigator.serviceWorker.register(
+					name,
+					{
+						scope: '/',
+					},
+				)
+				if (registration.installing) {
+					console.debug('Service worker installing')
+				} else if (registration.waiting) {
+					console.debug('Service worker installed')
+				} else if (registration.active) {
+					console.debug('Service worker active')
+				}
+			} catch (error) {
+				console.error(`Registration failed with ${error}`)
+			}
+		}
+	}
+
+	registerServiceWorker('/sw.js')
+</script>

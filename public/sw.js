@@ -4,6 +4,7 @@ const addResourcesToCache = async (resources) => {
 };
 
 const putInCache = async (request, response) => {
+	if (request.method !== 'GET') return
 	const cache = await caches.open('v1');
 	await cache.put(request, response);
 };

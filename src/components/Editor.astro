@@ -21,10 +21,13 @@ import Shortcuts from './Shortcuts.astro'
 		<div class="more">
 			<button class="show-more"><Icon name="more" /></button>
 			<ul class="more-menu">
-				<li><button class="export-all">Export all</button></li>
+				<li class="hidden">
+					<button class="publish">Publish</button>
+				</li>
 				<li class="hidden">
 					<button class="download">Download</button>
 				</li>
+				<li><button class="export-all">Export all</button></li>
 				<li><hr /></li>
 				{
 					Object.entries(modes).map(([name, values]) => (
@@ -70,7 +73,6 @@ import Shortcuts from './Shortcuts.astro'
 <main></main>
 <Instructions />
 <Shortcuts />
-
 <script>
 	// Sorry for writing almost EVERYTHING here
 	import { Editor, rootCtx } from '@milkdown/kit/core'
@@ -92,6 +94,7 @@ import Shortcuts from './Shortcuts.astro'
 	import { getNotes } from '@utils/getNotes'
 	import { getOpfs } from '@utils/getOpfs'
 	import { currentMode, cycleModes } from '@utils/modes'
+	import { publish } from '@utils/publish'
 	import { showState } from '@utils/showState'
 	import { writeToFile, type SaveRef } from '@utils/writeToFile'
 	import MicroModal from 'micromodal'
@@ -110,8 +113,9 @@ import Shortcuts from './Shortcuts.astro'
 	const stateEl = getByClass('state', headerEl)
 	const showMoreEl = getByClass('show-more', headerEl)
 	const menuEl = getByClass('more-menu', headerEl)
-	const downloadEl = getByClass('download', headerEl)
-	const exportAllEl = getByClass('export-all', headerEl)
+	const downloadEl = getByClass('download', menuEl)
+	const exportAllEl = getByClass('export-all', menuEl)
+	const publishEl = getByClass('publish', menuEl)
 	const fontEl = getByClass('font', menuEl)
 	const themeEl = getByClass('theme', menuEl)
 	const spellEl = getByClass('spell', menuEl)
@@ -155,6 +159,11 @@ import Shortcuts from './Shortcuts.astro'
 					localStorage.getItem('spell') === 'true' || true
 				if (hasNotes) editorEl.classList.add('collapsed')
 				editorEl.ariaLabel = 'Your note'
+				const loaded = sessionStorage.getItem('loaded')
+				if (loaded) {
+					editor.action(replaceAll(loaded))
+					sessionStorage.setItem('loaded', null)
+				}
 			})
 
 			listener.updated((ctx, doc) => {
@@ -180,6 +189,7 @@ import Shortcuts from './Shortcuts.astro'
 					})
 					document.title = 'type.'
 					downloadEl.parentElement.classList.add('hidden')
+					publishEl.parentElement.classList.add('hidden')
 					exportAllEl.parentElement.classList.remove('hidden')
 					setCurrent('', editorEl)
 				} else {
@@ -194,6 +204,7 @@ import Shortcuts from './Shortcuts.astro'
 					}, 50)
 					headerLeftEl.dataset.context = 'editor'
 					downloadEl.parentElement.classList.remove('hidden')
+					publishEl.parentElement.classList.remove('hidden')
 					exportAllEl.parentElement.classList.add('hidden')
 				}
 			})
@@ -252,6 +263,11 @@ import Shortcuts from './Shortcuts.astro'
 			!showMoreEl.contains(e.target as Node)
 		)
 			showMoreEl.classList.remove('active')
+	})
+
+	publishEl.addEventListener('click', () => {
+		if (empty) return
+		publish(editor, editorEl, stateEl)
 	})
 
 	downloadEl.addEventListener('click', () => {
