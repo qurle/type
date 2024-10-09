@@ -3,6 +3,7 @@ export const config = {
 }
 
 import { createClient } from '@supabase/supabase-js'
+import { nanoid } from 'nanoid'
 
 const supabase = createClient(
 	process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -48,7 +49,7 @@ export default async (req: Request) => {
 			} else {
 				result = await supabase
 					.from('notes')
-					.insert({ note: note, author: author || 'type.', client_id: clientId, modified: new Date().toISOString() })
+					.insert({ id: nanoid(12), note: note, author: author || 'type.', client_id: clientId, modified: new Date().toISOString() })
 					.order('id', { ascending: false })
 					.limit(1)
 					.select()
