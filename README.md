@@ -20,7 +20,7 @@ You can also switch between themes and fonts. Every wish to have notebook with c
 ![themes and fonts of type](https://github.com/qurle/type/blob/main/.github/style.png)
 
 
-Type is local and private and works even in offline mode. Export and upload markdown and text files, copy and paste webiste pages. Right in your browser. 
+Type is local and private and works even in offline mode. Export, publish and upload markdown and text files, copy and paste webiste pages. Right in your browser. 
 
 ## mark it down
 Every note is markdown file. 

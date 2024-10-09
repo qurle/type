@@ -1,15 +1,21 @@
 @mixin blocks
-    ul ul > li
-                margin-left: var(--space-xl)
+    ul
+        margin-top: var(--space-m)
+        ul
+            margin-top: 0
+            margin-left: var(--space-xl)
 
-    ol ol > li
-                margin-left: var(--space-xl)
+    ol
+        margin-top: var(--space-m)
+        ol
+            margin-top: 0
+            margin-left: var(--space-xl)
 
     ul>li::marker
-                content: '· '
+            content: '· '
 
     li > p
-                display: inline
+            display: inline
 
     a
         text-decoration: underline
@@ -50,12 +56,12 @@
             margin-top: var(--space-l)
 
     blockquote > blockquote
-        margin: var(--space-s) var(--space-xl) var(--space-s)
+            margin: var(--space-s) var(--space-xl) var(--space-s)
 
     hr
         margin-top: var(--space-l)
 
-    img 
+    img
         ~ br.ProseMirror-trailingBreak
         ~ .ProseMirror-separator
             display: none
