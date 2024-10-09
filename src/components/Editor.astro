@@ -28,6 +28,9 @@ import Shortcuts from './Shortcuts.astro'
 					<button class="download">Download</button>
 				</li>
 				<li><button class="export-all">Export all</button></li>
+				<li class="hidden">
+					<button class="edit">Copy and edit</button>
+				</li>
 				<li><hr /></li>
 				{
 					Object.entries(modes).map(([name, values]) => (
@@ -116,6 +119,7 @@ import Shortcuts from './Shortcuts.astro'
 	const downloadEl = getByClass('download', menuEl)
 	const exportAllEl = getByClass('export-all', menuEl)
 	const publishEl = getByClass('publish', menuEl)
+	const editEl = getByClass('edit', menuEl)
 	const fontEl = getByClass('font', menuEl)
 	const themeEl = getByClass('theme', menuEl)
 	const spellEl = getByClass('spell', menuEl)
@@ -133,6 +137,7 @@ import Shortcuts from './Shortcuts.astro'
 	let empty = true
 	let hasNotes = notes?.length > 0
 	let lastSave = Date.now()
+	let locked = false
 
 	console.debug(`Loading editor`)
 
@@ -183,8 +188,8 @@ import Shortcuts from './Shortcuts.astro'
 						initNotesListeners()
 					})
 					document.title = 'type.'
-					downloadEl.parentElement.classList.add('hidden')
 					publishEl.parentElement.classList.add('hidden')
+					downloadEl.parentElement.classList.add('hidden')
 					exportAllEl.parentElement.classList.remove('hidden')
 					setCurrent('', editorEl)
 				} else {
@@ -198,16 +203,20 @@ import Shortcuts from './Shortcuts.astro'
 						editorEl.classList.remove('collapsed')
 					}, 50)
 					headerLeftEl.dataset.context = 'editor'
+					if (!locked)
+						publishEl.parentElement.classList.remove('hidden')
 					downloadEl.parentElement.classList.remove('hidden')
-					publishEl.parentElement.classList.remove('hidden')
 					exportAllEl.parentElement.classList.add('hidden')
 				}
 			})
 		})
 		.create()
 
+	// Loading note by UUID
 	const idEl = document.getElementById('id-storage')
 	if (idEl && idEl.dataset.id) {
+		editorEl.contentEditable = 'false'
+		lock()
 		const note = await fetch(`/api/getNote?id=${idEl.dataset.id}`)
 			.then((response) => response.json())
 			.then((body) => body.note)
@@ -284,6 +293,10 @@ import Shortcuts from './Shortcuts.astro'
 		exportAll(opfs, stateEl)
 	})
 
+	editEl.addEventListener('click', () => {
+		unlock()
+	})
+
 	window.addEventListener('beforeunload', () => {
 		save('unload')
 	})
@@ -301,7 +314,6 @@ import Shortcuts from './Shortcuts.astro'
 					case 'KeyS': {
 						e.preventDefault()
 						if (e.repeat) return
-
 						if (e.shiftKey) {
 							exportFile(editor, editorEl, stateEl)
 						} else {
@@ -309,6 +321,13 @@ import Shortcuts from './Shortcuts.astro'
 							save('shortcut')
 						}
 						return
+					}
+					case 'KeyP': {
+						if (e.repeat) return
+						if (e.shiftKey) {
+							publish(editor, editorEl, stateEl, current)
+							return
+						}
 					}
 					case 'KeyD': {
 						e.preventDefault()
@@ -429,6 +448,7 @@ import Shortcuts from './Shortcuts.astro'
 	}
 
 	function save(ref: SaveRef, hidden = false) {
+		if (locked) return false
 		if (!empty && (ref !== 'autosave' || updated)) {
 			const currentId = getCurrent() || setCurrent(newId(), editorEl)
 			console.debug(`Current ID: ${currentId}`)
@@ -509,5 +529,20 @@ import Shortcuts from './Shortcuts.astro'
 		empty = true
 		window.history.pushState({ page: null }, '', '')
 		setCurrent('', editorEl)
+	}
+
+	function lock() {
+		locked = true
+		editorEl.contentEditable = 'false'
+		publishEl.parentElement.classList.add('hidden')
+		editEl.parentElement.classList.remove('hidden')
+	}
+
+	function unlock() {
+		locked = false
+		editorEl.contentEditable = 'true'
+		publishEl.parentElement.classList.remove('hidden')
+		editEl.parentElement.classList.add('hidden')
+		showState(stateEl, 'note copied')
 	}
 </script>
