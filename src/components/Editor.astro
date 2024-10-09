@@ -550,6 +550,7 @@ import Shortcuts from './Shortcuts.astro'
 	}
 
 	function clearEditor() {
+		unlock()
 		editor.action(replaceAll(''))
 		empty = true
 		window.history.pushState({ page: null }, '', '')
