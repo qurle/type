@@ -319,9 +319,11 @@ import Shortcuts from './Shortcuts.astro'
 						e.preventDefault()
 						if (e.repeat) return
 						if (e.shiftKey) {
+							if (empty) return
 							exportFile(editor, editorEl, stateEl)
 						} else {
 							if (e.repeat) return
+							if (empty) return
 							save('shortcut')
 						}
 						return
@@ -329,7 +331,10 @@ import Shortcuts from './Shortcuts.astro'
 					case 'KeyP': {
 						if (e.repeat) return
 						if (e.shiftKey) {
-							publish(editor, editorEl, stateEl, current)
+							e.preventDefault()
+							if (empty) return
+							save('publish', true)
+							publish(editor, editorEl, stateEl, getCurrent())
 							return
 						}
 					}

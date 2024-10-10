@@ -29,7 +29,7 @@ export default async (req: Request) => {
 
 async function insert(req) {
 	const { note, clientId, author }: NoteBody = await req.json()
-	console.log(`Sending ${note.slice(0, 10)} with author ${author}`)
+	console.log(`Sending ${note.slice(0, 10)} with clientId ${clientId} and author ${author}`)
 
 	if (new TextEncoder().encode(note).length >= 7_000_000) {
 		return new Response(

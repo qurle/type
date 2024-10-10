@@ -16,6 +16,8 @@ export function publish(editor: Editor, editorEl: HTMLElement, stateEl: HTMLElem
 		return
 	}
 
+	console.debug(`clientId: ${id}`)
+
 	fetch(`/api/publish`, {
 		method: 'POST', body: JSON.stringify({
 			note: markdown,
