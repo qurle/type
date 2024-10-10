@@ -11,7 +11,8 @@ export function publish(editor: Editor, editorEl: HTMLElement, stateEl: HTMLElem
 	// Removing space HTML entities
 	markdown = markdown.replace('&#x20;', ' ')
 
-	if (new TextEncoder().encode(markdown).length >= 7_000_000) {
+	const maxFileSize = 12_000_000
+	if (new TextEncoder().encode(markdown).length > maxFileSize) {
 		showState(stateEl, 'note is too large')
 		return
 	}

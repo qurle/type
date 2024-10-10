@@ -25,6 +25,8 @@ const k: Knex = knex({
 	},
 })
 
+const maxFileSize = 12_000_000
+
 function encode(str: string) {
 	return Buffer.from(str, 'utf8').toString('base64url')
 }
@@ -37,7 +39,7 @@ async function insert(req) {
 	const { content, clientId, author }: NoteBody = await req.json()
 	console.log(`Sending ${content.slice(0, 10)} with author ${author}`)
 
-	if (new TextEncoder().encode(content).length >= 7_000_000) {
+	if (new TextEncoder().encode(content).length > maxFileSize) {
 		return new Response(
 			'{ error: "Note is too large" }', {
 				status: 413,

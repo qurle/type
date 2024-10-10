@@ -29,12 +29,12 @@ export default async (req: Request) => {
 				})
 			}
 
-			const result = await supabase.from('notes').select('note, author, client_id, encoded').eq('id', id).maybeSingle()
+			const result = await supabase.from('notes').select('content, author, client_id, encoded').eq('id', id).maybeSingle()
 			console.log(`Result:`)
-			const note = result.data?.encoded ? (result.data?.note ? decode(result.data.note) : null) : result.data?.note
+			const content = result.data?.encoded ? (result.data?.content ? decode(result.data.content) : null) : result.data?.content
 			console.log(result)
 			return new Response(JSON.stringify({
-				note: note,
+				content: content,
 				clientId: result.data?.client_id
 			}), { status: 200, statusText: "Returning URL" })
 	}
