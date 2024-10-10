@@ -9,7 +9,7 @@ const { name, title } = Astro.props
 			class="dialog"
 			role="dialog"
 			aria-modal="true"
-			aria-labelledby="modal-1-title"
+			aria-labelledby=`modal-${name}-title`
 		>
 			<header class="header">
 				<h2 id=`modal-${name}-title`>{title}</h2>
