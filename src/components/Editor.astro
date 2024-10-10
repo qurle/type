@@ -168,7 +168,9 @@ import Shortcuts from './Shortcuts.astro'
 
 			listener.updated((ctx, doc) => {
 				updated = true
-				const isEmpty = doc.content.size <= 2
+				const isEmpty =
+					editorEl.childElementCount <= 1 &&
+					editorEl.children[0].childNodes.length <= 1
 
 				showMoreEl.classList.remove('active')
 

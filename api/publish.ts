@@ -4,18 +4,6 @@ export const config = {
 
 import { createClient } from '@supabase/supabase-js';
 import { nanoid } from 'nanoid';
-// import { knex } from 'knex'
-
-
-// declare module 'knex/types/tables' {
-// 	interface Note {
-// 		id: string,
-// 		note: string,
-// 		author: string,
-// 		clientId: string,
-// 		modified: string,
-// 	}
-// }
 
 interface NoteBody {
 	note: string,
@@ -27,16 +15,6 @@ const supabase = createClient(
 	process.env.NEXT_PUBLIC_SUPABASE_URL,
 	process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 )
-
-// knex({
-// 	client: 'pg',
-// 	connection: {
-// 		host: process.env.PG_HOST,
-// 		user: process.env.USER,
-// 		password: process.env.PG_PASSWORD,
-// 		database: process.env.PG_DB,
-// 	},
-// })
 
 function encode(str: string) {
 	return Buffer.from(str, 'utf8').toString('base64url')
@@ -66,29 +44,14 @@ async function insert(req) {
 	const from = new Date()
 	from.setDate(from.getDate() - 14)
 
-	const existingId = await getExistingId(clientId, from)
-	let id
-	if (existingId) {
-		id = await updateNoteGetId(id, note)
+	let id = await getExistingId(clientId, from)
+	if (id) {
+		await updateNoteGetId(id, note)
 		console.log('Updated')
-		console.log(id)
 	} else {
-		id = await insertNoteGetId(id, note, author, clientId)
+		id = await insertNoteGetId(note, author, clientId)
 		console.log('Inserted')
-		console.log(id)
 	}
-
-	// const existingIdK = await getExistingId(clientId, from, 'kulizh')
-	// let idK
-	// if (existingId) {
-	// 	idK = await updateNoteGetId(id, note, 'kulizh')
-	// 	console.log('Updated')
-	// 	console.log(id)
-	// } else {
-	// 	idK = await insertNoteGetId(id, note, author, clientId, 'kulizh')
-	// 	console.log('Inserted')
-	// 	console.log(id)
-	// }
 
 	console.log(`Result:`)
 	console.log(id)
@@ -98,9 +61,7 @@ async function insert(req) {
 }
 
 
-async function getExistingId(clientId: string, from: Date, platform: 'supabase' | 'kulizh' = 'supabase') {
-	switch (platform) {
-		case 'supabase': {
+async function getExistingId(clientId: string, from: Date) {
 			return (await supabase
 				.from('notes')
 				.select('id')
@@ -108,21 +69,10 @@ async function getExistingId(clientId: string, from: Date, platform: 'supabase' 
 				.gte('modified', from.toISOString())
 				.limit(1)
 				.single())?.data?.id
-		}
-		// case 'kulizh': {
-		// 	return ''
-		// 		return (await knex<Note>('notes')
-		// 			.select('id')
-		// 			.where('client_id', clientId)
-		// 			.where('modified', '>=', from.toISOString())
-		// 			.first())?.id
-		// }
-	}
+
 }
 
-async function updateNoteGetId(id: string, note: string, platform: 'supabase' | 'kulizh' = 'supabase') {
-	switch (platform) {
-		case 'supabase': {
+async function updateNoteGetId(id: string, note: string) {
 			return (await supabase
 				.from('notes')
 				.update({
@@ -135,25 +85,9 @@ async function updateNoteGetId(id: string, note: string, platform: 'supabase' | 
 				.limit(1)
 				.select()
 				.single())?.data?.id
-		}
-		// case 'kulizh': {
-		// 	return ''
-		// 		return (await knex('notes')
-		// 			.where('id', id)
-		// 			.update({
-		// 				note: encode(note),
-		// 				modified: new Date().toISOString(),
-		// 				encoded: true
-		// 			},
-		// 				'id')
-		// 			.first())
-		// }
-	}
 }
 
-async function insertNoteGetId(id: string, note: string, author: string, clientId: string, platform: 'supabase' | 'kulizh' = 'supabase') {
-	switch (platform) {
-		case 'supabase': {
+async function insertNoteGetId(note: string, author: string, clientId: string) {
 			return (await supabase
 					.from('notes')
 					.insert({
@@ -168,19 +102,4 @@ async function insertNoteGetId(id: string, note: string, author: string, clientI
 				.select()
 					.limit(1)
 				.single())?.data?.id
-			}
-		// case 'kulizh': {
-		// 	return ''
-		// 	return (await knex('notes')
-		// 		.insert({
-		// 			id: nanoid(12),
-		// 			note: encode(note),
-		// 			author: author || 'type.',
-		// 			client_id: clientId,
-		// 			modified: new Date().toISOString(),
-		// 			encoded: true
-		// 		}, 'id')
-		// 		.first())
-		// }
-	}
 }
