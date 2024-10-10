@@ -1,41 +1,64 @@
-export const config = {
-	runtime: 'edge',
+import knex, { type Knex } from 'knex';
+
+interface Note {
+	id: string,
+	content: string,
+	author: string,
+	client_id: string,
+	modified: string,
 }
 
-import { createClient } from '@supabase/supabase-js';
+interface NoteBody {
+	content: string,
+	clientId: string
+	author?: string,
+}
 
-
-const supabase = createClient(
-	process.env.NEXT_PUBLIC_SUPABASE_URL,
-	process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-)
+const k: Knex = knex({
+	client: 'pg',
+	connection: {
+		host: process.env.PG_HOST,
+		user: process.env.PG_USER,
+		password: process.env.PG_PASSWORD,
+		database: process.env.PG_DB,
+	},
+})
 
 function decode(str: string) {
 	return Buffer.from(str, 'base64url').toString('utf8');
 }
 
-export default async (req: Request) => {
-	switch (req.method) {
-		case 'GET':
-			const params = new URL(req.url).searchParams;
+export async function GET(req: Request) {
+	return await getById(req);
+}
+
+async function getById(req) {
+	const params = new URL(req.url).searchParams;
 			const id = params.get('id');
 
 			if (!id) {
 				return new Response('ID is empty', {
 					status: 400,
-					headers: {
-						"Content-Type": "application/json"
-					}
 				})
 			}
 
-			const result = await supabase.from('notes').select('note, author, client_id, encoded').eq('id', id).maybeSingle()
-			console.log(`Result:`)
-			const note = result.data?.encoded ? (result.data?.note ? decode(result.data.note) : null) : result.data?.note
-			console.log(result)
-			return new Response(JSON.stringify({
-				note: note,
-				clientId: result.data?.client_id
-			}), { status: 200, statusText: "Returning URL" })
+	const note = await getNote(id)
+
+	if (!id) {
+		return new Response('Note not found', {
+			status: 404,
+		})
 	}
+
+	return new Response(JSON.stringify({
+		content: decode(note.content),
+		clientId: note.client_id
+	}), { status: 200, statusText: "Returning Note" })
+}
+
+async function getNote(id: string): Promise<Note> {
+	return (await k<Note>('notes')
+		.select()
+		.where('id', id)
+		.first())
 }

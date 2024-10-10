@@ -1,9 +1,11 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "allowJs": true,
     "baseUrl": ".",
     "jsx": "react-jsx",
     "jsxImportSource": "react",
+    "target": "ES2016",
     "lib": [
       "ES2016",
       "DOM",
@@ -34,7 +36,16 @@
         "src/utils/*"
       ]
     },
-    "target": "ES2016"
+    // Copied from "astro/tsconfigs/base"
+    "moduleResolution": "Bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
   },
-  "extends": "astro/tsconfigs/base"
+  // "extends": "astro/tsconfigs/base",
 }

@@ -213,16 +213,7 @@ import Shortcuts from './Shortcuts.astro'
 		.create()
 
 	// Loading note by UUID
-	const idEl = document.getElementById('id-storage')
-	if (idEl && idEl.dataset.id) {
-		setCurrent('', editorEl)
-		lock()
-		const { note, clientId } = await fetch(
-			`/api/getNote?id=${idEl.dataset.id}`,
-		).then((response) => response.json())
-		idEl.remove()
-		editor.action(replaceAll(note))
-	}
+	await loadByURL()
 
 	let saver = startAutosave()
 
@@ -309,6 +300,19 @@ import Shortcuts from './Shortcuts.astro'
 	initModeCyclersListenters()
 	initNotesListeners()
 	initDragAndDrop()
+
+	async function loadByURL() {
+		const idEl = document.getElementById('id-storage')
+		if (idEl && idEl.dataset.id) {
+			setCurrent('', editorEl)
+			lock()
+			const { content, clientId } = await fetch(
+				`/api/getNote?id=${idEl.dataset.id}`,
+			).then((response) => response.json())
+			idEl.remove()
+			editor.action(replaceAll(content))
+		}
+	}
 
 	function initShortcuts() {
 		document.addEventListener('keydown', (e) => {
