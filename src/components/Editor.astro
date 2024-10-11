@@ -350,6 +350,7 @@ import Shortcuts from './Shortcuts.astro'
 						if (e.repeat) return
 						if (e.shiftKey) {
 							unlock()
+							save('copy')
 							return
 						}
 					}
@@ -558,7 +559,7 @@ import Shortcuts from './Shortcuts.astro'
 		if (![location.origin, location.origin + '/'].includes(location.href)) {
 			location.href = location.origin
 		}
-		unlock()
+		if (locked) unlock()
 		editor.action(replaceAll(''))
 		empty = true
 		window.history.pushState({ page: null }, '', '')
@@ -566,6 +567,7 @@ import Shortcuts from './Shortcuts.astro'
 	}
 
 	function lock() {
+		console.debug(`Locking editor`)
 		locked = true
 		editorEl.contentEditable = 'false'
 		publishEl.parentElement.classList.add('hidden')
@@ -573,10 +575,10 @@ import Shortcuts from './Shortcuts.astro'
 	}
 
 	function unlock() {
+		console.debug(`Unlocking editor`)
 		locked = false
 		editorEl.contentEditable = 'true'
 		publishEl.parentElement.classList.remove('hidden')
 		editEl.parentElement.classList.add('hidden')
-		showState(stateEl, 'note copied')
 	}
 </script>

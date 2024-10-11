@@ -4,11 +4,13 @@ import { isEmptyNote } from '@utils/isEmptyNote'
 import { showState } from '@utils/showState'
 import { smartTrunc } from '@utils/smartTrunc'
 
-export type SaveRef = 'autosave' | 'shortcut' | 'unload' | 'clear' | 'overwrite' | 'multiple-drop' | 'publish'
+export type SaveRef = 'autosave' | 'shortcut' | 'unload' | 'clear' | 'overwrite' | 'multiple-drop' | 'publish' | 'copy'
 
 export async function writeToFile(editor: Editor, editorEl: HTMLElement, opfs: FileSystemDirectoryHandle, id: string, stateEl: HTMLElement, saveRef: SaveRef = 'autosave', hidden = false, markdown: string = editor.action(getMarkdown()) || '') {
-	if (isEmptyNote)
+	if (isEmptyNote(markdown)) {
+		console.debug(`Note is empty`)
 		return false
+	}
 
 	const defaultLength = 80
 	const firstBlock = (editorEl.children[0] as HTMLElement).innerText
@@ -43,10 +45,13 @@ export async function writeToFile(editor: Editor, editorEl: HTMLElement, opfs: F
 		})
 	}
 
+	if (!hidden) {
 	switch (saveRef) {
 		case 'multiple-drop': break
-		case 'overwrite': if (!hidden) showState(stateEl, 'previous note saved'); break
-		default: if (!hidden) showState(stateEl, 'saved')
+		case 'copy': showState(stateEl, 'note copied'); break
+		case 'overwrite': showState(stateEl, 'previous note saved'); break
+		default: showState(stateEl, 'saved')
+	}
 	}
 
 	return Date.now()

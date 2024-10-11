@@ -6,7 +6,6 @@ import { smartTrunc } from '@utils/smartTrunc';
 import { downloadZip } from 'client-zip';
 
 export function exportFile(editor: Editor, editorEl: HTMLElement, stateEl: HTMLElement, filename = null, markdown: string = editor.action(getMarkdown()) || '') {
-	console.debug(markdown)
 	if (isEmptyNote(markdown)) {
 		showState(stateEl, 'note is empty')
 		return false
