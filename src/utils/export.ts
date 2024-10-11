@@ -33,7 +33,7 @@ export async function exportAll(opfs: FileSystemDirectoryHandle, stateEl: HTMLEl
 	}
 	if (files.length > 0) {
 		const date = new Date()
-		downloadBlob(`typed at ${date.getFullYear()}-${date.getMonth()}-${date.getDate()}.zip`, await downloadZip(files).blob())
+		downloadBlob(`typed at ${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}.zip`, await downloadZip(files).blob())
 	}
 	else
 		showState(stateEl, 'nothing to export')
