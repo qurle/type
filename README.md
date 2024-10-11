@@ -48,8 +48,8 @@ Any dialogs are also welcome at [nick.denq@gmail.com](mailto:nick.denq@gmail.com
 <a href="https://github.com/qurle/type/fork" target="_blank"><img alt="contribution plus sign" src="https://github.com/qurle/type/blob/main/.github/add.svg" width="48" style="border-radius: 999px"/></a></p>
 
 [@qurle](https://github.com/qurle)<br/>
-Creator. Designer. Frontender.
+Creator. Designer. Developer.
 
 [@kulizh](https://github.com/kulizh)<br/>
-Supporter. Backender. Frontender.
+Supporter. Tester. Backender.
 
