@@ -1,15 +1,13 @@
 import { Editor } from '@milkdown/core';
 import { getMarkdown } from '@milkdown/utils';
+import { isEmptyNote } from '@utils/isEmptyNote';
 import { showState } from '@utils/showState';
 
 export function publish(editor: Editor, editorEl: HTMLElement, stateEl: HTMLElement, id: string, markdown: string = editor.action(getMarkdown()) || '') {
-	if (/^\s*$/g.test(markdown)) {
+	if (isEmptyNote(markdown)) {
 		showState(stateEl, 'note is empty')
 		return
 	}
-
-	// Removing space HTML entities
-	markdown = markdown.replace('&#x20;', ' ')
 
 	const maxFileSize = 12_000_000
 	if (new TextEncoder().encode(markdown).length > maxFileSize) {
@@ -17,6 +15,7 @@ export function publish(editor: Editor, editorEl: HTMLElement, stateEl: HTMLElem
 		return
 	}
 
+	showState(stateEl, 'publishing')
 	fetch(`/api/publish`, {
 		method: 'POST', body: JSON.stringify({
 			content: markdown,
@@ -28,7 +27,7 @@ export function publish(editor: Editor, editorEl: HTMLElement, stateEl: HTMLElem
 		const url = `${location.origin}/note/${id}`
 		navigator.clipboard.writeText(url).then(() => {
 			showState(stateEl, 'note url is copied', true)
+			return true
 			})
-
-	})
+	}).catch(() => { return false })
 }

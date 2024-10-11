@@ -1,16 +1,14 @@
 import { Editor } from '@milkdown/core'
 import { getMarkdown } from '@milkdown/utils'
+import { isEmptyNote } from '@utils/isEmptyNote'
+import { showState } from '@utils/showState'
 import { smartTrunc } from '@utils/smartTrunc'
-import { showState } from './showState'
 
 export type SaveRef = 'autosave' | 'shortcut' | 'unload' | 'clear' | 'overwrite' | 'multiple-drop' | 'publish'
 
 export async function writeToFile(editor: Editor, editorEl: HTMLElement, opfs: FileSystemDirectoryHandle, id: string, stateEl: HTMLElement, saveRef: SaveRef = 'autosave', hidden = false, markdown: string = editor.action(getMarkdown()) || '') {
-	if (/^\s*$/g.test(markdown))
-		return
-
-	// Removing space HTML entities
-	markdown = markdown.replace('&#x20;', ' ')
+	if (isEmptyNote)
+		return false
 
 	const defaultLength = 80
 	const firstBlock = (editorEl.children[0] as HTMLElement).innerText

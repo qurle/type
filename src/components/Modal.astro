@@ -86,12 +86,12 @@ const { name, title } = Astro.props
 		padding: var(--space-l);
 	}
 
+	button svg {
+		pointer-events: none;
+	}
+
 	svg {
 		width: 24px;
 		height: 24px;
 	}
 </style>
-<script>
-	import MicroModal from 'micromodal'
-	MicroModal.init({ debug: false })
-</script>

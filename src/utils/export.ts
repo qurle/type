@@ -1,19 +1,20 @@
 import { Editor } from '@milkdown/core';
 import { getMarkdown } from '@milkdown/utils';
+import { isEmptyNote } from '@utils/isEmptyNote';
 import { showState } from '@utils/showState';
 import { smartTrunc } from '@utils/smartTrunc';
 import { downloadZip } from 'client-zip';
 
 export function exportFile(editor: Editor, editorEl: HTMLElement, stateEl: HTMLElement, filename = null, markdown: string = editor.action(getMarkdown()) || '') {
-	if (/^\s*$/g.test(markdown)) {
+	console.debug(markdown)
+	if (isEmptyNote(markdown)) {
 		showState(stateEl, 'note is empty')
-		return
+		return false
 	}
 
 	const defaultLength = 40
 	const firstBlock = (editorEl.children[0] as HTMLElement).innerText
 	filename = filename || smartTrunc(firstBlock || markdown.split('\n')[0], defaultLength) || 'note'
-
 
 	console.debug(`Downloading. Filename is ${filename}. Text has ${markdown.length} symbols`)
 	downloadText(filename + '.md', markdown)

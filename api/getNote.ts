@@ -50,10 +50,15 @@ async function getById(req) {
 		})
 	}
 
+	const headers = new Headers()
+	headers.append('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=30')
+
 	return new Response(JSON.stringify({
 		content: decode(note.content),
 		clientId: note.client_id
-	}), { status: 200, statusText: "Returning Note" })
+	}), {
+		status: 200, statusText: "Returning Note", headers: headers
+	})
 }
 
 async function getNote(id: string): Promise<Note> {

@@ -92,18 +92,18 @@ import Shortcuts from './Shortcuts.astro'
 	import { debug } from '@utils/debug'
 	import { del } from '@utils/del'
 	import { exportAll, exportFile } from '@utils/export'
-	import { focusToEnd } from '@utils/focusToEnd'
 	import { getByClass, getByTag } from '@utils/getElement'
 	import { getNotes } from '@utils/getNotes'
 	import { getOpfs } from '@utils/getOpfs'
 	import { currentMode, cycleModes } from '@utils/modes'
 	import { publish } from '@utils/publish'
+	import { setFocus } from '@utils/setFocus'
 	import { showState } from '@utils/showState'
 	import { writeToFile, type SaveRef } from '@utils/writeToFile'
 	import MicroModal from 'micromodal'
 	import { nanoid } from 'nanoid/non-secure'
 
-	MicroModal.init()
+	MicroModal.init({ disableFocus: true, debug: false })
 
 	// Utilities
 	const autosaveInterval = 5_000
@@ -128,7 +128,6 @@ import Shortcuts from './Shortcuts.astro'
 	// Other
 	const opfs = await getOpfs()
 	const notes = await getNotes(opfs)
-
 	// Assinged selectors
 	let editorEl: HTMLDivElement = null
 	let notesEl: HTMLUListElement = null
@@ -221,11 +220,13 @@ import Shortcuts from './Shortcuts.astro'
 	const current = getCurrent()
 	if (current) {
 		editor.action(
-			replaceAll(notes.find((note) => note.id === current).content),
+			replaceAll(
+				notes.find((note) => note.id === current)?.content || '',
+			),
 		)
 	}
 
-	focusToEnd(editorEl)
+	setFocus(editorEl)
 	document.addEventListener('visibilitychange', toggleAutosave)
 
 	initShortcuts()
@@ -245,7 +246,6 @@ import Shortcuts from './Shortcuts.astro'
 
 	backEl.addEventListener('click', () => {
 		save('clear')
-		if (location.href !== location.origin) location.href = location.origin
 		clearEditor()
 	})
 
@@ -304,13 +304,17 @@ import Shortcuts from './Shortcuts.astro'
 	async function loadByURL() {
 		const idEl = document.getElementById('id-storage')
 		if (idEl && idEl.dataset.id) {
+			editorEl.classList.add('loading')
 			setCurrent('', editorEl)
 			lock()
 			const { content, clientId } = await fetch(
 				`/api/getNote?id=${idEl.dataset.id}`,
-			).then((response) => response.json())
+			)
+				.then((response) => response.json())
+				.catch(() => showState(stateEl, `couldn't load :(`))
 			idEl.remove()
 			editor.action(replaceAll(content))
+			editorEl.classList.remove('loading')
 		}
 	}
 
@@ -376,13 +380,6 @@ import Shortcuts from './Shortcuts.astro'
 							return
 						}
 						save('clear')
-						if (
-							![location.origin, location.origin + '/'].includes(
-								location.href,
-							)
-						) {
-							location.href = location.origin
-						}
 						clearEditor()
 						return
 					}
@@ -475,7 +472,7 @@ import Shortcuts from './Shortcuts.astro'
 			if (e.state.page === null) {
 				save('clear')
 				clearEditor()
-				location.reload()
+				// location.reload()
 			}
 		})
 	}
@@ -531,7 +528,7 @@ import Shortcuts from './Shortcuts.astro'
 			files[0].text().then((t) => {
 				console.debug(`Replacing`)
 				// Generating new ID to avoid overwrites
-				editorEl.dataset.id = newId()
+				setCurrent(newId(), editorEl)
 				editor.action(replaceAll(t))
 			})
 		} else {
@@ -558,6 +555,9 @@ import Shortcuts from './Shortcuts.astro'
 	}
 
 	function clearEditor() {
+		if (![location.origin, location.origin + '/'].includes(location.href)) {
+			location.href = location.origin
+		}
 		unlock()
 		editor.action(replaceAll(''))
 		empty = true

@@ -26,6 +26,13 @@
 
         color: var(--color-main-25)
         pointer-events: none
+        animation: none
+
+    &.loading
+        > p:only-child::before
+            content: 'Loading note...'
+            color: var(--color-main)
+            animation: pulse 2s linear infinite alternate 
 
     // Editor is empty
     > p:only-child
