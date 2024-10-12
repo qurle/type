@@ -1,7 +1,7 @@
 import knex, { type Knex } from 'knex';
 import { nanoid } from 'nanoid';
 
-interface Note {
+interface PusblishedNote {
 	id: string,
 	content: string,
 	author: string,
@@ -26,6 +26,7 @@ const k: Knex = knex({
 })
 
 const maxFileSize = 12_000_000
+const table = 'published'
 
 function encode(str: string) {
 	return Buffer.from(str, 'utf8').toString('base64url')
@@ -66,7 +67,7 @@ async function insert(req) {
 
 
 async function getExistingId(clientId: string, from: Date): Promise<string> {
-	return (await k<Note>('notes')
+	return (await k<PusblishedNote>(table)
 		.select('id')
 		.where('client_id', clientId)
 		.where('modified', '>=', from.toISOString())
@@ -74,7 +75,7 @@ async function getExistingId(clientId: string, from: Date): Promise<string> {
 }
 
 async function updateNoteGetId(id: string, content: string): Promise<string> {
-	return (await k('notes')
+	return (await k(table)
 		.where('id', id)
 		.update({
 			content: encode(content),
@@ -85,7 +86,7 @@ async function updateNoteGetId(id: string, content: string): Promise<string> {
 }
 
 async function insertNoteGetId(content: string, author: string, clientId: string): Promise<string> {
-	return (await k<Note>('notes')
+	return (await k<PusblishedNote>(table)
 		.insert({
 			id: nanoid(12),
 			content: encode(content),

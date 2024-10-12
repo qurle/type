@@ -16,6 +16,9 @@ const supabase = createClient(
 	process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 )
 
+const maxFileSize = 12_000_000
+const table = 'published'
+
 function encode(str: string) {
 	return Buffer.from(str, 'utf8').toString('base64url')
 }
@@ -31,7 +34,7 @@ async function insert(req) {
 	const { content, clientId, author }: NoteBody = await req.json()
 	console.log(`Sending ${content.slice(0, 10)} with clientId ${clientId} and author ${author}`)
 
-	if (new TextEncoder().encode(content).length >= 7_000_000) {
+	if (new TextEncoder().encode(content).length > maxFileSize) {
 		return new Response(
 			'{ error: "Note is too large" }', {
 			status: 413,
@@ -63,7 +66,7 @@ async function insert(req) {
 
 async function getExistingId(clientId: string, from: Date) {
 			return (await supabase
-				.from('notes')
+				.from(table)
 				.select('id')
 				.eq('client_id', clientId)
 				.gte('modified', from.toISOString())
@@ -74,7 +77,7 @@ async function getExistingId(clientId: string, from: Date) {
 
 async function updateNoteGetId(id: string, content: string) {
 			return (await supabase
-				.from('notes')
+				.from(table)
 				.update({
 					content: encode(content),
 					modified: new Date().toISOString(),
@@ -89,7 +92,7 @@ async function updateNoteGetId(id: string, content: string) {
 
 async function insertNoteGetId(content: string, author: string, clientId: string) {
 			return (await supabase
-					.from('notes')
+				.from(table)
 					.insert({
 						id: nanoid(12),
 						content: encode(content),

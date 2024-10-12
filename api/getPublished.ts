@@ -1,17 +1,11 @@
 import knex, { type Knex } from 'knex';
 
-interface Note {
+interface PublishedNote {
 	id: string,
 	content: string,
 	author: string,
 	client_id: string,
 	modified: string,
-}
-
-interface NoteBody {
-	content: string,
-	clientId: string
-	author?: string,
 }
 
 const k: Knex = knex({
@@ -24,6 +18,8 @@ const k: Knex = knex({
 	},
 })
 
+const table = 'published'
+
 function decode(str: string) {
 	return Buffer.from(str, 'base64url').toString('utf8');
 }
@@ -34,13 +30,13 @@ export async function GET(req: Request) {
 
 async function getById(req) {
 	const params = new URL(req.url).searchParams;
-			const id = params.get('id');
+	const id = params.get('id');
 
-			if (!id) {
-				return new Response('ID is empty', {
-					status: 400,
-				})
-			}
+	if (!id) {
+		return new Response('ID is empty', {
+			status: 400,
+		})
+	}
 
 	const note = await getNote(id)
 
@@ -61,8 +57,8 @@ async function getById(req) {
 	})
 }
 
-async function getNote(id: string): Promise<Note> {
-	return (await k<Note>('notes')
+async function getNote(id: string): Promise<PublishedNote> {
+	return (await k<PublishedNote>(table)
 		.select()
 		.where('id', id)
 		.first())

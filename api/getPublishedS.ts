@@ -10,6 +10,8 @@ const supabase = createClient(
 	process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 )
 
+const table = 'published'
+
 function decode(str: string) {
 	return Buffer.from(str, 'base64url').toString('utf8');
 }
@@ -29,7 +31,7 @@ export default async (req: Request) => {
 				})
 			}
 
-			const result = await supabase.from('notes').select('content, author, client_id, encoded').eq('id', id).maybeSingle()
+			const result = await supabase.from(table).select('content, author, client_id, encoded').eq('id', id).maybeSingle()
 			console.log(`Result:`)
 			const content = result.data?.encoded ? (result.data?.content ? decode(result.data.content) : null) : result.data?.content
 			console.log(result)
