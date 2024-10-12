@@ -76,6 +76,29 @@ import Shortcuts from './Shortcuts.astro'
 <main></main>
 <Instructions />
 <Shortcuts />
+<script is:inline src="https://accounts.google.com/gsi/client" async></script>
+<div
+	id="g_id_onload"
+	data-client_id="1061638758491-4bu2no6kr0pq34vrad859pe6oeh4o8l1.apps.googleusercontent.com"
+	data-context="signup"
+	data-ux_mode="popup"
+	data-callback="console.log('yo')"
+	data-auto_prompt="false"
+>
+</div>
+
+<div
+	class="g_id_signin"
+	data-type="standard"
+	data-shape="rectangular"
+	data-theme="outline"
+	data-text="signin"
+	data-size="medium"
+	data-locale="en"
+	data-logo_alignment="left"
+>
+</div>
+
 <script>
 	// Sorry for writing almost EVERYTHING here
 	import { Editor, rootCtx } from '@milkdown/kit/core'
