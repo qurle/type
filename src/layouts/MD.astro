@@ -1,0 +1,13 @@
+---
+import Layout from './Layout.astro'
+---
+
+<Layout>
+	<div class="blocks">
+		<slot />
+	</div>
+</Layout>
+<style lang="scss">
+	@import '@styles/blocks.sass';
+	@include blocks;
+</style>

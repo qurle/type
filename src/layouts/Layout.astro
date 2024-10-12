@@ -1,5 +1,4 @@
 ---
-import Modal from '@components/Modal.astro'
 import Fonts from '@components/utils/Fonts.astro'
 import '@styles/global.sass'
 
@@ -7,7 +6,10 @@ const {
   title = 'type.',
   description = 'Zen markdown-friendly editor for just typing',
   class: className,
+  frontmatter,
 } = Astro.props
+
+const pageTitle = frontmatter?.title || title
 
 const base = Astro.url.pathname.endsWith('/')
   ? Astro.url.pathname
@@ -27,7 +29,7 @@ const base = Astro.url.pathname.endsWith('/')
     <meta name="msapplication-navbutton-color" content="#161616" />
     <meta name="apple-mobile-web-app-status-bar-style" content="#161616" />
 
-    <meta property="og:title" content={title} />
+    <meta property="og:title" content={pageTitle} />
     <meta property="og:image" content="/og/main.png" />
     <meta property="vk:image" content="/og/main-vk.png" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -62,7 +64,7 @@ const base = Astro.url.pathname.endsWith('/')
       loadMode('font')
     </script>
 
-    <title>{title}</title>
+    <title>{pageTitle}</title>
   </head>
   <body class={className}>
     <!-- <h1 class="page-heading">Zen-editor for just typing</h1> -->
