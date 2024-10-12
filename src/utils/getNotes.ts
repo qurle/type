@@ -1,6 +1,9 @@
+import { smartTrunc } from '@utils/smartTrunc';
 import { nanoid } from 'nanoid/non-secure';
 
-export async function getNotes(opfs: FileSystemDirectoryHandle = null) {
+export async function getNotes(opfs: FileSystemDirectoryHandle = null, userId = '') {
+	if (userId)
+		return await getOnlineNotes(userId)
 	if (opfs)
 		return await getLocalNotes(opfs)
 	else
@@ -15,18 +18,28 @@ export async function getLocalNotes(opfs: FileSystemDirectoryHandle) {
 			// @ts-ignore
 			const file = await handle.getFile() as File
 			const note: Note = {
-				id: file.name,
+				localId: file.name,
 				name: null,
-				author: 'type.local',
+				userId: 'type.local',
 				modified: new Date(file.lastModified)
 			}
 
 			note.content = await file.text()
-			note.name = localStorage.getItem(`name-${file.name}`) || note.content.slice(0, 50) || 'Empty note'
+			note.name = localStorage.getItem(`name-${file.name}`) || note.content.slice(0, 50) || 'Untitled note'
 			notes.push(note)
 		}
 	}
 	console.debug(notes)
+	return notes
+}
+
+async function getOnlineNotes(userId: string): Promise<Note[]> {
+	const notes: Note[] = (await fetch(`/api/getAllNotes?userId=${userId}`).then(respone => respone.json()) as Note[]).map(note => {
+		note.name = smartTrunc(note.content, 80)
+		return note
+	})
+	console.log(`Got online notes`)
+	console.log(notes)
 	return notes
 }
 

@@ -12,11 +12,11 @@ export function loadToEditor(editor: Editor, editorEl: HTMLElement, rootEl: HTML
 	editor.action(insert(note.content))
 	setFocus(editorEl)
 
-	window.history.pushState({ page: note.id }, '')
+	window.history.pushState({ page: note.localId }, '')
 	document.title = note.name
 
-	editorEl.dataset.id = note.id
-	setCurrent(note.id, editorEl)
+	editorEl.dataset.id = note.localId
+	setCurrent(note.localId, editorEl)
 
-	return note.id
+	return note.localId
 }

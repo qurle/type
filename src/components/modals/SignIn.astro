@@ -1,0 +1,90 @@
+---
+import Modal from '@components/modals/Modal.astro'
+---
+
+<Modal name="sign" title="Activate sync">
+	<form id="form-code">
+		<label for="code" class="text">Type your activation code.</label>
+		<div class="text description">
+			Want to claim one for free? Contact <a
+				href="mailto:nick@type.baby?subject=I%20want%20a%20sync%20for%20type.?bcc=wrl.snk@gmail.com"
+				>nick@type.baby</a
+			>
+		</div>
+		<div class="input-container">
+			<input
+				type="email"
+				name="code"
+				placeholder="activation code"
+				autofocus
+				required
+			/>
+			<button>confirm</button>
+		</div>
+	</form>
+</Modal>
+
+<style>
+	.text {
+		padding-right: var(--space-m);
+	}
+
+	.description {
+		margin-top: var(--space-s);
+		color: var(--color-main-50);
+		font-size: var(--font-size-xs);
+	}
+
+	.input-container {
+		--padding: calc(var(--space-m) + var(--space-s));
+		--compensated-padding: calc(var(--padding) - 1px) var(--space-l)
+			calc(var(--padding) + 1px);
+
+		position: relative;
+		margin: var(--space-l) 0;
+
+		border: 1px solid var(--color-main-15);
+		border-radius: var(--radius-l);
+	}
+
+	button {
+		display: block;
+		position: absolute;
+		top: 0;
+		right: 0;
+
+		height: 100%;
+		padding: var(--compensated-padding);
+
+		opacity: 0;
+		pointer-events: none;
+		transition: opacity var(--transition-m);
+	}
+
+	input {
+		width: 100%;
+		padding: var(--compensated-padding);
+		border-radius: var(--radius-l);
+
+		&::placeholder {
+			color: var(--color-main-25);
+		}
+		&:not(:placeholder-shown) + button {
+			opacity: 1;
+			pointer-events: all;
+		}
+	}
+</style>
+<script>
+	import { getById } from '@utils/getElement'
+	import { setUserId } from '@utils/userId'
+
+	const formEl = getById('form-code')
+	formEl.addEventListener('submit', async () => {
+		const { id } = await fetch('/api/checkUser').then((responce) =>
+			responce.json(),
+		)
+		setUserId(id)
+		location.reload()
+	})
+</script>

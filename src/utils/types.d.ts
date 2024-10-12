@@ -3,9 +3,9 @@
  * like images and videos.
  */
 interface Note {
-	id: string,
+	localId: string,
 	name: string,
-	author: string,
+	userId: string,
 	modified: Date,
 	content?: string,
 }

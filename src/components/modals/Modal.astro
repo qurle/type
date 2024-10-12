@@ -59,13 +59,20 @@ const { name, title } = Astro.props
 		flex-direction: column;
 
 		max-height: 60vh;
-		max-width: 100%;
+		max-width: 60vw;
+
 		overflow: auto;
 
 		background: var(--color-background);
 		border-radius: var(--radius-l);
 		transform: scale(0.75);
 		transition: transform var(--transition-m);
+	}
+
+	@media screen and (max-width: 640px) {
+		.dialog {
+			max-width: 100%;
+		}
 	}
 
 	.header {

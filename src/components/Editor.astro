@@ -4,8 +4,9 @@ import '@styles/editor.sass'
 import '@styles/notes.sass'
 import { Icon } from 'astro-icon/components'
 import { modes } from '@utils/modes'
-import Instructions from './Instructions.astro'
-import Shortcuts from './Shortcuts.astro'
+import Instructions from '@components/modals/Instructions.astro'
+import Shortcuts from '@components/modals/Shortcuts.astro'
+import SignIn from './modals/SignIn.astro'
 ---
 
 <header class="editor-header">
@@ -30,6 +31,13 @@ import Shortcuts from './Shortcuts.astro'
 				<li><button class="export-all">Export all</button></li>
 				<li class="hidden">
 					<button class="edit">Copy and edit</button>
+				</li>
+				<li>
+					<button class="sync"
+						><span>Sync<sup> α</sup></span><span class="value"
+							>off</span
+						></button
+					>
 				</li>
 				<li><hr /></li>
 				{
@@ -76,32 +84,36 @@ import Shortcuts from './Shortcuts.astro'
 <main></main>
 <Instructions />
 <Shortcuts />
+<SignIn />
 <script>
+	// REMOVE
+	MicroModal.show('modal-sign')
 	// Sorry for writing almost EVERYTHING here
 	import { Editor, rootCtx } from '@milkdown/kit/core'
-import { clipboard } from '@milkdown/kit/plugin/clipboard'
-import { history } from '@milkdown/kit/plugin/history'
-import { indent } from '@milkdown/kit/plugin/indent'
-import { listener, listenerCtx } from '@milkdown/kit/plugin/listener'
-import { upload } from '@milkdown/kit/plugin/upload'
-import { commonmark } from '@milkdown/kit/preset/commonmark'
-import { automd } from '@milkdown/plugin-automd'
-import { replaceAll } from '@milkdown/utils'
-import { buildEditor } from '@utils/buildEditor'
-import { getCurrent, setCurrent } from '@utils/current'
-import { debug } from '@utils/debug'
-import { del } from '@utils/del'
-import { exportAll, exportFile } from '@utils/export'
-import { getByClass, getByTag } from '@utils/getElement'
-import { getNotes } from '@utils/getNotes'
-import { getOpfs } from '@utils/getOpfs'
-import { currentMode, cycleModes } from '@utils/modes'
-import { publish } from '@utils/publish'
-import { setFocus } from '@utils/setFocus'
-import { showState } from '@utils/showState'
-import { writeToFile, type SaveRef } from '@utils/writeToFile'
-import MicroModal from 'micromodal'
-import { nanoid } from 'nanoid/non-secure'
+	import { clipboard } from '@milkdown/kit/plugin/clipboard'
+	import { history } from '@milkdown/kit/plugin/history'
+	import { indent } from '@milkdown/kit/plugin/indent'
+	import { listener, listenerCtx } from '@milkdown/kit/plugin/listener'
+	import { upload } from '@milkdown/kit/plugin/upload'
+	import { commonmark } from '@milkdown/kit/preset/commonmark'
+	import { automd } from '@milkdown/plugin-automd'
+	import { replaceAll } from '@milkdown/utils'
+	import { buildEditor } from '@utils/buildEditor'
+	import { getCurrent, setCurrent } from '@utils/current'
+	import { debug } from '@utils/debug'
+	import { del } from '@utils/del'
+	import { exportAll, exportFile } from '@utils/export'
+	import { getByClass, getByTag } from '@utils/getElement'
+	import { getNotes } from '@utils/getNotes'
+	import { getOpfs } from '@utils/getOpfs'
+	import { currentMode, cycleModes } from '@utils/modes'
+	import { publish } from '@utils/publish'
+	import { setFocus } from '@utils/setFocus'
+	import { showState } from '@utils/showState'
+	import { getUserId } from '@utils/userId'
+	import { writeToFile, type SaveRef } from '@utils/writeToFile'
+	import MicroModal from 'micromodal'
+	import { nanoid } from 'nanoid/non-secure'
 
 	MicroModal.init({ disableFocus: true, debug: false })
 
@@ -120,6 +132,7 @@ import { nanoid } from 'nanoid/non-secure'
 	const exportAllEl = getByClass('export-all', menuEl)
 	const publishEl = getByClass('publish', menuEl)
 	const editEl = getByClass('edit', menuEl)
+	const syncEl = getByClass('sync', menuEl)
 	const fontEl = getByClass('font', menuEl)
 	const themeEl = getByClass('theme', menuEl)
 	const spellEl = getByClass('spell', menuEl)
@@ -127,7 +140,7 @@ import { nanoid } from 'nanoid/non-secure'
 
 	// Other
 	const opfs = await getOpfs()
-	const notes = await getNotes(opfs)
+	const notes = await getNotes(opfs, getUserId())
 	// Assinged selectors
 	let editorEl: HTMLDivElement = null
 	let notesEl: HTMLUListElement = null
@@ -213,6 +226,7 @@ import { nanoid } from 'nanoid/non-secure'
 
 	// Loading note by UUID
 	await loadByURL()
+	if (getUserId()) rootEl.classList.add('online')
 
 	let saver = startAutosave()
 
@@ -221,7 +235,7 @@ import { nanoid } from 'nanoid/non-secure'
 	if (current) {
 		editor.action(
 			replaceAll(
-				notes.find((note) => note.id === current)?.content || '',
+				notes.find((note) => note.localId === current)?.content || '',
 			),
 		)
 	}
@@ -244,62 +258,16 @@ import { nanoid } from 'nanoid/non-secure'
 		}
 	})
 
-	backEl.addEventListener('click', () => {
-		save('clear')
-		clearEditor()
-	})
-
-	addEl.addEventListener('click', () => {
-		uploadInput.click()
-	})
-
-	uploadInput.addEventListener('change', (e: InputEvent) => {
-		processFiles(uploadInput.files)
-	})
-
-	showMoreEl.addEventListener('click', () => {
-		showMoreEl.classList.toggle('active')
-	})
-
-	// Hide menu
-	document.documentElement.addEventListener('click', (e: MouseEvent) => {
-		if (
-			!menuEl.contains(e.target as Node) &&
-			!showMoreEl.contains(e.target as Node)
-		)
-			showMoreEl.classList.remove('active')
-	})
-
-	publishEl.addEventListener('click', () => {
-		if (empty) return
-		save('publish', true)
-		showMoreEl.classList.remove('active')
-		publish(editor, editorEl, stateEl, getCurrent())
-	})
-
-	downloadEl.addEventListener('click', () => {
-		if (empty) return
-		showMoreEl.classList.remove('active')
-		exportFile(editor, editorEl, stateEl)
-	})
-	exportAllEl.addEventListener('click', () => {
-		showMoreEl.classList.remove('active')
-		exportAll(opfs, stateEl)
-	})
-
-	editEl.addEventListener('click', () => {
-		showMoreEl.classList.remove('active')
-		unlock()
-	})
-
 	window.addEventListener('beforeunload', () => {
 		save('unload')
 	})
 
+	initHeaderListeners()
 	initNavigationListener()
 	initModeCyclersListenters()
 	initNotesListeners()
 	initDragAndDrop()
+	initOnlineListeners()
 
 	async function loadByURL() {
 		const idEl = document.getElementById('id-storage')
@@ -316,6 +284,80 @@ import { nanoid } from 'nanoid/non-secure'
 			editor.action(replaceAll(content))
 			editorEl.classList.remove('loading')
 		}
+	}
+
+	function initHeaderListeners() {
+		backEl.addEventListener('click', () => {
+			save('clear')
+			clearEditor()
+		})
+
+		addEl.addEventListener('click', () => {
+			uploadInput.click()
+		})
+
+		uploadInput.addEventListener('change', (e: InputEvent) => {
+			processFiles(uploadInput.files)
+		})
+
+		showMoreEl.addEventListener('click', () => {
+			showMoreEl.classList.toggle('active')
+		})
+
+		// Hide menu
+		document.documentElement.addEventListener('click', (e: MouseEvent) => {
+			if (
+				!menuEl.contains(e.target as Node) &&
+				!showMoreEl.contains(e.target as Node)
+			)
+				showMoreEl.classList.remove('active')
+		})
+
+		publishEl.addEventListener('click', () => {
+			if (empty) return
+			if (!isOnline()) return
+
+			MicroModal.show('modal-sign')
+			save('publish', true)
+			showMoreEl.classList.remove('active')
+			publish(editor, editorEl, stateEl, getCurrent())
+		})
+
+		downloadEl.addEventListener('click', () => {
+			if (empty) return
+			showMoreEl.classList.remove('active')
+			exportFile(editor, editorEl, stateEl)
+		})
+		exportAllEl.addEventListener('click', () => {
+			showMoreEl.classList.remove('active')
+			exportAll(opfs, stateEl)
+		})
+
+		editEl.addEventListener('click', () => {
+			showMoreEl.classList.remove('active')
+			unlock()
+		})
+
+		syncEl.addEventListener('click', () => {
+			if (isOnline()) {
+				MicroModal.show('modal-sign')
+			}
+		})
+	}
+
+	function initOnlineListeners() {
+		window.addEventListener('offline', () => {
+			rootEl.classList.remove('online')
+		})
+
+		window.addEventListener('online', () => {
+			rootEl.classList.add('online')
+		})
+	}
+
+	function isOnline() {
+		if (!navigator.onLine) showState(stateEl, 'you are offline')
+		return navigator.onLine
 	}
 
 	function initShortcuts() {

@@ -3,7 +3,7 @@ import { getMarkdown } from '@milkdown/utils';
 import { isEmptyNote } from '@utils/isEmptyNote';
 import { showState } from '@utils/showState';
 
-export function publish(editor: Editor, editorEl: HTMLElement, stateEl: HTMLElement, id: string, markdown: string = editor.action(getMarkdown()) || '') {
+export function publish(editor: Editor, editorEl: HTMLElement, stateEl: HTMLElement, localId: string, markdown: string = editor.action(getMarkdown()) || '') {
 	if (isEmptyNote(markdown)) {
 		showState(stateEl, 'note is empty')
 		return
@@ -19,7 +19,7 @@ export function publish(editor: Editor, editorEl: HTMLElement, stateEl: HTMLElem
 	fetch(`/api/publish`, {
 		method: 'POST', body: JSON.stringify({
 			content: markdown,
-			clientId: id
+			localId: localId
 		})
 	}).then(response => response.json()).then(body => {
 		const id = body.id

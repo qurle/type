@@ -1,7 +1,8 @@
 import knex, { type Knex } from 'knex';
 import { nanoid } from 'nanoid';
 
-interface PusblishedNote {
+const table = 'notes'
+interface Note {
 	id: string,
 	content: string,
 	// TODO: Rename to user_id in database
@@ -11,10 +12,11 @@ interface PusblishedNote {
 	modified: string,
 }
 
+
 interface NoteBody {
 	content: string,
 	localId: string
-	userId?: string,
+	userId: string,
 }
 
 const k: Knex = knex({
@@ -28,31 +30,27 @@ const k: Knex = knex({
 })
 
 const maxFileSize = 12_000_000
-const table = 'published'
 
 function encode(str: string) {
 	return Buffer.from(str, 'utf8').toString('base64url')
 }
 
 export async function POST(req: Request) {
-	return await publish(req);
+	return await upload(req);
 }
 
-async function publish(req: Request) {
+async function upload(req: Request) {
 	const { content, localId, userId }: NoteBody = await req.json()
 	console.log(`Sending ${content.slice(0, 10)} with user ID ${userId}`)
 
 	if (new TextEncoder().encode(content).length > maxFileSize) {
 		return new Response(
 			'{ error: "Note is too large" }', {
-				status: 413,
+			status: 413,
 		})
 	}
 
-	const from = new Date()
-	from.setDate(from.getDate() - 14)
-
-	let id = await getExistingId(localId, from)
+	let id = await checkUserAndLocalgetId(localId, userId)
 	if (id) {
 		await updateNoteGetId(id, content)
 		console.log('Updated')
@@ -64,15 +62,15 @@ async function publish(req: Request) {
 	console.log(id)
 	return new Response(JSON.stringify({
 		id: id
-	}), { status: 200, statusText: "Returning ID for URL" })
+	}), { status: 200, statusText: "Returning ID" })
 }
 
 
-async function getExistingId(localId: string, from: Date): Promise<string> {
-	return (await k<PusblishedNote>(table)
+async function checkUserAndLocalgetId(clientId: string, userId: string): Promise<string> {
+	return (await k<Note>(table)
 		.select('id')
-		.where('client_id', localId)
-		.andWhere('modified', '>=', from.toISOString())
+		.where('client_id', clientId)
+		.andWhere('author', userId)
 		.first())?.id
 }
 
@@ -87,13 +85,13 @@ async function updateNoteGetId(id: string, content: string): Promise<string> {
 
 }
 
-async function insertNoteGetId(content: string, userId: string, localId: string): Promise<string> {
-	return (await k<PusblishedNote>(table)
+async function insertNoteGetId(content: string, userId: string, clientId: string): Promise<string> {
+	return (await k<Note>(table)
 		.insert({
 			id: nanoid(12),
 			content: encode(content),
 			author: userId || 'type.',
-			client_id: localId,
+			client_id: clientId,
 			modified: new Date().toISOString(),
 		}, 'id'))[0]?.id
 }

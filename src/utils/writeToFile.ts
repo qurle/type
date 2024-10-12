@@ -6,7 +6,7 @@ import { smartTrunc } from '@utils/smartTrunc'
 
 export type SaveRef = 'autosave' | 'shortcut' | 'unload' | 'clear' | 'overwrite' | 'multiple-drop' | 'publish' | 'copy'
 
-export async function writeToFile(editor: Editor, editorEl: HTMLElement, opfs: FileSystemDirectoryHandle, id: string, stateEl: HTMLElement, saveRef: SaveRef = 'autosave', hidden = false, markdown: string = editor.action(getMarkdown()) || '') {
+export async function writeToFile(editor: Editor, editorEl: HTMLElement, opfs: FileSystemDirectoryHandle, localId: string, stateEl: HTMLElement, saveRef: SaveRef = 'autosave', hidden = false, markdown: string = editor.action(getMarkdown()) || '') {
 	if (isEmptyNote(markdown)) {
 		console.debug(`Note is empty`)
 		return false
@@ -19,16 +19,16 @@ export async function writeToFile(editor: Editor, editorEl: HTMLElement, opfs: F
 	console.debug(`Saving "${name}" by ${saveRef}`)
 
 	const savedNote: Note = {
-		id: id,
+		localId: localId,
 		name: name,
-		author: 'type.local',
+		userId: 'type.local',
 		modified: null,
 	}
-	localStorage.setItem(`name-${id}`, name)
+	localStorage.setItem(`name-${localId}`, name)
 
 	// Write to file
 	try {
-		const handle = await opfs.getFileHandle(id, { create: true, })
+		const handle = await opfs.getFileHandle(localId, { create: true, })
 		const file = await handle.getFile()
 		savedNote.modified = new Date(file.lastModified)
 		const writable = await handle.createWritable()
@@ -40,7 +40,7 @@ export async function writeToFile(editor: Editor, editorEl: HTMLElement, opfs: F
 
 		worker.postMessage({
 			ref: 'save',
-			fileName: id,
+			fileName: localId,
 			content: markdown
 		})
 	}

@@ -10,7 +10,7 @@ ul.notes
     animation: 300ms fade-in linear
 
     &::before
-        content: 'Or pick a note'
+        content: 'Local notes'
         color: var(--color-main-25)
         margin-bottom: var(--space-m)
 
@@ -80,6 +80,9 @@ ul.notes
                 opacity: 0
                 z-index: 1
                 font-size: var(--font-size-s)
+
+main.online ul.notes::before
+    content: 'Your notes'
 
 // Animations
 @keyframes fade-in-scale
