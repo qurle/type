@@ -39,7 +39,7 @@ export function renderNotes(notes: Note[], rootEl: HTMLElement, editor: Editor, 
 			noteDateEl.innerText = getShortDate(note.modified)
 			noteDelEl.innerText = 'delete'
 
-			noteButtonEl.addEventListener('click', () => { loadToEditor(editor, editorEl, rootEl, note) })
+			noteButtonEl.addEventListener('click', () => { loadToEditor(editor, editorEl, rootEl, notesEl, note) })
 			noteButtonEl.dataset.id = note.id
 
 			noteRightEl.appendChild(noteDelEl)

@@ -12,7 +12,7 @@ export function buildEditor(
 	const notesEl = renderNotes(notes, rootEl, editor, editorEl)
 		if (notes?.length > 0) {
 			toggleNotes(true, editorEl, rootEl)
-	} else loadToEditor(editor, editorEl, rootEl)
+		} else loadToEditor(editor, editorEl, rootEl, notesEl)
 
 	return notesEl
 }
