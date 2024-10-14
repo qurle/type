@@ -66,10 +66,10 @@ async function upload(req: Request) {
 }
 
 
-async function checkUserAndLocalgetId(clientId: string, userId: string): Promise<string> {
+async function checkUserAndLocalgetId(localId: string, userId: string): Promise<string> {
 	return (await k<Note>(table)
 		.select('id')
-		.where('client_id', clientId)
+		.where('client_id', localId)
 		.andWhere('author', userId)
 		.first())?.id
 }
