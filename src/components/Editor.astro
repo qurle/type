@@ -79,29 +79,30 @@ import Shortcuts from './Shortcuts.astro'
 <script>
 	// Sorry for writing almost EVERYTHING here
 	import { Editor, rootCtx } from '@milkdown/kit/core'
-import { clipboard } from '@milkdown/kit/plugin/clipboard'
-import { history } from '@milkdown/kit/plugin/history'
-import { indent } from '@milkdown/kit/plugin/indent'
-import { listener, listenerCtx } from '@milkdown/kit/plugin/listener'
-import { upload } from '@milkdown/kit/plugin/upload'
-import { commonmark } from '@milkdown/kit/preset/commonmark'
-import { automd } from '@milkdown/plugin-automd'
-import { replaceAll } from '@milkdown/utils'
-import { buildEditor } from '@utils/buildEditor'
-import { getCurrent, setCurrent } from '@utils/current'
-import { debug } from '@utils/debug'
-import { del } from '@utils/del'
-import { exportAll, exportFile } from '@utils/export'
-import { getByClass, getByTag } from '@utils/getElement'
-import { getNotes } from '@utils/getNotes'
-import { getOpfs } from '@utils/getOpfs'
-import { currentMode, cycleModes } from '@utils/modes'
-import { publish } from '@utils/publish'
-import { setFocus } from '@utils/setFocus'
-import { showState } from '@utils/showState'
-import { writeToFile, type SaveRef } from '@utils/writeToFile'
-import MicroModal from 'micromodal'
-import { nanoid } from 'nanoid/non-secure'
+	import { clipboard } from '@milkdown/kit/plugin/clipboard'
+	import { history } from '@milkdown/kit/plugin/history'
+	import { indent } from '@milkdown/kit/plugin/indent'
+	import { listener, listenerCtx } from '@milkdown/kit/plugin/listener'
+	import { upload } from '@milkdown/kit/plugin/upload'
+	import { commonmark } from '@milkdown/kit/preset/commonmark'
+	// import { gfm } from '@milkdown/kit/preset/gfm'
+	import { automd } from '@milkdown/plugin-automd'
+	import { replaceAll } from '@milkdown/utils'
+	import { buildEditor } from '@utils/buildEditor'
+	import { getCurrent, setCurrent } from '@utils/current'
+	import { debug } from '@utils/debug'
+	import { del } from '@utils/del'
+	import { exportAll, exportFile } from '@utils/export'
+	import { getByClass, getByTag } from '@utils/getElement'
+	import { getNotes } from '@utils/getNotes'
+	import { getOpfs } from '@utils/getOpfs'
+	import { currentMode, cycleModes } from '@utils/modes'
+	import { publish } from '@utils/publish'
+	import { setFocus } from '@utils/setFocus'
+	import { showState } from '@utils/showState'
+	import { writeToFile, type SaveRef } from '@utils/writeToFile'
+	import MicroModal from 'micromodal'
+	import { nanoid } from 'nanoid/non-secure'
 
 	MicroModal.init({ disableFocus: true, debug: false })
 
@@ -142,6 +143,7 @@ import { nanoid } from 'nanoid/non-secure'
 
 	const editor = await Editor.make()
 		.use(commonmark)
+		// .use(gfm)
 		.use(history)
 		.use(clipboard)
 		.use(upload)
