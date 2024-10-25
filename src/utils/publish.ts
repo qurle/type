@@ -25,9 +25,16 @@ export function publish(editor: Editor, editorEl: HTMLElement, stateEl: HTMLElem
 		const id = body.id
 		console.debug(`Got ID: ${id}`)
 		const url = `${location.origin}/note/${id}`
-		navigator.clipboard.writeText(url).then(() => {
+		setClipboard(url).then(() => {
 			showState(stateEl, 'note url is copied', true)
 			return true
 			})
 	}).catch(() => { return false })
+}
+
+async function setClipboard(text) {
+	const type = "text/plain"
+	const blob = new Blob([text], { type })
+	const data = [new ClipboardItem({ [type]: blob })]
+	await navigator.clipboard.write(data)
 }
