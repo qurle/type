@@ -1,15 +1,18 @@
 @mixin blocks
     ul
-        margin-top: var(--space-m)
+        margin-top: var(--space-l)
         ul
             margin-top: 0
             margin-left: var(--space-xl)
 
     ol
-        margin-top: var(--space-m)
+        margin-top: var(--space-l)
         ol
             margin-top: 0
             margin-left: var(--space-xl)
+
+    p + ul, p + ol
+        margin-top: var(--space-m)
 
     ul>li::marker
             content: '• '

@@ -111,7 +111,7 @@ import Shortcuts from '@components/Shortcuts.astro'
 	// Elements
 	const headerEl = getByTag('header')
 	const headerLeftEl = getByClass('left', headerEl)
-	const uploadInput = getByTag('input', headerLeftEl) as HTMLInputElement
+	const uploadInputEl = getByTag('input', headerLeftEl) as HTMLInputElement
 	const addEl = getByClass('add', headerLeftEl)
 	const backEl = getByClass('back', headerLeftEl)
 	const stateEl = getByClass('state', headerEl)
@@ -245,11 +245,11 @@ import Shortcuts from '@components/Shortcuts.astro'
 	})
 
 	addEl.addEventListener('click', () => {
-		uploadInput.click()
+		uploadInputEl.click()
 	})
 
-	uploadInput.addEventListener('change', (e: InputEvent) => {
-		processFiles(uploadInput.files)
+	uploadInputEl.addEventListener('change', (e: InputEvent) => {
+		processFiles(uploadInputEl.files)
 	})
 
 	showMoreEl.addEventListener('click', () => {
@@ -375,7 +375,7 @@ import Shortcuts from '@components/Shortcuts.astro'
 					case 'KeyO': {
 						e.preventDefault()
 						if (e.repeat) return
-						uploadInput.click()
+						uploadInputEl.click()
 						return
 					}
 				}
