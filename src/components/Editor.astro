@@ -95,6 +95,7 @@ import Shortcuts from '@components/Shortcuts.astro'
 	import { getByClass, getByTag } from '@utils/getElement'
 	import { getNotes } from '@utils/getNotes'
 	import { getOpfs } from '@utils/getOpfs'
+	import { isEmptyNote } from '@utils/isEmptyNote'
 	import { currentMode, cycleModes } from '@utils/modes'
 	import { publish } from '@utils/publish'
 	import { setFocus } from '@utils/setFocus'
@@ -178,14 +179,8 @@ import Shortcuts from '@components/Shortcuts.astro'
 						rootEl.classList.add('notes-shown')
 					}, 50)
 					headerLeftEl.dataset.context = 'notes'
-					getNotes(opfs).then((notes) => {
-						hasNotes = notes?.length > 0
-						if (notesEl) {
-							rootEl.removeChild(notesEl)
-						}
-						notesEl = buildEditor(editor, notes, rootEl, editorEl)
-						initNotesListeners()
-					})
+					loadNotesList()
+
 					document.title = 'type.'
 					publishEl.parentElement.classList.add('hidden')
 					downloadEl.parentElement.classList.add('hidden')
@@ -315,6 +310,20 @@ import Shortcuts from '@components/Shortcuts.astro'
 			idEl.remove()
 			editor.action(replaceAll(content))
 			editorEl.classList.remove('loading')
+			if (isEmptyNote(content)) return
+
+			const firstBlock =
+				(editorEl.children[0] as HTMLElement)?.innerText || ''
+			if (isEmptyNote(firstBlock)) return
+			const newLineIndex = firstBlock.indexOf('\n')
+			let title =
+				newLineIndex === -1
+					? firstBlock
+					: firstBlock.slice(0, newLineIndex)
+			if (title.length > 20) {
+				title = title.slice(0, 20) + '…'
+			}
+			document.title = title
 		}
 	}
 
@@ -345,6 +354,7 @@ import Shortcuts from '@components/Shortcuts.astro'
 							publish(editor, editorEl, stateEl, getCurrent())
 							return
 						}
+						break
 					}
 					case 'KeyE': {
 						if (e.repeat) return
@@ -353,6 +363,7 @@ import Shortcuts from '@components/Shortcuts.astro'
 							save('copy')
 							return
 						}
+						break
 					}
 					case 'KeyD': {
 						e.preventDefault()
@@ -438,7 +449,8 @@ import Shortcuts from '@components/Shortcuts.astro'
 					.addEventListener('click', (e: MouseEvent) => {
 						e.stopPropagation()
 						const confirmed = e.shiftKey
-						del(noteEl.dataset.id, opfs, confirmed)
+						del(noteEl, opfs, confirmed)
+						loadNotesList()
 					})
 
 				noteEl.addEventListener('keydown', (e) => {
@@ -461,6 +473,23 @@ import Shortcuts from '@components/Shortcuts.astro'
 							).focus()
 						else editorEl.focus()
 					}
+					if (
+						(e.key === 'Backspace' || e.key === 'Delete') &&
+						empty &&
+						notesEl
+					) {
+						const nextLi = buttonEl.parentElement
+							.nextElementSibling as HTMLLIElement
+
+						const confirmed = e.shiftKey
+						del(noteEl, opfs, confirmed)
+
+						if (nextLi)
+							(
+								nextLi.firstElementChild as HTMLButtonElement
+							).focus()
+						else editorEl.focus()
+					}
 				})
 			})
 		}
@@ -473,7 +502,6 @@ import Shortcuts from '@components/Shortcuts.astro'
 			if (e.state.page === null) {
 				save('clear')
 				clearEditor()
-				// location.reload()
 			}
 		})
 	}
@@ -487,7 +515,7 @@ import Shortcuts from '@components/Shortcuts.astro'
 
 	function save(ref: SaveRef, hidden = false) {
 		if (locked) return false
-		if (!empty && (!nonExplicitSaveRefs.includes(ref) || updated)) {
+		if ((!empty && updated) || nonExplicitSaveRefs.includes(ref)) {
 			const currentId = getCurrent() || setCurrent(newId(), editorEl)
 			console.debug(`Current ID: ${currentId}`)
 			writeToFile(editor, editorEl, opfs, currentId, stateEl, ref, hidden)
@@ -524,6 +552,20 @@ import Shortcuts from '@components/Shortcuts.astro'
 		localStorage.setItem(scope, mode)
 	}
 
+	function loadNotesList() {
+		console.debug('Loading notes list')
+		getNotes(opfs).then((notes) => {
+			hasNotes = notes?.length > 0
+			notesEl = getByClass('notes', rootEl) as HTMLUListElement
+			if (notesEl) {
+				rootEl.removeChild(notesEl)
+			}
+			notesEl = buildEditor(editor, notes, rootEl, editorEl)
+			initNotesListeners()
+			return notesEl
+		})
+	}
+
 	async function processFiles(fileList: FileList) {
 		console.debug('File(s) uploading')
 		const allowedFiles = ['md', 'txt']
@@ -546,7 +588,7 @@ import Shortcuts from '@components/Shortcuts.astro'
 					clearEditor()
 				}
 				console.debug(`Writing file ${file.name}`)
-				writeToFile(
+				await writeToFile(
 					editor,
 					editorEl,
 					opfs,
@@ -556,20 +598,21 @@ import Shortcuts from '@components/Shortcuts.astro'
 					false,
 					await file.text(),
 				)
-				location.reload()
+				loadNotesList()
 			}
 			showState(stateEl, `uploaded ${files.length} files`)
 		}
 	}
 
 	function clearEditor() {
+		console.debug(`Clearing editor`)
 		if (![location.origin, location.origin + '/'].includes(location.href)) {
-			location.href = location.origin
+			window.history.pushState({ page: null }, '', '/')
 		}
 		if (locked) unlock()
 		editor.action(replaceAll(''))
 		empty = true
-		window.history.pushState({ page: null }, '', '')
+		editorEl.focus()
 		setCurrent('', editorEl)
 	}
 

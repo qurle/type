@@ -7,6 +7,8 @@ import { smartTrunc } from '@utils/smartTrunc'
 export type SaveRef = 'autosave' | 'shortcut' | 'unload' | 'clear' | 'overwrite' | 'multiple-drop' | 'publish' | 'copy'
 
 export async function writeToFile(editor: Editor, editorEl: HTMLElement, opfs: FileSystemDirectoryHandle, id: string, stateEl: HTMLElement, saveRef: SaveRef = 'autosave', hidden = false, markdown: string = editor.action(getMarkdown()) || '') {
+	markdown = markdown.replace(/&#x20;/g, ' ')
+
 	if (isEmptyNote(markdown)) {
 		console.debug(`Note is empty`)
 		return false
@@ -14,7 +16,7 @@ export async function writeToFile(editor: Editor, editorEl: HTMLElement, opfs: F
 
 	const defaultLength = 80
 	const firstBlock = (editorEl.children[0] as HTMLElement).innerText
-	const name = smartTrunc(firstBlock || markdown.split('\n')[0], defaultLength)
+	const name = smartTrunc(isEmptyNote(firstBlock) ? markdown.split('\n')[0] : firstBlock, defaultLength)
 
 	console.debug(`Saving "${name}" by ${saveRef}`)
 
