@@ -96,9 +96,11 @@ import Shortcuts from '@components/Shortcuts.astro'
 	import { getNotes } from '@utils/getNotes'
 	import { getOpfs } from '@utils/getOpfs'
 	import { isEmptyNote } from '@utils/isEmptyNote'
+	import { loadToEditor } from '@utils/loadToEditor'
 	import { currentMode, cycleModes } from '@utils/modes'
 	import { publish } from '@utils/publish'
 	import { setFocus } from '@utils/setFocus'
+	import { setTitle } from '@utils/setTitle'
 	import { showState } from '@utils/showState'
 	import { writeToFile, type SaveRef } from '@utils/writeToFile'
 	import MicroModal from 'micromodal'
@@ -181,7 +183,7 @@ import Shortcuts from '@components/Shortcuts.astro'
 					headerLeftEl.dataset.context = 'notes'
 					loadNotesList()
 
-					document.title = 'type.'
+					setTitle()
 					publishEl.parentElement.classList.add('hidden')
 					downloadEl.parentElement.classList.add('hidden')
 					exportAllEl.parentElement.classList.remove('hidden')
@@ -212,13 +214,14 @@ import Shortcuts from '@components/Shortcuts.astro'
 	let saver = startAutosave()
 
 	notesEl = buildEditor(editor, notes, rootEl, editorEl)
+
+	// Loading last opened document
 	const current = getCurrent()
 	if (current) {
-		editor.action(
-			replaceAll(
-				notes.find((note) => note.id === current)?.content || '',
-			),
-		)
+		const note = notes.find((note) => note.id === current)
+		if (note) {
+			loadToEditor(editor, editorEl, rootEl, notesEl, note)
+		}
 	}
 
 	setFocus(editorEl)
@@ -315,15 +318,7 @@ import Shortcuts from '@components/Shortcuts.astro'
 			const firstBlock =
 				(editorEl.children[0] as HTMLElement)?.innerText || ''
 			if (isEmptyNote(firstBlock)) return
-			const newLineIndex = firstBlock.indexOf('\n')
-			let title =
-				newLineIndex === -1
-					? firstBlock
-					: firstBlock.slice(0, newLineIndex)
-			if (title.length > 20) {
-				title = title.slice(0, 20) + '…'
-			}
-			document.title = title
+			setTitle(firstBlock)
 		}
 	}
 

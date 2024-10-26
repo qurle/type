@@ -2,6 +2,7 @@ import { Editor } from '@milkdown/core'
 import { insert } from '@milkdown/utils'
 import { setCurrent } from '@utils/current'
 import { setFocus } from '@utils/setFocus'
+import { setTitle } from '@utils/setTitle'
 
 export function loadToEditor(editor: Editor, editorEl: HTMLElement, rootEl: HTMLElement, notesEl: HTMLElement, note: Note = null) {
 	if (!note)
@@ -15,7 +16,7 @@ export function loadToEditor(editor: Editor, editorEl: HTMLElement, rootEl: HTML
 	setFocus(editorEl)
 
 	window.history.pushState({ page: note.id }, '')
-	document.title = note.name
+	setTitle(note.name)
 
 	editorEl.dataset.id = note.id
 	setCurrent(note.id, editorEl)
