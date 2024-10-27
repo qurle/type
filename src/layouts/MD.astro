@@ -1,13 +1,50 @@
 ---
+import { Icon } from 'astro-icon/components'
 import Layout from './Layout.astro'
+import '@styles/blocks.sass'
 ---
 
 <Layout>
+	<header class="editor-header">
+		<a class="back" href="/"><Icon name="back" /></a>
+	</header>
 	<div class="blocks">
 		<slot />
 	</div>
 </Layout>
 <style lang="scss">
 	@import '@styles/blocks.sass';
-	@include blocks;
+
+	header.editor-header {
+		display: flex;
+		justify-content: space-between;
+		width: 100%;
+
+		margin-bottom: calc(var(--space-m) + var(--space-l));
+
+		font-family: var(--font-sans);
+		font-size: var(--font-size-xs);
+
+		z-index: 2;
+		a {
+			display: block;
+			opacity: 0.25;
+
+			transition:
+				opacity var(--transition-s),
+				transform var(--transition-m);
+			&:hover {
+				opacity: 0.5;
+			}
+			&:active {
+				transform: scale(0.8);
+			}
+		}
+
+		svg {
+			display: block;
+			height: 24px;
+			width: 24px;
+		}
+	}
 </style>

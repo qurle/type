@@ -11,6 +11,16 @@ export default defineConfig({
     enabled: false
   },
 
+  vite: {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          api: 'modern-compiler',
+        }
+      }
+    }
+  },
+
   output: "hybrid",
   adapter: vercel(),
 });
