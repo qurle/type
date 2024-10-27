@@ -512,7 +512,7 @@ import Shortcuts from '@components/Shortcuts.astro'
 		if (locked) return false
 		if ((!empty && updated) || nonExplicitSaveRefs.includes(ref)) {
 			const currentId = getCurrent() || setCurrent(newId(), editorEl)
-			console.debug(`Current ID: ${currentId}`)
+			console.debug(`Saving with ID: ${currentId} by ref "${ref}"`)
 			writeToFile(editor, editorEl, opfs, currentId, stateEl, ref, hidden)
 			updated = false
 			return true
