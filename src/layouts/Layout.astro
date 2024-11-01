@@ -2,14 +2,17 @@
 import Fonts from '@components/utils/Fonts.astro'
 import '@styles/global.sass'
 
+const defaultTitle = 'type.'
 const {
-  title = 'type.',
+  title = defaultTitle,
+  simpleTitle = false,
   description = 'Zen markdown-friendly editor for just typing',
   class: className,
-  frontmatter,
 } = Astro.props
 
-const pageTitle = frontmatter?.title || title
+let pageTitle = defaultTitle
+if (title !== defaultTitle)
+  pageTitle = simpleTitle ? title : `${title} | ${defaultTitle}`
 
 const base = Astro.url.pathname.endsWith('/')
   ? Astro.url.pathname

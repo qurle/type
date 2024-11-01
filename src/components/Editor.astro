@@ -163,7 +163,7 @@ import Shortcuts from '@components/Shortcuts.astro'
 					) as HTMLCollectionOf<HTMLDivElement>
 				)[0]
 				editorEl.spellcheck =
-					localStorage.getItem('spell') === 'true' || true
+					localStorage.getItem('spell') === 'true' || false
 				if (hasNotes) editorEl.classList.add('collapsed')
 				editorEl.ariaLabel = 'Your note'
 			})

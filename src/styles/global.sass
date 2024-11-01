@@ -54,12 +54,34 @@ hr
     text-decoration: dotted coral underline
     text-decoration-thickness: 2px
     text-underline-offset: 2px
-    
+
 .bordered
     outline: 1px dashed var(--color-main-50)
 
 .hidden
     display: none !important
+
+.primary.button
+    display: block
+    width: fit-content
+    padding: var(--space-m) calc(var(--space-l) + var(--space-m)) calc(var(--space-m) + 2px)
+   
+    color: var(--color-main) 
+    border: 1px solid var(--color-main-15)
+    
+    border-radius: calc(1.5 * var(--space-m))
+    text-decoration: none
+   
+    cursor: pointer
+    user-select: none
+
+    transform: scale(1)
+    transition: background-color var(--transition-m), transform var(--transition-s)
+    &:hover
+        background: var(--color-main-05)
+    &:active
+        transform: scale(.95)
+        
 
 :root[data-theme="digital"]
     @include digital

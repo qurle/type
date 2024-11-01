@@ -2,13 +2,21 @@
 import { Icon } from 'astro-icon/components'
 import Layout from './Layout.astro'
 import '@styles/blocks.sass'
+
+const { frontmatter } = Astro.props
 ---
 
-<Layout>
-	<header class="editor-header">
-		<a class="back" href="/"><Icon name="back" /></a>
-	</header>
-	<div class="blocks">
+<Layout title={frontmatter?.title} simpleTitle={frontmatter?.simpleTitle}>
+	{
+		!frontmatter?.hideHeader && (
+			<header class="editor-header">
+				<a class="back" href="/">
+					{!frontmatter?.hideBack && <Icon name="back" />}go to editor
+				</a>
+			</header>
+		)
+	}
+	<div class="blocks" contenteditable={frontmatter?.editable || false}>
 		<slot />
 	</div>
 </Layout>
@@ -27,7 +35,10 @@ import '@styles/blocks.sass'
 
 		z-index: 2;
 		a {
-			display: block;
+			display: flex;
+			gap: var(--space-m);
+			align-items: center;
+			font-weight: 500;
 			opacity: 0.25;
 
 			transition:

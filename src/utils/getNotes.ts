@@ -85,7 +85,7 @@ const names = [
 	'Messages I\'m to embarassed to send',
 	'Ideas for my Telegram blog @artiqle',
 	'Improvements for VKUI',
-	'How be almost lost a web design studio',
+	'How we almost lost a web design studio',
 	'Beyonce kill list',
 	'To my lovely ones',
 	'Is Astro perfect?',

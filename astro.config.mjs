@@ -5,11 +5,10 @@ import vercel from "@astrojs/vercel/serverless";
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [icon()],
+  output: "hybrid",
+  adapter: vercel(),
 
-  devToolbar: {
-    enabled: false
-  },
+  integrations: [icon()],
 
   vite: {
     css: {
@@ -21,6 +20,20 @@ export default defineConfig({
     }
   },
 
-  output: "hybrid",
-  adapter: vercel(),
+  markdown: {
+    syntaxHighlight: false,
+  },
+
+  redirects: {
+    '/hi': '/hello',
+    '/good-morning': '/hello',
+    '/good-afternoon': '/hello',
+    '/good-evening': '/hello',
+    '/about': '/hello',
+    '/welcome': '/hello',
+  },
+
+  devToolbar: {
+    enabled: false
+  },
 });

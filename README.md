@@ -15,7 +15,7 @@ Zen editor for those who love simplicity. Start typing at [type.baby](https://ty
 
 Distractions and interfaces may restrain your thoughts. Unleash your creativity and just type your thoughts / blog posts / notes / docs.
 
-You can also switch between themes and fonts. Every wish to have notebook with colored pages?
+You can also switch between themes and fonts. Ever wished to have notebook with colored pages?
 
 ![themes and fonts of type](https://github.com/qurle/type/blob/main/.github/style.png)
 
