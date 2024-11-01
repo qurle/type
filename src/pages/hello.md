@@ -11,7 +11,7 @@ Zen markdown-friendly editor
 
 ![Look of type homepage](/hello/hero-image.webp)
 
-<a class="primary button"><i>Try it now</i></a>
+<div class="center"><a class="primary button" href='/'><i>Try it now</i></a></div>
 
 <br/><br/><br/>
 
@@ -84,13 +84,15 @@ nativefier 'type.baby'
 ```
 
 <br/>
-<div class="divider">∗ ∗ ∗</div>
+<div class="center">∗ ∗ ∗</div>
 <br/>
 
 Designed and developed by [<img alt="userpic of qurle" src="https://avatars.githubusercontent.com/u/32414396?v=4" class="avatar">qurle](https://qurle.net) with the great help of [<img alt="userpic of qurle" src="https://avatars.githubusercontent.com/u/32977836?v=4" class="avatar">kulizh](https://kulizh.ru). 
 Insired by iA Writer, Teletype, Telegraph and Notion.
 
 Bugs and ideas can be reported via [issues](https://github.com/qurle/type/issues). Any dialogs are also welcome at [nick@qurle.net](mailto:nick@qurle.net?subject=type.).
+
+<div class="center"><a class="primary button" href='/'><i>Go type!</i></a></div>
 
 <br/>
 
@@ -103,6 +105,10 @@ Bugs and ideas can be reported via [issues](https://github.com/qurle/type/issues
 <footer><span><a href="/">type</a>. ©️ all lefts reversed</span><div class="legal"><a href="/privacy">Privacy policy</a><a href="/terms">Terms of service</a></footer>
 
 <style>
+	a > i {
+		position: relative;
+		left: -1px;
+	}
 	.blocks {
 		padding-top: 4rem;
 	}
@@ -124,7 +130,11 @@ Bugs and ideas can be reported via [issues](https://github.com/qurle/type/issues
 		margin-right: .5ch;
 	}
 
-	.divider {
+	.center {
+		display: flex;
+		width: 100%;
+		justify-content: center;
+		align-items: center;
 		text-align: center; 
 		padding: 2rem 0;
 	}
