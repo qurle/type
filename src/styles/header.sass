@@ -86,7 +86,7 @@ header.editor-header
             -webkit-backdrop-filter: blur(50px)
             backdrop-filter: blur(50px)
             
-            button
+            button, li:not(.credit) > a
                 display: flex
                 justify-content: space-between
                 gap: var(--space-xl)
@@ -104,7 +104,7 @@ header.editor-header
                     text-align: right
                     color: var(--color-main-50)
 
-            button, .credit
+            li > button, li:not(.credit) > a, .credit
                 width: 100%
                 padding: var(--space-m) var(--space-l)
 
