@@ -288,6 +288,7 @@ import Shortcuts from '@components/Shortcuts.astro'
 	editEl.addEventListener('click', () => {
 		showMoreEl.classList.remove('active')
 		unlock()
+		save('copy')
 	})
 
 	window.addEventListener('beforeunload', () => {

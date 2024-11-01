@@ -35,7 +35,7 @@ Switch fonts and themes to chose appearance that suits you the best.
 
 ### Share and export
 
-Import markdown and text files. Export files. Publish your notes [to the web](/notes/example). Duplicate and edit public notes. All in your browser.
+Import markdown and text files. Export files. Publish your notes [to the web](/note/example). Duplicate and edit public notes. All in your browser.
 
 <br/>
 

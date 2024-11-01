@@ -31,6 +31,8 @@ export default defineConfig({
     '/good-evening': '/hello',
     '/about': '/hello',
     '/welcome': '/hello',
+
+    '/example': '/note/example',
   },
 
   devToolbar: {
