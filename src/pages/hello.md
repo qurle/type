@@ -17,7 +17,7 @@ Zen markdown-friendly editor
 
 ### Your digital notebook
 
-The design of *type* is based on blank notebook. It lacks of distractions that may restrain your thoughts. Unleash your creativity and just type your thoughts 
+The design of *type* is based on blank notebook. It lacks of distractions that may restrain your thoughts. Unleash your creativity and just type your thoughts 
 <span style="opacity: .5">/ blog posts </span>
 <span style="opacity: .4">/ notes </span>
 <span style="opacity: .3">/ docs </span>
@@ -29,19 +29,19 @@ Switch fonts and themes to chose appearance that suits you the best.
 
 ### Local-first
 
-*Type* is fast and works even without internet connection and well-secured. We only store the notes you published.
+*Type* is fast, offline-able and well-secured. We only store the notes you published without any additional personal data.
 
 <br/>
 
 ### Share and export
 
-Import markdown and text files. Export files. Publish your notes [to the web](/notes/example). Duplicate and edit public notes. All in your browser.
+Import markdown and text files. Export files. Publish your notes [to the web](/notes/example). Duplicate and edit public notes. All in your browser.
 
 <br/>
 
 ### Markdown-based
 
-Markdown is easy markup language which makes *type* more than plain text editor. There are things like **bold texts**, [links](http://type.baby), `code`, images and headings.
+Markdown is easy markup language which makes *type* more than plain text editor. There are things like **bold texts**, [links](http://type.baby), `code`, images and headings.
 
 <br/>
 
