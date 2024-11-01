@@ -109,8 +109,13 @@ Bugs and ideas can be reported via [issues](https://github.com/qurle/type/issues
 		position: relative;
 		left: -1px;
 	}
+
 	.blocks {
 		padding-top: 4rem;
+	}
+
+	h1:first-of-type, p:first-of-type {
+		text-align: center;
 	}
 
 	.caption {
