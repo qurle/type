@@ -11,7 +11,7 @@ Zen markdown-friendly editor
 
 <img class="hero-image" src="/hello/hero-image.webp" alt="Look of type homepage" width="1920" height="1320"/>
 
-<div class="center no-padding"><a class="primary button" href='/'><i>Try it now</i></a></div>
+<div class="center no-padding"><a class="primary button" href='/'><i>Start typing</i></a></div>
 
 <br/><br/><br/>
 
