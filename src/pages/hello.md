@@ -150,7 +150,7 @@ Bugs and ideas can be reported via [issues](https://github.com/qurle/type/issues
 
 	footer {
 		display: flex;
-		gap: 2rem;
+		gap: 1rem 2rem;
 		justify-content: space-between;
 		flex-wrap: wrap;
 
