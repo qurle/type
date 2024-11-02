@@ -9,7 +9,7 @@ hideHeader: true
 
 Zen markdown-friendly editor
 
-![Look of type homepage](/hello/hero-image.webp)
+<img class="hero-image" src="/hello/hero-image.webp" alt="Look of type homepage" width="1920" height="1320"/>
 
 <div class="center no-padding"><a class="primary button" href='/'><i>Try it now</i></a></div>
 
@@ -45,7 +45,7 @@ Markdown is easy markup language which makes *type* more than plain text edito
 
 <br/>
 
-![Example of switching font and theme](/hello/appearance.webp)
+<img src="/hello/appearance.webp" alt="Example of switching font and theme" width="1920" height="1000"/>
 
 <br/><br/>
 
@@ -118,6 +118,10 @@ Share bugs and ideas via [issues](https://github.com/qurle/type/issues). Any dia
 		text-align: center;
 	}
 
+	.hero-image {
+		animation: scale-in 800ms var(--transition-easing);
+	}
+
 	.caption {
 		opacity: .5; 
 		font-size: .8em;
@@ -168,10 +172,26 @@ Share bugs and ideas via [issues](https://github.com/qurle/type/issues). Any dia
 	
 	.legal a {
 		opacity: .5;
-		transition: opacity 175ms var(--transition-easing);
+		transition: opacity var(--transition-s);
 	}
 
 	.legal a:hover {
 		opacity: .75;
 	}
+
+	@keyframes scale-in {
+		0% {
+			transform: translateY(2rem) scale(.8);
+			opacity: 0;
+		}
+		100% {
+			transform: translateY(0)  scale(1);
+			opacity: 1;
+		}
+	}
 </style>
+<script>
+	if (localStorage.getItem('saw-home') !== 'true') {
+		localStorage.setItem('saw-home', 'true')
+	}	
+</script>

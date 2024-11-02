@@ -4,6 +4,11 @@ import Layout from '../layouts/Layout.astro'
 ---
 
 <Layout>
+	<script>
+		if (localStorage.getItem('saw-home') !== 'true') {
+			location.href = '/hello'
+		}
+	</script>
 	<Editor />
 </Layout>
 <script>
