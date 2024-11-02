@@ -11,7 +11,7 @@ Zen markdown-friendly editor
 
 ![Look of type homepage](/hello/hero-image.webp)
 
-<div class="center"><a class="primary button" href='/'><i>Try it now</i></a></div>
+<div class="center no-padding"><a class="primary button" href='/'><i>Try it now</i></a></div>
 
 <br/><br/><br/>
 
@@ -111,7 +111,7 @@ Bugs and ideas can be reported via [issues](https://github.com/qurle/type/issues
 	}
 
 	.blocks {
-		padding-top: 4rem;
+		padding-top: min(4rem, 5vh);
 	}
 
 	h1:first-of-type, p:first-of-type {
@@ -142,6 +142,10 @@ Bugs and ideas can be reported via [issues](https://github.com/qurle/type/issues
 		align-items: center;
 		text-align: center; 
 		padding: 2rem 0;
+	}
+
+	.no-padding {
+		padding: 0;
 	}
 
 	footer {
