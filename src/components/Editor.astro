@@ -88,6 +88,7 @@ import Shortcuts from '@components/Shortcuts.astro'
 	import { listener, listenerCtx } from '@milkdown/kit/plugin/listener'
 	import { upload } from '@milkdown/kit/plugin/upload'
 	import { commonmark } from '@milkdown/kit/preset/commonmark'
+	import { gfm } from '@milkdown/kit/preset/gfm'
 	import { automd } from '@milkdown/plugin-automd'
 	import { replaceAll } from '@milkdown/utils'
 	import { buildEditor } from '@utils/buildEditor'
@@ -148,6 +149,7 @@ import Shortcuts from '@components/Shortcuts.astro'
 
 	const editor = await Editor.make()
 		.use(commonmark)
+		.use(gfm)
 		.use(history)
 		.use(clipboard)
 		.use(upload)
