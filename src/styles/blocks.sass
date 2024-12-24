@@ -1,11 +1,13 @@
 @mixin blocks
     ul
+        padding-left: 1ch
         margin-top: var(--space-l)
         ul
             margin-top: 0
             margin-left: var(--space-xl)
 
     ol
+        padding-left: 2ch
         margin-top: var(--space-l)
         ol
             margin-top: 0
@@ -19,6 +21,9 @@
 
     li > p
             display: inline
+
+    li:not(:last-child)
+        margin-bottom: 0.1em
 
     a
         text-decoration: underline
