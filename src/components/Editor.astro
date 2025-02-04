@@ -3,7 +3,7 @@ import '@styles/header.sass'
 import '@styles/editor.sass'
 import '@styles/notes.sass'
 import { Icon } from 'astro-icon/components'
-import { modes } from '@utils/modes'
+import { modes } from '@scripts/render/appearance'
 import Instructions from '@components/Instructions.astro'
 import Shortcuts from '@components/Shortcuts.astro'
 ---
@@ -91,22 +91,25 @@ import Shortcuts from '@components/Shortcuts.astro'
 	import { gfm } from '@milkdown/kit/preset/gfm'
 	import { automd } from '@milkdown/plugin-automd'
 	import { replaceAll } from '@milkdown/utils'
-	import { buildEditor } from '@utils/buildEditor'
-	import { getCurrent, setCurrent } from '@utils/current'
-	import { debug } from '@utils/debug'
-	import { del } from '@utils/del'
-	import { exportAll, exportFile } from '@utils/export'
-	import { getByClass, getByTag } from '@utils/getElement'
-	import { getNotes } from '@utils/getNotes'
-	import { getOpfs } from '@utils/getOpfs'
-	import { isEmptyNote } from '@utils/isEmptyNote'
-	import { loadToEditor } from '@utils/loadToEditor'
-	import { currentMode, cycleModes } from '@utils/modes'
-	import { publish } from '@utils/publish'
-	import { setFocus } from '@utils/setFocus'
-	import { setTitle } from '@utils/setTitle'
-	import { showState } from '@utils/showState'
-	import { writeToFile, type SaveRef } from '@utils/writeToFile'
+	import { buildEditor } from '@scripts/render/buildEditor'
+	import { getCurrent, setCurrent } from '@scripts/utils/currentNote'
+	import { showBorders } from '@scripts/render/showBorders'
+	import { deleteNote } from '@scripts/storage/deleteNote'
+	import { exportAll, exportFile } from '@scripts/note/export'
+	import { getByClass, getByTag } from '@scripts/elements'
+	import { getNotes } from '@scripts/storage/getNotes'
+	import { getOpfs } from '@scripts/storage/getOpfs'
+	import { isEmptyString } from '@scripts/utils/isEmptyString'
+	import { openInEditor } from '@scripts/render/openInEditor'
+	import {
+		currentAppearance,
+		cycleAppearance,
+	} from '@scripts/render/appearance'
+	import { publish } from '@scripts/note/publish'
+	import { setFocus } from '@scripts/utils/setFocus'
+	import { setTitle } from '@scripts/note/setTitle'
+	import { showState } from '@scripts/render/showState'
+	import { writeToFile, type SaveRef } from '@scripts/storage/writeToFile'
 	import MicroModal from 'micromodal'
 	import { nanoid } from 'nanoid/non-secure'
 
@@ -225,7 +228,7 @@ import Shortcuts from '@components/Shortcuts.astro'
 	if (current) {
 		const note = notes.find((note) => note.id === current)
 		if (note) {
-			loadToEditor(editor, editorEl, rootEl, notesEl, note)
+			openInEditor(editor, editorEl, rootEl, notesEl, note)
 		}
 	}
 
@@ -319,11 +322,11 @@ import Shortcuts from '@components/Shortcuts.astro'
 			idEl.remove()
 			editor.action(replaceAll(content))
 			editorEl.classList.remove('loading')
-			if (isEmptyNote(content)) return
+			if (isEmptyString(content)) return
 
 			const firstBlock =
 				(editorEl.children[0] as HTMLElement)?.innerText || ''
-			if (isEmptyNote(firstBlock)) return
+			if (isEmptyString(firstBlock)) return
 			setTitle(firstBlock)
 		}
 	}
@@ -369,7 +372,7 @@ import Shortcuts from '@components/Shortcuts.astro'
 					case 'KeyD': {
 						e.preventDefault()
 						if (e.repeat) return
-						debug(rootEl)
+						showBorders(rootEl)
 						return
 					}
 					// Mortal combat mode
@@ -406,15 +409,15 @@ import Shortcuts from '@components/Shortcuts.astro'
 		const themeValueEl = getByClass('value', themeEl)
 		const spellValueEl = getByClass('value', spellEl)
 
-		fontValueEl.textContent = currentMode('font')
-		themeValueEl.textContent = currentMode('theme')
+		fontValueEl.textContent = currentAppearance('font')
+		themeValueEl.textContent = currentAppearance('theme')
 		spellValueEl.textContent = editorEl.spellcheck ? 'on' : 'off'
 
 		fontEl.addEventListener('click', () => {
-			fontValueEl.textContent = cycleModes('font')
+			fontValueEl.textContent = cycleAppearance('font')
 		})
 		themeEl.addEventListener('click', () => {
-			themeValueEl.textContent = cycleModes('theme')
+			themeValueEl.textContent = cycleAppearance('theme')
 		})
 		spellEl.addEventListener('click', () => {
 			editorEl.spellcheck = !editorEl.spellcheck
@@ -450,7 +453,7 @@ import Shortcuts from '@components/Shortcuts.astro'
 					.addEventListener('click', (e: MouseEvent) => {
 						e.stopPropagation()
 						const confirmed = e.shiftKey
-						del(noteEl, opfs, confirmed)
+						deleteNote(noteEl, opfs, confirmed)
 						loadNotesList()
 					})
 
@@ -483,7 +486,7 @@ import Shortcuts from '@components/Shortcuts.astro'
 							.nextElementSibling as HTMLLIElement
 
 						const confirmed = e.shiftKey
-						del(noteEl, opfs, confirmed)
+						deleteNote(noteEl, opfs, confirmed)
 
 						if (nextLi)
 							(

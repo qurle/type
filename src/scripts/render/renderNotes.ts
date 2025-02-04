@@ -1,6 +1,6 @@
 import { Editor } from '@milkdown/core'
-import { getShortDate } from '@utils/getShortDate'
-import { loadToEditor } from '@utils/loadToEditor'
+import { getShortDate } from '@scripts/utils/getShortDate'
+import { openInEditor } from '@scripts/render/openInEditor'
 
 /**
  * Addes notes to DOM (if any)
@@ -39,7 +39,7 @@ export function renderNotes(notes: Note[], rootEl: HTMLElement, editor: Editor, 
 			noteDateEl.innerText = getShortDate(note.modified)
 			noteDelEl.innerText = 'delete'
 
-			noteButtonEl.addEventListener('click', () => { loadToEditor(editor, editorEl, rootEl, notesEl, note) })
+			noteButtonEl.addEventListener('click', () => { openInEditor(editor, editorEl, rootEl, notesEl, note) })
 			noteButtonEl.dataset.id = note.id
 
 			noteRightEl.appendChild(noteDelEl)

@@ -3,7 +3,7 @@ export const modes = {
 	theme: ['light', 'dark', 'digital']
 }
 
-export function cycleModes(mode: keyof typeof modes) {
+export function cycleAppearance(mode: keyof typeof modes) {
 	const modeArray = modes[mode]
 	const currentValueRaw = document.documentElement.dataset[mode]
 	const currentValue = currentValueRaw && currentValueRaw !== 'undefined' ? currentValueRaw : modeArray[0]
@@ -13,11 +13,11 @@ export function cycleModes(mode: keyof typeof modes) {
 	return nextValue
 }
 
-export function currentMode(mode: keyof typeof modes) {
+export function currentAppearance(mode: keyof typeof modes) {
 	return localStorage.getItem(mode) || document.documentElement.dataset[mode]
 }
 
-export function loadMode(mode: keyof typeof modes) {
+export function loadAppearance(mode: keyof typeof modes) {
 	const value = localStorage.getItem(mode)
 	if (value && value !== 'undefined') {
 		document.documentElement.dataset[mode] = value

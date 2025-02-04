@@ -1,22 +1,22 @@
 import { Editor } from '@milkdown/core'
 import { getMarkdown } from '@milkdown/utils'
-import { isEmptyNote } from '@utils/isEmptyNote'
-import { showState } from '@utils/showState'
-import { smartTrunc } from '@utils/smartTrunc'
+import { isEmptyString } from '@scripts/utils/isEmptyString'
+import { showState } from '@scripts/render/showState'
+import { smartTrunc } from '@scripts/utils/smartTrunc'
 
 export type SaveRef = 'autosave' | 'shortcut' | 'unload' | 'clear' | 'overwrite' | 'multiple-drop' | 'publish' | 'copy'
 
 export async function writeToFile(editor: Editor, editorEl: HTMLElement, opfs: FileSystemDirectoryHandle, id: string, stateEl: HTMLElement, saveRef: SaveRef = 'autosave', hidden = false, markdown: string = editor.action(getMarkdown()) || '') {
 	markdown = markdown.replace(/&#x20;/g, ' ')
 
-	if (isEmptyNote(markdown)) {
+	if (isEmptyString(markdown)) {
 		console.debug(`Note is empty`)
 		return false
 	}
 
 	const defaultLength = 80
 	const firstBlock = (editorEl.children[0] as HTMLElement).innerText
-	const name = smartTrunc(isEmptyNote(firstBlock) ? markdown.split('\n')[0] : firstBlock, defaultLength)
+	const name = smartTrunc(isEmptyString(firstBlock) ? markdown.split('\n')[0] : firstBlock, defaultLength)
 
 	console.debug(`Saving "${name}" by ${saveRef}`)
 
@@ -48,12 +48,12 @@ export async function writeToFile(editor: Editor, editorEl: HTMLElement, opfs: F
 	}
 
 	if (!hidden) {
-	switch (saveRef) {
-		case 'multiple-drop': break
-		case 'copy': showState(stateEl, 'note copied'); break
-		case 'overwrite': showState(stateEl, 'previous note saved'); break
-		default: showState(stateEl, 'saved')
-	}
+		switch (saveRef) {
+			case 'multiple-drop': break
+			case 'copy': showState(stateEl, 'note copied'); break
+			case 'overwrite': showState(stateEl, 'previous note saved'); break
+			default: showState(stateEl, 'saved')
+		}
 	}
 
 	return Date.now()

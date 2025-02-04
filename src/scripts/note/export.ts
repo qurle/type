@@ -1,12 +1,12 @@
 import { Editor } from '@milkdown/core';
 import { getMarkdown } from '@milkdown/utils';
-import { isEmptyNote } from '@utils/isEmptyNote';
-import { showState } from '@utils/showState';
-import { smartTrunc } from '@utils/smartTrunc';
+import { isEmptyString } from '@scripts/utils/isEmptyString';
+import { showState } from '@scripts/render/showState';
+import { smartTrunc } from '@scripts/utils/smartTrunc';
 import { downloadZip } from 'client-zip';
 
 export function exportFile(editor: Editor, editorEl: HTMLElement, stateEl: HTMLElement, filename = null, markdown: string = editor.action(getMarkdown()) || '') {
-	if (isEmptyNote(markdown)) {
+	if (isEmptyString(markdown)) {
 		showState(stateEl, 'note is empty')
 		return false
 	}

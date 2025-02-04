@@ -1,4 +1,4 @@
-export function isEmptyNote(str: string) {// Removing space HTML entities
+export function isEmptyString(str: string) {	// Removing space HTML entities
 	return /^\s*$/g.test(
 		str
 			// EOL spaces

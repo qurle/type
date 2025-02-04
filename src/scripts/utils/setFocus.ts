@@ -8,7 +8,7 @@ export function setFocus(elem: HTMLElement, scroll: 'start' | 'end' | undefined 
 
 	if (caret === 'end') {
 		// Careful! This shit is deprecated
-		// but doesn't have any alternative
+		// but doesn't have any alternative lol
 		document.execCommand('selectAll', false, null)
 		document.getSelection().collapseToEnd()
 	}

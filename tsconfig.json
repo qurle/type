@@ -32,8 +32,8 @@
       "@styles/*": [
         "src/styles/*"
       ],
-      "@utils/*": [
-        "src/utils/*"
+      "@scripts/*": [
+        "src/scripts/*"
       ]
     },
     // Copied from "astro/tsconfigs/base"

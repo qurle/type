@@ -46,7 +46,6 @@ const networkFirst = async ({ request, preloadResponsePromise, fallbackUrl }) =>
 	}
 };
 
-
 const enableNavigationPreload = async () => {
 	if (self.registration.navigationPreload) {
 		// Enable navigation preloads!

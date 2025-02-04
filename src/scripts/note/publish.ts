@@ -1,10 +1,10 @@
 import { Editor } from '@milkdown/core';
 import { getMarkdown } from '@milkdown/utils';
-import { isEmptyNote } from '@utils/isEmptyNote';
-import { showState } from '@utils/showState';
+import { isEmptyString } from '@scripts/utils/isEmptyString';
+import { showState } from '@scripts/render/showState';
 
 export function publish(editor: Editor, editorEl: HTMLElement, stateEl: HTMLElement, id: string, markdown: string = editor.action(getMarkdown()) || '') {
-	if (isEmptyNote(markdown)) {
+	if (isEmptyString(markdown)) {
 		showState(stateEl, 'note is empty')
 		return
 	}
@@ -52,10 +52,10 @@ function publishThenCopy(markdown: string, id: string, stateEl: HTMLElement) {
 		})
 
 	} else {
-// NOTE: Firefox has support for ClipboardItem and navigator.clipboard.write,
-//   but those are behind `dom.events.asyncClipboard.clipboardItem` preference.
-//   Good news is that other than Safari, Firefox does not care about
-//   Clipboard API being used async in a Promise.
+		// NOTE: Firefox has support for ClipboardItem and navigator.clipboard.write,
+		//   but those are behind `dom.events.asyncClipboard.clipboardItem` preference.
+		//   Good news is that other than Safari, Firefox does not care about
+		//   Clipboard API being used async in a Promise.
 		fetch(`/api/publish`, {
 			method: 'POST', body: JSON.stringify({
 				content: markdown,
