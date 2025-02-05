@@ -1,5 +1,3 @@
-import { nanoid } from 'nanoid/non-secure';
-
 export async function getNotes(opfs: FileSystemDirectoryHandle = null) {
 	if (opfs)
 		return await getLocalNotes(opfs)

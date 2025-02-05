@@ -17,7 +17,7 @@ import Shortcuts from '@components/Shortcuts.astro'
 		<button class="add"><Icon name="add" /></button>
 	</div>
 	<div class="right">
-		<div class="state">saved</div>
+		<div class="status"></div>
 		<div class="more">
 			<button class="show-more"><Icon name="more" /></button>
 			<ul class="more-menu">
@@ -80,7 +80,7 @@ import Shortcuts from '@components/Shortcuts.astro'
 <Instructions />
 <Shortcuts />
 <script>
-	// Sorry for writing almost EVERYTHING here
+	// Am I an import king now?
 	import { Editor, rootCtx } from '@milkdown/kit/core'
 	import { clipboard } from '@milkdown/kit/plugin/clipboard'
 	import { history } from '@milkdown/kit/plugin/history'
@@ -92,11 +92,11 @@ import Shortcuts from '@components/Shortcuts.astro'
 	import { automd } from '@milkdown/plugin-automd'
 	import { replaceAll } from '@milkdown/utils'
 	import { buildEditor } from '@scripts/render/buildEditor'
-	import { getCurrent, setCurrent } from '@scripts/utils/currentNote'
+	import { loadCurrentId, setCurrentId } from '@scripts/utils/currentNote'
 	import { showBorders } from '@scripts/render/showBorders'
 	import { deleteNote } from '@scripts/storage/deleteNote'
 	import { exportAll, exportFile } from '@scripts/note/export'
-	import { getByClass, getByTag } from '@scripts/elements'
+	import { getByClass, getByTag } from '@scripts/utils/getElements'
 	import { getNotes } from '@scripts/storage/getNotes'
 	import { getOpfs } from '@scripts/storage/getOpfs'
 	import { isEmptyString } from '@scripts/utils/isEmptyString'
@@ -108,22 +108,22 @@ import Shortcuts from '@components/Shortcuts.astro'
 	import { publish } from '@scripts/note/publish'
 	import { setFocus } from '@scripts/utils/setFocus'
 	import { setTitle } from '@scripts/note/setTitle'
-	import { showState } from '@scripts/render/showState'
-	import { writeToFile, type SaveRef } from '@scripts/storage/writeToFile'
+	import { setStatusEl, showStatus } from '@scripts/render/showStatus'
+	import { writeToFile } from '@scripts/storage/writeToFile'
 	import MicroModal from 'micromodal'
-	import { nanoid } from 'nanoid/non-secure'
+	import { state } from '@scripts/state'
+	import { save, toggleAutosave } from '@scripts/note/save'
+	import { createId } from '@scripts/utils/createId'
 
 	MicroModal.init({ disableFocus: true, debug: false })
 
-	// Utilities
-	const autosaveInterval = 5_000
 	// Elements
+	// Move only shared elements to state variable
 	const headerEl = getByTag('header')
 	const headerLeftEl = getByClass('left', headerEl)
 	const uploadInputEl = getByTag('input', headerLeftEl) as HTMLInputElement
 	const addEl = getByClass('add', headerLeftEl)
 	const backEl = getByClass('back', headerLeftEl)
-	const stateEl = getByClass('state', headerEl)
 	const showMoreEl = getByClass('show-more', headerEl)
 	const menuEl = getByClass('more-menu', headerEl)
 	const downloadEl = getByClass('download', menuEl)
@@ -133,24 +133,24 @@ import Shortcuts from '@components/Shortcuts.astro'
 	const fontEl = getByClass('font', menuEl)
 	const themeEl = getByClass('theme', menuEl)
 	const spellEl = getByClass('spell', menuEl)
-	const rootEl = getByTag('main')
 
-	// Other
-	const opfs = await getOpfs()
-	const notes = await getNotes(opfs)
-	// Assinged selectors
-	let editorEl: HTMLDivElement = null
-	let notesEl: HTMLUListElement = null
-	// States
-	let updated = false
-	let empty = true
-	let hasNotes = notes?.length > 0
-	let lastSave = Date.now()
-	let locked = false
+	// Setting states
+	// States are used throughout different methods
+	state.opfs = await getOpfs()
+	state.notes = await getNotes(state.opfs)
+	state.hasNotes = state.notes?.length > 0
+	state.updated = false
+	state.empty = true
+	state.locked = false
+
+	state.rootEl = getByTag('main')
+
+	// Element to show statuses
+	setStatusEl(getByClass('status', headerEl))
 
 	console.debug(`Loading editor`)
 
-	const editor = await Editor.make()
+	state.editor = await Editor.make()
 		.use(commonmark)
 		.use(gfm)
 		.use(history)
@@ -160,54 +160,58 @@ import Shortcuts from '@components/Shortcuts.astro'
 		.use(listener)
 		.use(automd)
 		.config((ctx) => {
-			ctx.set(rootCtx, rootEl)
+			ctx.set(rootCtx, state.rootEl)
 
 			const listener = ctx.get(listenerCtx)
 
 			listener.mounted(() => {
-				editorEl = (
-					document.getElementsByClassName(
-						'editor',
-					) as HTMLCollectionOf<HTMLDivElement>
-				)[0]
-				editorEl.spellcheck =
+				state.editorEl = document.getElementsByClassName(
+					'editor',
+				)[0] as HTMLDivElement
+				state.editorEl.ariaLabel = 'Your note'
+				if (state.hasNotes) state.editorEl.classList.add('collapsed')
+				state.editorEl.spellcheck =
 					localStorage.getItem('spell') === 'true' || false
-				if (hasNotes) editorEl.classList.add('collapsed')
-				editorEl.ariaLabel = 'Your note'
+				state.wasEmpty = true
 			})
 
 			listener.updated((ctx, doc) => {
-				updated = true
-				const isEmpty = doc.content.size <= 2
+				state.updated = true
+				state.empty = doc.content.size <= 2
 
 				showMoreEl.classList.remove('active')
 
-				if (isEmpty) {
-					empty = true
-					if (hasNotes) editorEl.classList.add('collapsed')
+				if (state.empty) {
+					if (state.hasNotes)
+						state.editorEl.classList.add('collapsed')
 					setTimeout(() => {
-						rootEl.classList.add('notes-shown')
+						state.rootEl.classList.add('notes-shown')
 					}, 50)
 					headerLeftEl.dataset.context = 'notes'
-					loadNotesList()
-
+					updateNotesList()
 					setTitle()
 					publishEl.parentElement.classList.add('hidden')
 					downloadEl.parentElement.classList.add('hidden')
 					exportAllEl.parentElement.classList.remove('hidden')
-					setCurrent('', editorEl)
-				} else {
-					empty = false
-					if (hasNotes) {
-						notesEl.style.visibility = 'hidden'
-						rootEl.classList.remove('notes-shown')
-						notesEl.style.visibility = 'visible'
+					setCurrentId('')
+					state.wasEmpty = true
+				} else if (state.wasEmpty) {
+					// We don't want to change all this while regular typing
+
+					if (state.hasNotes) {
+						state.notesEl.style.visibility = 'hidden'
+						state.rootEl.classList.remove('notes-shown')
+						state.notesEl.style.visibility = 'visible'
 					}
+					// Avoid layout colliding
 					setTimeout(() => {
-						editorEl.classList.remove('collapsed')
+						state.editorEl.classList.remove('collapsed')
 					}, 50)
+
 					headerLeftEl.dataset.context = 'editor'
-					if (!locked)
+					state.wasEmpty = false
+					// Change buttons in menu
+					if (!state.locked)
 						publishEl.parentElement.classList.remove('hidden')
 					downloadEl.parentElement.classList.remove('hidden')
 					exportAllEl.parentElement.classList.add('hidden')
@@ -219,33 +223,36 @@ import Shortcuts from '@components/Shortcuts.astro'
 	// Loading note by UUID
 	await loadByURL()
 
-	let saver = startAutosave()
+	toggleAutosave(true)
+	buildEditor()
 
-	notesEl = buildEditor(editor, notes, rootEl, editorEl)
-
-	// Loading last opened document
-	const current = getCurrent()
+	// Opening last opened document
+	const current = loadCurrentId()
 	if (current) {
-		const note = notes.find((note) => note.id === current)
+		const note = state.notes.find((note) => note.id === current)
 		if (note) {
-			openInEditor(editor, editorEl, rootEl, notesEl, note)
+			openInEditor(note)
 		}
 	}
 
-	setFocus(editorEl)
-	document.addEventListener('visibilitychange', toggleAutosave)
+	setFocus(state.editorEl)
+	document.addEventListener('visibilitychange', () => {
+		toggleAutosave(!document.hidden)
+	})
 
 	initShortcuts()
 
-	editorEl.addEventListener('keydown', (e) => {
-		if (e.key === 'ArrowDown' && empty && notesEl) {
+	state.editorEl.addEventListener('keydown', (e) => {
+		if (e.key === 'ArrowDown' && state.empty && state.notesEl) {
 			;(
-				notesEl.firstElementChild.firstElementChild as HTMLButtonElement
+				state.notesEl.firstElementChild
+					.firstElementChild as HTMLButtonElement
 			).focus()
 		}
-		if (e.key === 'ArrowUp' && empty && notesEl) {
+		if (e.key === 'ArrowUp' && state.empty && state.notesEl) {
 			;(
-				notesEl.lastElementChild.firstElementChild as HTMLButtonElement
+				state.notesEl.lastElementChild
+					.firstElementChild as HTMLButtonElement
 			).focus()
 		}
 	})
@@ -260,7 +267,7 @@ import Shortcuts from '@components/Shortcuts.astro'
 	})
 
 	uploadInputEl.addEventListener('change', (e: InputEvent) => {
-		processFiles(uploadInputEl.files)
+		uploadNotes(uploadInputEl.files)
 	})
 
 	showMoreEl.addEventListener('click', () => {
@@ -277,20 +284,20 @@ import Shortcuts from '@components/Shortcuts.astro'
 	})
 
 	publishEl.addEventListener('click', () => {
-		if (empty) return
+		if (state.empty) return
 		save('publish', true)
 		showMoreEl.classList.remove('active')
-		publish(editor, editorEl, stateEl, getCurrent())
+		publish(loadCurrentId())
 	})
 
 	downloadEl.addEventListener('click', () => {
-		if (empty) return
+		if (state.empty) return
 		showMoreEl.classList.remove('active')
-		exportFile(editor, editorEl, stateEl)
+		exportFile()
 	})
 	exportAllEl.addEventListener('click', () => {
 		showMoreEl.classList.remove('active')
-		exportAll(opfs, stateEl)
+		exportAll()
 	})
 
 	editEl.addEventListener('click', () => {
@@ -311,21 +318,21 @@ import Shortcuts from '@components/Shortcuts.astro'
 	async function loadByURL() {
 		const idEl = document.getElementById('id-storage')
 		if (idEl && idEl.dataset.id) {
-			editorEl.classList.add('loading')
-			setCurrent('', editorEl)
+			state.editorEl.classList.add('loading')
+			setCurrentId('')
 			lock()
 			const { content, clientId } = await fetch(
 				`/api/getPublished?id=${idEl.dataset.id}`,
 			)
 				.then((response) => response.json())
-				.catch(() => showState(stateEl, `couldn't load :(`))
+				.catch(() => showStatus(`couldn't load :(`))
 			idEl.remove()
-			editor.action(replaceAll(content))
-			editorEl.classList.remove('loading')
+			state.editor.action(replaceAll(content))
+			state.editorEl.classList.remove('loading')
 			if (isEmptyString(content)) return
 
 			const firstBlock =
-				(editorEl.children[0] as HTMLElement)?.innerText || ''
+				(state.editorEl.children[0] as HTMLElement)?.innerText || ''
 			if (isEmptyString(firstBlock)) return
 			setTitle(firstBlock)
 		}
@@ -340,11 +347,11 @@ import Shortcuts from '@components/Shortcuts.astro'
 						e.preventDefault()
 						if (e.repeat) return
 						if (e.shiftKey) {
-							if (empty) return
-							exportFile(editor, editorEl, stateEl)
+							if (state.empty) return
+							exportFile()
 						} else {
 							if (e.repeat) return
-							if (empty) return
+							if (state.empty) return
 							save('shortcut')
 						}
 						return
@@ -353,9 +360,9 @@ import Shortcuts from '@components/Shortcuts.astro'
 						if (e.repeat) return
 						if (e.shiftKey) {
 							e.preventDefault()
-							if (empty) return
+							if (state.empty) return
 							save('publish', true)
-							publish(editor, editorEl, stateEl, getCurrent())
+							publish(loadCurrentId())
 							return
 						}
 						break
@@ -372,7 +379,7 @@ import Shortcuts from '@components/Shortcuts.astro'
 					case 'KeyD': {
 						e.preventDefault()
 						if (e.repeat) return
-						showBorders(rootEl)
+						showBorders(state.rootEl)
 						return
 					}
 					// Mortal combat mode
@@ -392,7 +399,7 @@ import Shortcuts from '@components/Shortcuts.astro'
 						}
 						if (showMoreEl.classList.contains('active')) {
 							showMoreEl.classList.remove('active')
-							editorEl.focus()
+							state.editorEl.focus()
 							return
 						}
 						save('clear')
@@ -411,7 +418,7 @@ import Shortcuts from '@components/Shortcuts.astro'
 
 		fontValueEl.textContent = currentAppearance('font')
 		themeValueEl.textContent = currentAppearance('theme')
-		spellValueEl.textContent = editorEl.spellcheck ? 'on' : 'off'
+		spellValueEl.textContent = state.editorEl.spellcheck ? 'on' : 'off'
 
 		fontEl.addEventListener('click', () => {
 			fontValueEl.textContent = cycleAppearance('font')
@@ -420,31 +427,31 @@ import Shortcuts from '@components/Shortcuts.astro'
 			themeValueEl.textContent = cycleAppearance('theme')
 		})
 		spellEl.addEventListener('click', () => {
-			editorEl.spellcheck = !editorEl.spellcheck
-			spellValueEl.textContent = editorEl.spellcheck ? 'on' : 'off'
-			localStorage.setItem('spell', editorEl.spellcheck.toString())
+			state.editorEl.spellcheck = !state.editorEl.spellcheck
+			spellValueEl.textContent = state.editorEl.spellcheck ? 'on' : 'off'
+			localStorage.setItem('spell', state.editorEl.spellcheck.toString())
 		})
 	}
 
 	function initDragAndDrop() {
-		editorEl.addEventListener('dragover', (e) => {
-			editorEl.classList.add('dragover')
+		state.editorEl.addEventListener('dragover', (e) => {
+			state.editorEl.classList.add('dragover')
 		})
-		editorEl.addEventListener('dragleave', () => {
-			editorEl.classList.remove('dragover')
+		state.editorEl.addEventListener('dragleave', () => {
+			state.editorEl.classList.remove('dragover')
 		})
-		editorEl.addEventListener('drop', (e) => {
-			editorEl.classList.remove('dragover')
+		state.editorEl.addEventListener('drop', (e) => {
+			state.editorEl.classList.remove('dragover')
 			e.preventDefault()
-			processFiles(e.dataTransfer.files)
+			uploadNotes(e.dataTransfer.files)
 		})
 	}
 
 	function initNotesListeners() {
 		// Probably the worst code I ever wrote
-		if (hasNotes) {
+		if (state.hasNotes) {
 			;[
-				...(notesEl.getElementsByClassName(
+				...(state.notesEl.getElementsByClassName(
 					'note',
 				) as HTMLCollectionOf<HTMLButtonElement>),
 			].forEach((noteEl) => {
@@ -453,46 +460,46 @@ import Shortcuts from '@components/Shortcuts.astro'
 					.addEventListener('click', (e: MouseEvent) => {
 						e.stopPropagation()
 						const confirmed = e.shiftKey
-						deleteNote(noteEl, opfs, confirmed)
-						loadNotesList()
+						deleteNote(noteEl, state.opfs, confirmed)
+						updateNotesList()
 					})
 
 				noteEl.addEventListener('keydown', (e) => {
 					const buttonEl = e.target as HTMLButtonElement
-					if (e.key === 'ArrowDown' && empty && notesEl) {
+					if (e.key === 'ArrowDown' && state.empty && state.notesEl) {
 						const nextLi = buttonEl.parentElement
 							.nextElementSibling as HTMLLIElement
 						if (nextLi)
 							(
 								nextLi.firstElementChild as HTMLButtonElement
 							).focus()
-						else editorEl.focus()
+						else state.editorEl.focus()
 					}
-					if (e.key === 'ArrowUp' && empty && notesEl) {
+					if (e.key === 'ArrowUp' && state.empty && state.notesEl) {
 						const prevLi = buttonEl.parentElement
 							.previousElementSibling as HTMLLIElement
 						if (prevLi)
 							(
 								prevLi.firstElementChild as HTMLButtonElement
 							).focus()
-						else editorEl.focus()
+						else state.editorEl.focus()
 					}
 					if (
 						(e.key === 'Backspace' || e.key === 'Delete') &&
-						empty &&
-						notesEl
+						state.empty &&
+						state.notesEl
 					) {
 						const nextLi = buttonEl.parentElement
 							.nextElementSibling as HTMLLIElement
 
 						const confirmed = e.shiftKey
-						deleteNote(noteEl, opfs, confirmed)
+						deleteNote(noteEl, state.opfs, confirmed)
 
 						if (nextLi)
 							(
 								nextLi.firstElementChild as HTMLButtonElement
 							).focus()
-						else editorEl.focus()
+						else state.editorEl.focus()
 					}
 				})
 			})
@@ -510,67 +517,24 @@ import Shortcuts from '@components/Shortcuts.astro'
 		})
 	}
 
-	const nonExplicitSaveRefs: SaveRef[] = [
-		'unload',
-		'clear',
-		'overwrite',
-		'multiple-drop',
-	]
-
-	function save(ref: SaveRef, hidden = false) {
-		if (locked) return false
-		if ((!empty && updated) || nonExplicitSaveRefs.includes(ref)) {
-			const currentId = getCurrent() || setCurrent(newId(), editorEl)
-			console.debug(`Saving with ID: ${currentId} by ref "${ref}"`)
-			writeToFile(editor, editorEl, opfs, currentId, stateEl, ref, hidden)
-			updated = false
-			return true
-		}
-		return false
-	}
-
-	function newId(length = 10) {
-		const id = nanoid(length)
-		console.debug(`Generated new ID: ${id}`)
-		return id
-	}
-
-	function toggleAutosave() {
-		if (document.hidden) {
-			clearInterval(saver)
-		} else {
-			saver = startAutosave()
-		}
-	}
-
-	function startAutosave() {
-		return setInterval(() => {
-			if (Date.now() - lastSave > 3000) {
-				save('autosave')
+	function updateNotesList() {
+		console.debug('Updating notes list')
+		getNotes(state.opfs).then((notes) => {
+			state.hasNotes = notes?.length > 0
+			state.notesEl = getByClass(
+				'notes',
+				state.rootEl,
+			) as HTMLUListElement
+			if (state.notesEl) {
+				state.rootEl.removeChild(state.notesEl)
 			}
-		}, autosaveInterval)
-	}
-
-	function activateMode(scope: 'font' | 'theme', mode: string) {
-		document.documentElement.dataset[scope] = mode
-		localStorage.setItem(scope, mode)
-	}
-
-	function loadNotesList() {
-		console.debug('Loading notes list')
-		getNotes(opfs).then((notes) => {
-			hasNotes = notes?.length > 0
-			notesEl = getByClass('notes', rootEl) as HTMLUListElement
-			if (notesEl) {
-				rootEl.removeChild(notesEl)
-			}
-			notesEl = buildEditor(editor, notes, rootEl, editorEl)
+			buildEditor()
 			initNotesListeners()
-			return notesEl
+			return state.notesEl
 		})
 	}
 
-	async function processFiles(fileList: FileList) {
+	async function uploadNotes(fileList: FileList) {
 		console.debug('File(s) uploading')
 		const allowedFiles = ['md', 'txt']
 		const files = [...fileList].filter((file) =>
@@ -582,29 +546,25 @@ import Shortcuts from '@components/Shortcuts.astro'
 			files[0].text().then((t) => {
 				console.debug(`Replacing`)
 				// Generating new ID to avoid overwrites
-				setCurrent(newId(), editorEl)
-				editor.action(replaceAll(t))
+				setCurrentId(createId())
+				state.editor.action(replaceAll(t))
 			})
 		} else {
 			for (const file of files) {
-				if (!empty) {
+				if (!state.empty) {
 					save('overwrite')
 					clearEditor()
 				}
 				console.debug(`Writing file ${file.name}`)
 				await writeToFile(
-					editor,
-					editorEl,
-					opfs,
-					newId(),
-					stateEl,
+					createId(),
 					'multiple-drop',
 					false,
 					await file.text(),
 				)
-				loadNotesList()
+				updateNotesList()
 			}
-			showState(stateEl, `uploaded ${files.length} files`)
+			showStatus(`uploaded ${files.length} files`)
 		}
 	}
 
@@ -613,25 +573,25 @@ import Shortcuts from '@components/Shortcuts.astro'
 		if (![location.origin, location.origin + '/'].includes(location.href)) {
 			window.history.pushState({ page: null }, '', '/')
 		}
-		if (locked) unlock()
-		editor.action(replaceAll(''))
-		empty = true
-		editorEl.focus()
-		setCurrent('', editorEl)
+		if (state.locked) unlock()
+		state.editor.action(replaceAll(''))
+		state.empty = true
+		state.editorEl.focus()
+		setCurrentId('')
 	}
 
 	function lock() {
 		console.debug(`Locking editor`)
-		locked = true
-		editorEl.contentEditable = 'false'
+		state.locked = true
+		state.editorEl.contentEditable = 'false'
 		publishEl.parentElement.classList.add('hidden')
 		editEl.parentElement.classList.remove('hidden')
 	}
 
 	function unlock() {
 		console.debug(`Unlocking editor`)
-		locked = false
-		editorEl.contentEditable = 'true'
+		state.locked = false
+		state.editorEl.contentEditable = 'true'
 		publishEl.parentElement.classList.remove('hidden')
 		editEl.parentElement.classList.add('hidden')
 	}

@@ -1,13 +1,15 @@
-export function toggleNotes(show: boolean, editorEl: HTMLElement, rootEl: HTMLElement) {
+import { state } from '@scripts/state'
+
+export function toggleNotes(show: boolean) {
 	if (show) {
-		editorEl.classList.add('collapsed')
+		state.editorEl.classList.add('collapsed')
 		setTimeout(() => {
-			rootEl.classList.add('notes-shown')
+			state.rootEl.classList.add('notes-shown')
 		}, 50)
 	} else {
-		rootEl.classList.remove('notes-shown')
+		state.rootEl.classList.remove('notes-shown')
 		setTimeout(() => {
-			editorEl.classList.remove('collapsed')
+			state.editorEl.classList.remove('collapsed')
 		}, 50)
 	}
 }

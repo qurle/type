@@ -1,44 +1,59 @@
-import { Editor } from '@milkdown/core';
 import { getMarkdown } from '@milkdown/utils';
 import { isEmptyString } from '@scripts/utils/isEmptyString';
-import { showState } from '@scripts/render/showState';
+import { showStatus } from '@scripts/render/showStatus';
 import { smartTrunc } from '@scripts/utils/smartTrunc';
 import { downloadZip } from 'client-zip';
+import { state } from '@scripts/state';
 
-export function exportFile(editor: Editor, editorEl: HTMLElement, stateEl: HTMLElement, filename = null, markdown: string = editor.action(getMarkdown()) || '') {
+/**
+ * Downloads file which is currently in editor
+ * @param filename Custom filename
+ * @param markdown Custom markdown to download
+ * @returns true if downloaded, false if not (etc. empty note)
+ */
+export function exportFile(filename = null, markdown: string = state.editor.action(getMarkdown()) || '') {
 	if (isEmptyString(markdown)) {
-		showState(stateEl, 'note is empty')
+		showStatus('note is empty')
 		return false
 	}
 
 	const defaultLength = 40
-	const firstBlock = (editorEl.children[0] as HTMLElement).innerText
+	const firstBlock = (state.editorEl.children[0] as HTMLElement).innerText
 	filename = filename || smartTrunc(firstBlock || markdown.split('\n')[0], defaultLength) || 'note'
 
 	console.debug(`Downloading. Filename is ${filename}. Text has ${markdown.length} symbols`)
 	downloadText(filename + '.md', markdown)
+	return true
 }
 
-export async function exportAll(opfs: FileSystemDirectoryHandle, stateEl: HTMLElement) {
-	showState(stateEl, 'exporting all files')
+/**
+ * Downloads all notes in form of ZIP-archive
+ * @returns true if downloaded, false if not (etc. empty note)
+ */
+export async function exportAll() {
+	showStatus('exporting all files')
 	const files: File[] = []
-	// @ts-ignore
-	for await (const handle of opfs.values()) {
+	for await (const handle of state.opfs.values()) {
 		if (handle.kind === 'file') {
 			const name = localStorage.getItem(`name-${handle.name}`) || handle.name
-			// @ts-ignore
-			const file = new File([await handle.getFile()], name + '.md')
+			const file = new File([await (handle as FileSystemFileHandle).getFile()], name + '.md')
 			files.push(file)
 		}
 	}
 	if (files.length > 0) {
 		const date = new Date()
 		downloadBlob(`typed at ${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}.zip`, await downloadZip(files).blob())
+		return true
 	}
-	else
-		showState(stateEl, 'nothing to export')
+	else {
+		showStatus('nothing to export')
+		return false
+	}
 }
 
+/**
+ * Creates link and clicks it to download a blob file
+ */
 function downloadBlob(filename, blob) {
 	const link = document.createElement('a')
 	link.href = URL.createObjectURL(blob)
@@ -47,9 +62,11 @@ function downloadBlob(filename, blob) {
 
 	URL.revokeObjectURL(link.href)
 	link.remove()
-
 }
 
+/**
+ * Removes space HTML entities, then creates link and clicks it to download a text file
+ */
 function downloadText(filename: string, content: string) {
 	// Removing space HTML entities
 	content = content.replace(/&#x20;/g, ' ')

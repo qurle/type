@@ -9,3 +9,16 @@ interface Note {
 	modified: Date,
 	content?: string,
 }
+
+/**
+ * Reason for note to be saved
+ */
+type SaveRef =
+	'autosave' |
+	'shortcut' |
+	'unload' |
+	'clear' |
+	'overwrite' |
+	'multiple-drop' |
+	'publish' |
+	'copy'

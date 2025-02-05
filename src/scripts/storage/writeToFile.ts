@@ -1,12 +1,19 @@
 import { Editor } from '@milkdown/core'
 import { getMarkdown } from '@milkdown/utils'
 import { isEmptyString } from '@scripts/utils/isEmptyString'
-import { showState } from '@scripts/render/showState'
+import { showStatus } from '@scripts/render/showStatus'
 import { smartTrunc } from '@scripts/utils/smartTrunc'
+import { state } from '@scripts/state'
 
-export type SaveRef = 'autosave' | 'shortcut' | 'unload' | 'clear' | 'overwrite' | 'multiple-drop' | 'publish' | 'copy'
-
-export async function writeToFile(editor: Editor, editorEl: HTMLElement, opfs: FileSystemDirectoryHandle, id: string, stateEl: HTMLElement, saveRef: SaveRef = 'autosave', hidden = false, markdown: string = editor.action(getMarkdown()) || '') {
+/**
+ * Write non-empty note to file and show status
+ * @param id Nano ID of note
+ * @param saveRef Source of saving command
+ * @param hidden No need to show status
+ * @param markdown Markdown to write
+ * @returns Date of saving
+ */
+export async function writeToFile(id: string, saveRef: SaveRef = 'autosave', hidden = false, markdown: string = state.editor.action(getMarkdown()) || '') {
 	markdown = markdown.replace(/&#x20;/g, ' ')
 
 	if (isEmptyString(markdown)) {
@@ -15,7 +22,7 @@ export async function writeToFile(editor: Editor, editorEl: HTMLElement, opfs: F
 	}
 
 	const defaultLength = 80
-	const firstBlock = (editorEl.children[0] as HTMLElement).innerText
+	const firstBlock = (state.editorEl.children[0] as HTMLElement).innerText
 	const name = smartTrunc(isEmptyString(firstBlock) ? markdown.split('\n')[0] : firstBlock, defaultLength)
 
 	console.debug(`Saving "${name}" by ${saveRef}`)
@@ -30,7 +37,7 @@ export async function writeToFile(editor: Editor, editorEl: HTMLElement, opfs: F
 
 	// Write to file
 	try {
-		const handle = await opfs.getFileHandle(id, { create: true, })
+		const handle = await state.opfs.getFileHandle(id, { create: true, })
 		const file = await handle.getFile()
 		savedNote.modified = new Date(file.lastModified)
 		const writable = await handle.createWritable()
@@ -50,9 +57,9 @@ export async function writeToFile(editor: Editor, editorEl: HTMLElement, opfs: F
 	if (!hidden) {
 		switch (saveRef) {
 			case 'multiple-drop': break
-			case 'copy': showState(stateEl, 'note copied'); break
-			case 'overwrite': showState(stateEl, 'previous note saved'); break
-			default: showState(stateEl, 'saved')
+			case 'copy': showStatus('note copied'); break
+			case 'overwrite': showStatus('previous note saved'); break
+			default: showStatus('saved')
 		}
 	}
 

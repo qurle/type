@@ -1,31 +1,38 @@
-import { Editor } from '@milkdown/core';
 import { getMarkdown } from '@milkdown/utils';
 import { isEmptyString } from '@scripts/utils/isEmptyString';
-import { showState } from '@scripts/render/showState';
+import { showStatus } from '@scripts/render/showStatus';
+import { state } from '@scripts/state';
 
-export function publish(editor: Editor, editorEl: HTMLElement, stateEl: HTMLElement, id: string, markdown: string = editor.action(getMarkdown()) || '') {
+/**
+ * Publish note to the server
+ * @param id ID of note
+ * @param markdown Custom markdown
+ * @returns true if sended, false if not
+ */
+export function publish(id: string, markdown: string = state.editor.action(getMarkdown()) || '') {
 	if (isEmptyString(markdown)) {
-		showState(stateEl, 'note is empty')
-		return
+		showStatus('note is empty')
+		return false
 	}
 
 	const maxFileSize = 12_000_000
 	if (new TextEncoder().encode(markdown).length > maxFileSize) {
-		showState(stateEl, 'note is too large')
-		return
+		showStatus('note is too large')
+		return false
 	}
 
-	showState(stateEl, 'publishing')
+	showStatus('publishing')
 	try {
-		publishThenCopy(markdown, id, stateEl)
+		publishThenCopy(markdown, id)
+		return true
 	}
 	catch {
-		showState(stateEl, 'publish failed')
+		showStatus('publish failed')
 		return false
 	}
 }
 
-function publishThenCopy(markdown: string, id: string, stateEl: HTMLElement) {
+function publishThenCopy(markdown: string, id: string) {
 	if (typeof ClipboardItem && navigator.clipboard.write) {
 		// NOTE: Safari locks down the clipboard API to only work when triggered
 		//   by a direct user interaction. You can't use it async in a promise.
@@ -47,7 +54,7 @@ function publishThenCopy(markdown: string, id: string, stateEl: HTMLElement) {
 			})
 		})
 		navigator.clipboard.write([text]).then(() => {
-			showState(stateEl, 'note url is copied', true)
+			showStatus('note url is copied', true)
 			return true
 		})
 
@@ -66,7 +73,7 @@ function publishThenCopy(markdown: string, id: string, stateEl: HTMLElement) {
 			console.debug(`Got ID: ${id}`)
 			const url = `${location.origin}/note/${id}`
 			navigator.clipboard.writeText(url).then(() => {
-				showState(stateEl, 'note url is copied', true)
+				showStatus('note url is copied', true)
 				return true
 			})
 		})
