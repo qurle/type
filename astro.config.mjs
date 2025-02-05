@@ -25,6 +25,7 @@ export default defineConfig({
   },
 
   redirects: {
+    // Home page
     '/hi': '/hello',
     '/good-morning': '/hello',
     '/good-afternoon': '/hello',
@@ -32,7 +33,12 @@ export default defineConfig({
     '/about': '/hello',
     '/welcome': '/hello',
 
+    // Example note
     '/example': '/note/example',
+
+    // External redirects
+    '/git': 'https://github.com/qurle/type'
+
   },
 
   devToolbar: {
