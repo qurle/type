@@ -306,6 +306,10 @@ import Shortcuts from '@components/Shortcuts.astro'
 		save('copy')
 	})
 
+	//
+	//! НЕ СОХРАНЯЮТСЯ ЗАМЕТКИ?
+	//
+
 	window.addEventListener('beforeunload', () => {
 		save('unload')
 	})

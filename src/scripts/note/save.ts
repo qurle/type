@@ -9,6 +9,7 @@ const nonExplicitSaveRefs: SaveRef[] = ['unload', 'clear', 'overwrite', 'multipl
 let saver: NodeJS.Timeout = null
 let lastSave = Date.now()
 
+
 /**
  * Activate interval of saving
  * @param delay Minimal delay from previous save in ms
