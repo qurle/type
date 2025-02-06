@@ -37,7 +37,6 @@ Shout out to [Milkdown](https://milkdown.dev/) — markdown engine of type. Fron
 
 **Maybe desktop version?**  
 If you can help with desktop app, contact me at [nick@qurle.net](mailto:nick@qurle.net?subject=type.%20desktop) or [Telegram](https://t.me/qurle) please.
-
 Meanwhile you can use [nativefier](https://github.com/nativefier/nativefier). If you have Node.js installed, it's as simple as
 ```sh
 npm install -g nativefier
@@ -49,5 +48,3 @@ nativefier 'type.baby'
 Designed and developed by [qurle](https://qurle.net) with the great help of [kulizh](https://kulizh.ru). Inspired by iA Writer, Teletype, Telegraph and Notion.
 
 Type is [open-source](https://github.com/qurle/type). Share bugs and ideas via [issues](https://github.com/qurle/type/issues). Any dialogs are also welcome at [nick@qurle.net](mailto:nick@qurle.net?subject=type.).
-
-[Go type!](https://type.baby)
