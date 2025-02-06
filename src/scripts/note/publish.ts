@@ -10,6 +10,8 @@ import { state } from '@scripts/state';
  * @returns true if sended, false if not
  */
 export function publish(id: string, markdown: string = state.editor.action(getMarkdown()) || '') {
+	console.debug(`Publishing`)
+
 	if (isEmptyString(markdown)) {
 		showStatus('note is empty')
 		return false

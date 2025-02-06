@@ -1,0 +1,28 @@
+---
+import '@styles/header.sass'
+import { Icon } from 'astro-icon/components'
+import Menu from '@components/Menu.astro'
+---
+
+<header class="editor-header">
+	<div class="left" data-context="notes">
+		<form>
+			<input type="file" multiple accept=".md,.txt" id="upload" />
+		</form>
+		<button class="back"><Icon name="back" /></button>
+		<button class="add"><Icon name="add" /></button>
+	</div>
+	<div class="right">
+		<div class="status"></div>
+		<Menu />
+	</div>
+</header>
+<script>
+	import { initHeaderElements } from '@scripts/header/elements'
+	import { initHeaderListeners } from '@scripts/header/listeners'
+
+	console.debug('Header called')
+
+	initHeaderElements()
+	initHeaderListeners()
+</script>

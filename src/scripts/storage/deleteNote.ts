@@ -4,6 +4,7 @@ export function deleteNote(noteEl: HTMLButtonElement, opfs: FileSystemDirectoryH
 	const name = localStorage.getItem(`name-${noteId}`) || "note"
 	console.debug(`Deleting ${noteId} called ${name}`)
 	const confirmation = confirmed || confirm(`Delete ${name ? `“${name}”` : `this note`}?`)
+
 	if (confirmation) {
 		opfs.removeEntry(noteId)
 		if (noteEl.parentElement.parentElement.childElementCount === 1)

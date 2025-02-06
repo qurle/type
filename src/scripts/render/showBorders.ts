@@ -1,5 +1,5 @@
-export function showBorders(rootEl: HTMLElement) {
-	;[...rootEl.children].forEach((el) =>
+export function showBorders(mainEl: HTMLElement) {
+	;[...mainEl.children].forEach((el) =>
 		(el as HTMLElement).classList.toggle('bordered'),
 	)
 }

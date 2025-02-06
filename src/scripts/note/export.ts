@@ -12,6 +12,7 @@ import { state } from '@scripts/state';
  * @returns true if downloaded, false if not (etc. empty note)
  */
 export function exportFile(filename = null, markdown: string = state.editor.action(getMarkdown()) || '') {
+	console.debug(`Exporting file`)
 	if (isEmptyString(markdown)) {
 		showStatus('note is empty')
 		return false
@@ -31,6 +32,7 @@ export function exportFile(filename = null, markdown: string = state.editor.acti
  * @returns true if downloaded, false if not (etc. empty note)
  */
 export async function exportAll() {
+	console.debug(`Exporting all files`)
 	showStatus('exporting all files')
 	const files: File[] = []
 	for await (const handle of state.opfs.values()) {

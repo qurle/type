@@ -1,5 +1,10 @@
 const defaultLength = 20
 
+/**
+ * Update the title of web page (document.title)
+ * @param str Custom suffix
+ * @returns New title if form of "type." or "type. | <prefix>"
+ */
 export function setTitle(str: string = null) {
 	const typeTitle = 'type.'
 	if (!str)
@@ -15,4 +20,5 @@ export function setTitle(str: string = null) {
 		}
 		document.title = `${name} | ${typeTitle}`
 	}
+	return document.title
 }

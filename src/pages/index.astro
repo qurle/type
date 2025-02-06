@@ -1,6 +1,9 @@
 ---
 import Editor from '@components/Editor.astro'
 import Layout from '../layouts/Layout.astro'
+import Header from '@components/Header.astro'
+import Shortcuts from '@components/Shortcuts.astro'
+import Instructions from '@components/Instructions.astro'
 ---
 
 <Layout>
@@ -9,7 +12,10 @@ import Layout from '../layouts/Layout.astro'
 			location.href = '/hello'
 		}
 	</script>
+	<Header />
 	<Editor />
+	<Instructions />
+	<Shortcuts />
 </Layout>
 <script>
 	const registerServiceWorker = async (name) => {
@@ -33,6 +39,9 @@ import Layout from '../layouts/Layout.astro'
 			}
 		}
 	}
-
+	console.debug('Page called')
 	registerServiceWorker('/sw.js')
+
+	import MicroModal from 'micromodal'
+	MicroModal.init({ disableFocus: true, debug: false })
 </script>

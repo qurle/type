@@ -1,6 +1,6 @@
 import knex, { type Knex } from 'knex';
 
-interface PublishedNote {
+type PublishedNote = {
 	id: string,
 	content: string,
 	author: string,

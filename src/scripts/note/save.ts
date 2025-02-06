@@ -1,4 +1,5 @@
 import { config } from '@scripts/config'
+import { updateNotesList } from '@scripts/render/notes'
 import { state } from '@scripts/state'
 import { writeToFile } from '@scripts/storage/writeToFile'
 import { createId } from '@scripts/utils/createId'
@@ -28,11 +29,11 @@ export function startAutosave(delay = config.autosaveDelay, interval = config.au
  * Start or reset autosave by boolean
  * @param toggle Starts if true, resets if false 
  */
-export function toggleAutosave(toggle = true) {
-	if (document.hidden) {
-		clearInterval(saver)
-	} else {
+export function toggleAutosave(save = true) {
+	if (save) {
 		saver = startAutosave()
+	} else {
+		clearInterval(saver)
 	}
 }
 
@@ -48,7 +49,7 @@ export function save(saveRef: SaveRef, hidden = false) {
 		const currentId =
 			loadCurrentId() || setCurrentId(createId())
 		console.debug(`Saving with ID: ${currentId} by ref "${saveRef}"`)
-		writeToFile(currentId, saveRef, hidden,)
+		writeToFile(currentId, saveRef, hidden)
 		state.updated = false
 		return true
 	}

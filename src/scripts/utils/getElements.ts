@@ -7,9 +7,6 @@ export function getByClass(
 	parent: HTMLElement = document.documentElement,
 	multiple = false,
 ) {
-	if (className === 'header')
-		console.warn('Searching for header')
-
 	const elements = parent.getElementsByClassName(
 		className,
 	) as HTMLCollectionOf<HTMLElement>

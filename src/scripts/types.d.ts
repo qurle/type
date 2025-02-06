@@ -2,7 +2,7 @@
  * A markdown file and all associated assets 
  * like images and videos.
  */
-interface Note {
+type Note = {
 	id: string,
 	name: string,
 	author: string,
