@@ -47,4 +47,4 @@ nativefier 'type.baby'
 
 Designed and developed by [qurle](https://qurle.net) with the great help of [kulizh](https://kulizh.ru). Inspired by iA Writer, Teletype, Telegraph and Notion.
 
-Type is [open-source](https://github.com/qurle/type). Share bugs and ideas via [issues](https://github.com/qurle/type/issues). Any dialogs are also welcome at [nick@qurle.net](mailto:nick@qurle.net?subject=type.).
+Share bugs and ideas via [issues](https://github.com/qurle/type/issues). Any dialogs are also welcome at [nick@qurle.net](mailto:nick@qurle.net?subject=type.).

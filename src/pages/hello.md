@@ -89,7 +89,7 @@ nativefier 'type.baby'
 
 Designed and developed by [<img alt="userpic of qurle" src="https://avatars.githubusercontent.com/u/32414396?v=4" class="avatar">qurle](https://qurle.net) with the great help of [<img alt="userpic of qurle" src="https://avatars.githubusercontent.com/u/32977836?v=4" class="avatar">kulizh](https://kulizh.ru). Inspired by iA Writer, Teletype, Telegraph and Notion.
 
-Type is [open-source](https://github.com/qurle/type). Share bugs and ideas via [issues](https://github.com/qurle/type/issues). Any dialogs are also welcome at [nick@qurle.net](mailto:nick@qurle.net?subject=type.).
+*Type* is [open-source](https://github.com/qurle/type). Share bugs and ideas via [issues](https://github.com/qurle/type/issues). Any dialogs are also welcome at [nick@qurle.net](mailto:nick@qurle.net?subject=type.).
 
 <div class="center"><a class="primary button" href='/'><i>Go type!</i></a></div>
 
