@@ -1,7 +1,7 @@
 import knex, { type Knex } from 'knex';
 import { nanoid } from 'nanoid';
 
-interface PusblishedNote {
+type PusblishedNote = {
 	id: string,
 	content: string,
 	author: string,
@@ -9,7 +9,7 @@ interface PusblishedNote {
 	modified: string,
 }
 
-interface NoteBody {
+type NoteBody = {
 	content: string,
 	clientId: string
 	author?: string,
@@ -39,6 +39,12 @@ export async function POST(req: Request) {
 async function insert(req) {
 	const { content, clientId, author }: NoteBody = await req.json()
 	console.log(`Sending ${content.slice(0, 10)} with author ${author}`)
+
+	if (!content || !clientId) {
+		return new Response('Bad request', {
+			status: 400,
+		})
+	}
 
 	if (new TextEncoder().encode(content).length > maxFileSize) {
 		return new Response(

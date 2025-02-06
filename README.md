@@ -2,54 +2,52 @@
 
 ![Vercel](https://vercelbadge.vercel.app/api/qurle/type?style=flat) ![Static Badge](https://img.shields.io/badge/badass-code-white?style=flat)
 
+Zen editor for those who love simplicity. Start typing at [type.baby →](https://type.baby/)
 
-Zen editor for those who love simplicity. Start typing at [type.baby](https://type.baby/)
-
-![hero image](https://github.com/qurle/type/blob/main/.github/hero.png)
-
-## why you need this
-**type.** is like a blank notebook. 
-
-![notebook in comparison with type](https://github.com/qurle/type/blob/main/.github/notebook.png)
+![Look of type homepage](https://github.com/qurle/type/blob/main/.github/hero-image.png)
 
 
-Distractions and interfaces may restrain your thoughts. Unleash your creativity and just type your thoughts / blog posts / notes / docs.
+### Your digital notebook
 
-You can also switch between themes and fonts. Ever wished to have notebook with colored pages?
+The design of *type* is based on blank notebook. It lacks distractions that may restrain your thoughts. Unleash your creativity and just type your thoughts / posts / notes / docs / whatever you want.
 
-![themes and fonts of type](https://github.com/qurle/type/blob/main/.github/style.png)
-
-
-Type is local and private and works even in offline mode. Export, publish and upload markdown and text files, copy and paste webiste pages. Right in your browser. 
-
-## mark it down
-Every note is markdown file. 
-
-![typing in markdown with type](https://github.com/qurle/type/blob/main/.github/demo.gif)
-
-Markdown is easy markup language which makes **type.** more than plain text editor. 
-
-For example, there are things like `# Headings`, `**bold texts**` and <code>\`code\`</code>. You can check more rules [here](https://www.markdownguide.org/basic-syntax/).
-
-## technologies
-Shout out to [Milkdown](https://milkdown.dev/) — core engine of **type.** There is [Astro](https://github.com/withastro/astro) framework under the hood.
+Switch fonts and themes to pick the appearance that suits you the best.
 
 
-## special thanks
-Of course **type.** is inspired by apps like [iA Writer](https://ia.net/writer), [Teletype](https://teletype.in/), [Telegraph](https://telegra.ph/) and [Notion](https://notion.so/). It was created as DIY alternative, but it's also the project I'd like to evolve.
+### Local-first
 
-## contact
-Bugs and ideas can be reported via [issues](https://github.com/qurle/type/issues).
-Any dialogs are also welcome at [nick.denq@gmail.com](mailto:nick.denq@gmail.com?subject=type.).
+*Type* is fast, offline-able and well-secured. We only store the notes you published without any additional personal data.
 
-## authors
-<p><a href="" target="_blank"><img alt="userpic of qurle" src="https://avatars.githubusercontent.com/u/32414396?v=4" width="48" style="border-radius: 999px"/></a>
-<a href="" target="_blank"><img alt="userpic of kulizh" src="https://avatars.githubusercontent.com/u/32977836?v=4" width="48" style="border-radius: 999px"/></a>
-<a href="https://github.com/qurle/type/fork" target="_blank"><img alt="contribution plus sign" src="https://github.com/qurle/type/blob/main/.github/add.svg" width="48" style="border-radius: 999px"/></a></p>
 
-[@qurle](https://github.com/qurle)<br/>
-Creator. Designer. Developer.
+### Share and export
 
-[@kulizh](https://github.com/kulizh)<br/>
-Supporter. Tester. Backender.
+Import markdown and text files. Export files. Publish your notes [to the web](/note/example). Duplicate and edit public notes. All in your browser.
 
+
+### Markdown-based
+
+Markdown is easy markup language which makes *type* more than plain text editor. There are things like **bold texts**, [links](http://type.baby), `code`, images and headings.
+
+
+![Example of switching font and theme](https://github.com/qurle/type/blob/main/.github/appearance.png)
+
+
+### Under the hood
+Shout out to [Milkdown](https://milkdown.dev/) — markdown engine of type. Fronted by [Astro](https://astro.build), backed by [Vercel Functions](https://vercel.com/docs/functions), stored by [PostreSQL](https://www.postgresql.org/).
+
+**Maybe desktop version?**  
+If you can help with desktop app, contact me at [nick@qurle.net](mailto:nick@qurle.net?subject=type.%20desktop) or [Telegram](https://t.me/qurle) please.
+
+Meanwhile you can use [nativefier](https://github.com/nativefier/nativefier). If you have Node.js installed, it's as simple as
+```sh
+npm install -g nativefier
+nativefier 'type.baby'
+```
+
+---
+
+Designed and developed by [qurle](https://qurle.net) with the great help of [kulizh](https://kulizh.ru). Inspired by iA Writer, Teletype, Telegraph and Notion.
+
+Type is [open-source](https://github.com/qurle/type). Share bugs and ideas via [issues](https://github.com/qurle/type/issues). Any dialogs are also welcome at [nick@qurle.net](mailto:nick@qurle.net?subject=type.).
+
+[Go type!](https://type.baby)

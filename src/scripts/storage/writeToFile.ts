@@ -18,14 +18,14 @@ export async function writeToFile(id: string, saveRef: SaveRef = 'autosave', hid
 
 	if (isEmptyString(markdown)) {
 		console.debug(`Note is empty`)
-		return false
+		return null
 	}
 
 	const defaultLength = 80
 	const firstBlock = (state.editorEl.children[0] as HTMLElement).innerText
 	const name = smartTrunc(isEmptyString(firstBlock) ? markdown.split('\n')[0] : firstBlock, defaultLength)
 
-	console.debug(`Saving "${name}" by ${saveRef}`)
+	console.debug(`Writing "${name}" to file by ${saveRef}`)
 
 	const savedNote: Note = {
 		id: id,

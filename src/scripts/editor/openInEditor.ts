@@ -1,18 +1,16 @@
 import { insert } from '@milkdown/utils'
 import { setCurrentId } from '@scripts/utils/currentNote'
 import { setFocus } from '@scripts/utils/setFocus'
-import { setTitle } from '@scripts/note/setTitle'
+import { setTitle } from '@scripts/utils/setTitle'
 import { state } from '@scripts/state'
+import { toggleNotesList } from '@scripts/render/notes'
 
-export function openInEditor(note: Note = null) {
-	if (!note)
-		return
+export function openInEditor(note: Note) {
+	console.debug(`Opening in editor`)
 
-	state.notesEl.style.visibility = 'hidden'
-	state.rootEl.classList.remove('show-notes')
+	if (!note) return
 
-	state.editor.action(insert(note.content))
-	state.notesEl.style.visibility = 'shown'
+	toggleNotesList(false)
 	setFocus(state.editorEl)
 
 	window.history.pushState({ page: note.id }, '')

@@ -1,6 +1,10 @@
 ---
+import Layout from '@layouts/Layout.astro'
+import Header from '@components/Header.astro'
 import Editor from '@components/Editor.astro'
-import Layout from '../layouts/Layout.astro'
+import NoteList from '@components/NoteList.astro'
+import Shortcuts from '@components/Shortcuts.astro'
+import Instructions from '@components/Instructions.astro'
 ---
 
 <Layout>
@@ -9,30 +13,60 @@ import Layout from '../layouts/Layout.astro'
 			location.href = '/hello'
 		}
 	</script>
-	<Editor />
+	<Header />
+	<main>
+		<Editor />
+		<NoteList />
+	</main>
+	<Instructions />
+	<Shortcuts />
 </Layout>
 <script>
-	const registerServiceWorker = async (name) => {
-		if ('serviceWorker' in navigator) {
-			try {
-				const registration = await navigator.serviceWorker.register(
-					name,
-					{
-						scope: '/',
-					},
-				)
-				if (registration.installing) {
-					console.debug('Service worker installing')
-				} else if (registration.waiting) {
-					console.debug('Service worker installed')
-				} else if (registration.active) {
-					console.debug('Service worker active')
-				}
-			} catch (error) {
-				console.error(`Registration failed with ${error}`)
-			}
-		}
-	}
-
+	import { registerServiceWorker } from '@scripts/utils/serviceWorkers'
 	registerServiceWorker('/sw.js')
+
+	import MicroModal from 'micromodal'
+	MicroModal.init({ disableFocus: true, debug: false })
+
+	import { createEditor } from '@scripts/editor/create'
+	import { initDragAndDrop } from '@scripts/editor/initDragAndDrop'
+	import { reopenLastNote } from '@scripts/editor/reopenLastNote'
+	import { initShortcuts } from '@scripts/editor/shortcuts'
+	import { header } from '@scripts/header/elements'
+	import { initMenuElements } from '@scripts/menu/elements'
+	import { initMenuListeners } from '@scripts/menu/listeners'
+	import { loadByURL } from '@scripts/note/loadByURL'
+	import { toggleAutosave } from '@scripts/note/save'
+	import { updateNotesList } from '@scripts/render/notes'
+	import { initStatus } from '@scripts/render/showStatus'
+	import { initState, state } from '@scripts/state'
+	import { setFocus } from '@scripts/utils/setFocus'
+	import {
+		initFocusListener,
+		initNavigationListener,
+		initUnloadListener,
+	} from '@scripts/utils/systemListenters'
+	import { initHeaderElements } from '@scripts/header/elements'
+	import { initHeaderListeners } from '@scripts/header/listeners'
+
+	await initState()
+	initHeaderElements()
+	initHeaderListeners()
+	initMenuElements()
+	initStatus(header.headerEl)
+
+	state.editor = await createEditor()
+
+	await loadByURL()
+	reopenLastNote()
+	updateNotesList()
+	setFocus(state.editorEl)
+	toggleAutosave(true)
+
+	initShortcuts(header.uploadInputEl)
+	initNavigationListener()
+	initFocusListener()
+	initUnloadListener()
+	initMenuListeners()
+	initDragAndDrop()
 </script>

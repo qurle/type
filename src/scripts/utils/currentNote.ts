@@ -12,6 +12,14 @@ export function setCurrentId(id: string) {
 }
 
 /**
+ * Set ID of current note to ''. Alias for setCurrentId('')
+ * @returns Empty string
+ */
+export function clearCurrentId() {
+	return setCurrentId('')
+}
+
+/**
  * Load ID of current note from local storage
  * @returns ID of latest note or empty string
  */

@@ -3,7 +3,7 @@
   "description": "Zen markdown-friendly editor for just typing",
   "author": "qurle",
   "type": "module",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
@@ -17,7 +17,6 @@
     "@milkdown/crepe": "^7.5.7",
     "@milkdown/kit": "^7.5.5",
     "@milkdown/plugin-automd": "^7.5.0",
-    "@supabase/supabase-js": "^2.45.4",
     "astro": "^5.2.5",
     "astro-icon": "^1.1.1",
     "client-zip": "^2.4.5",
@@ -28,6 +27,6 @@
     "typescript": "^5.6.2"
   },
   "devDependencies": {
-    "sass": "^1.79.1"
+    "sass": "1.79"
   }
 }

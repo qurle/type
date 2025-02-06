@@ -1,0 +1,54 @@
+---
+import '@styles/menu.sass'
+import { Icon } from 'astro-icon/components'
+import { modes } from '@scripts/render/appearance'
+---
+
+<div class="menu">
+	<button class="show-menu"><Icon name="more" /></button>
+	<ul class="menu-dropdown">
+		<li hidden>
+			<button class="publish">Publish</button>
+		</li>
+		<li hidden>
+			<button class="download">Download</button>
+		</li>
+		<li><button class="export-all">Export all</button></li>
+		<li hidden>
+			<button class="edit">Copy and edit</button>
+		</li>
+		<li><hr /></li>
+		{
+			Object.entries(modes).map(([name, values]) => (
+				<li>
+					<button class={name}>
+						<span>
+							{name.charAt(0).toUpperCase() +
+								name.substring(1).toLowerCase()}
+						</span>
+						<span class="value">{values[0]}</span>
+					</button>
+				</li>
+			))
+		}
+		<li>
+			<button class="spell"
+				><span>Spellcheck</span><span class="value">on</span></button
+			>
+		</li>
+		<li><hr /></li>
+		<li>
+			<button class="md-help" data-micromodal-trigger="modal-instructions"
+				>How to markdown</button
+			>
+		</li>
+		<li>
+			<button class="shortcuts" data-micromodal-trigger="modal-shortcuts"
+				>Shortcuts</button
+			>
+		</li>
+		<li>
+			<a href="/hello">About</a>
+		</li>
+	</ul>
+</div>

@@ -1,9 +1,10 @@
 import { config } from '@scripts/config'
+import { getByClass } from '@scripts/utils/getElements'
 
 let statusEl = null
 
-export function setStatusEl(element: HTMLElement) {
-	statusEl = element
+export function initStatus(parentElement = document.documentElement) {
+	statusEl = getByClass('status', parentElement)
 }
 
 export function showStatus(text: string, verbose = false, duration = config.statusShowDuration) {
