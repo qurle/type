@@ -30,7 +30,7 @@ export async function createEditor() {
 		.use(listener)
 		.use(automd)
 		.config((ctx) => {
-			ctx.set(rootCtx, state.mainEl)
+			ctx.set(rootCtx, document.getElementById('editor'))
 			const listener = ctx.get(listenerCtx)
 			listener.mounted(onMounted)
 			listener.updated(onUpdated)
@@ -48,13 +48,13 @@ export function onMounted() {
 }
 
 export function onUpdated(ctx, doc) {
-	console.debug('Turned to empty')
 	state.updated = true
 	state.empty = doc.content.size <= 2
 
 	menu.showMenuEl.classList.remove('active')
 
 	if (state.empty) {
+		console.debug('Turned to empty')
 		if (state.hasNotes) toggleNotesList(true)
 
 		header.headerLeftEl.dataset.context = 'notes'

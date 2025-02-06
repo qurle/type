@@ -19,7 +19,6 @@ export const state = {
 	// Elements
 	mainEl: null as HTMLElement,				// Editor + Notes (w/o header)
 	editorEl: null as HTMLElement,				// Lowest-level editor container
-	notesEl: null as HTMLElement,				// List of notes
 }
 
 export async function initState() {
@@ -29,7 +28,5 @@ export async function initState() {
 	state.updated = false
 	state.empty = true
 	state.locked = false
-	console.debug(`getByTag('main')`)
-	console.debug(getByTag('main'))
 	state.mainEl = getByTag('main')
 }

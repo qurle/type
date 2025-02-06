@@ -9,7 +9,7 @@ export const header = {
 }
 
 export function initHeaderElements(parentElement = document.documentElement) {
-	header.headerEl = getByTag('header')
+	header.headerEl = getByTag('header', parentElement)
 	header.headerLeftEl = getByClass('left', header.headerEl)
 	header.uploadInputEl = getByTag('input', header.headerLeftEl) as HTMLInputElement
 	header.addEl = getByClass('add', header.headerLeftEl)
