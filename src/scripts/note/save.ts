@@ -1,5 +1,4 @@
 import { config } from '@scripts/config'
-import { updateNotesList } from '@scripts/render/notes'
 import { state } from '@scripts/state'
 import { writeToFile } from '@scripts/storage/writeToFile'
 import { createId } from '@scripts/utils/createId'

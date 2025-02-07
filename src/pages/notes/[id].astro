@@ -1,13 +1,10 @@
 ---
 export const prerender = false
 
-import Editor from '@components/Editor.astro'
+import App from '@components/App.astro'
 import Layout from '@layouts/Layout.astro'
-
-const { id } = Astro.params
 ---
 
 <Layout>
-	<Editor />
+	<App />
 </Layout>
-<span id="id-storage" data-id={id} style="display: none;"></span>

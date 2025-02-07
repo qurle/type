@@ -6,8 +6,8 @@ import { showBorders } from '@scripts/render/showBorders'
 import { state } from '@scripts/state'
 import { loadCurrentId } from '@scripts/utils/currentNote'
 import { getByClass } from '@scripts/utils/getElements'
-import { clearEditor } from './clear'
-import { unlock } from './lock'
+import { clearEditor } from '@scripts/editor/clear'
+import { unlock } from '@scripts/editor/lock'
 
 export function initShortcuts(uploadInputEl: HTMLInputElement) {
 	document.addEventListener('keydown', (e) => {

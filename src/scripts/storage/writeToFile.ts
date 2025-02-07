@@ -1,9 +1,9 @@
-import { Editor } from '@milkdown/core'
 import { getMarkdown } from '@milkdown/utils'
 import { isEmptyString } from '@scripts/utils/isEmptyString'
 import { showStatus } from '@scripts/render/showStatus'
 import { smartTrunc } from '@scripts/utils/smartTrunc'
 import { state } from '@scripts/state'
+import { getMD } from '@scripts/versions/getMD'
 
 /**
  * Write non-empty note to file and show status
@@ -13,7 +13,7 @@ import { state } from '@scripts/state'
  * @param markdown Markdown to write
  * @returns Date of saving
  */
-export async function writeToFile(id: string, saveRef: SaveRef = 'autosave', hidden = false, markdown: string = state.editor.action(getMarkdown()) || '') {
+export async function writeToFile(id: string, saveRef: SaveRef = 'autosave', hidden = false, markdown: string = getMD()) {
 	markdown = markdown.replace(/&#x20;/g, ' ')
 
 	if (isEmptyString(markdown)) {

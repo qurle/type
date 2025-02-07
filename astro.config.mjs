@@ -1,6 +1,5 @@
 import icon from "astro-icon";
 import { defineConfig } from 'astro/config';
-
 import vercel from "@astrojs/vercel";
 
 // https://astro.build/config

@@ -4,6 +4,7 @@ import { showStatus } from '@scripts/render/showStatus';
 import { smartTrunc } from '@scripts/utils/smartTrunc';
 import { downloadZip } from 'client-zip';
 import { state } from '@scripts/state';
+import { getMD } from '@scripts/versions/getMD';
 
 /**
  * Downloads file which is currently in editor
@@ -11,7 +12,9 @@ import { state } from '@scripts/state';
  * @param markdown Custom markdown to download
  * @returns true if downloaded, false if not (etc. empty note)
  */
-export function exportFile(filename = null, markdown: string = state.editor.action(getMarkdown()) || '') {
+export function exportFile(
+	filename = null,
+	markdown: string = getMD()) {
 	console.debug(`Exporting file`)
 	if (isEmptyString(markdown)) {
 		showStatus('note is empty')
