@@ -4,6 +4,7 @@ import type { Editor as Editor2 } from '@tiptap/core'
 import { getOpfs } from '@scripts/storage/getOpfs';
 import { getNotes } from '@scripts/storage/getNotes';
 import { getByTag } from '@scripts/utils/getElements';
+import { getEditorVersion } from '@scripts/utils/getEditorVersion';
 
 export const state = {
 	// Editor
@@ -13,6 +14,7 @@ export const state = {
 	empty: true,								// Editor is empty
 	wasEmpty: true,								// Did not finish transition from empty state
 	updated: false,								// Editor (current note) has changed
+	editorVersion: '1',
 
 	// Storage
 	opfs: null as FileSystemDirectoryHandle,	// Entry for origin-private file system
@@ -25,11 +27,14 @@ export const state = {
 }
 
 export async function initState() {
+	state.locked = false
+	state.empty = true
+	state.updated = false
+	state.editorVersion = getEditorVersion()
+
 	state.opfs = await getOpfs()
 	state.notes = await getNotes(state.opfs)
 	state.hasNotes = state.notes?.length > 0
-	state.updated = false
-	state.empty = true
-	state.locked = false
+
 	state.mainEl = getByTag('main')
 }

@@ -11,7 +11,9 @@ import { state } from '@scripts/state';
  * @param markdown Custom markdown to download
  * @returns true if downloaded, false if not (etc. empty note)
  */
-export function exportFile(filename = null, markdown: string = state.editor.action(getMarkdown()) || '') {
+export function exportFile(
+	filename = null,
+	markdown: string = state.editor.action(getMarkdown()) || '') {
 	console.debug(`Exporting file`)
 	if (isEmptyString(markdown)) {
 		showStatus('note is empty')

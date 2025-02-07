@@ -1,18 +1,31 @@
 ---
-import Editor2 from '@components/Editor2.astro'
 import Header from '@components/Header.astro'
+import Editor from '@components/Editor.astro'
 import NoteList from '@components/NoteList.astro'
-import Layout from '@layouts/Layout.astro'
+import Shortcuts from '@components/Shortcuts.astro'
+import Instructions from '@components/Instructions.astro'
+
+// For loading published notes
+const captureNoteId = RegExp(/notes?\/(.*)\/?/, 'g')
+const noteId = captureNoteId.exec(Astro.url.pathname)?.[1] || false
+
+const { editorVersion } = Astro.props
 ---
 
-<Layout>
-	<Header pro />
-	<main>
-		<Editor2 />
-		<NoteList />
-	</main>
-</Layout>
-
+<script>
+	if (localStorage.getItem('saw-home') !== 'true') {
+		location.href = '/hello'
+	}
+</script>
+<Header editorVersion={editorVersion} />
+<main>
+	<Editor />
+	<NoteList />
+</main>
+<Instructions />
+<Shortcuts />
+{noteId && <span id="id-storage" data-id={noteId} hidden />}
+<span id="v" data-v={editorVersion || 1} hidden></span>
 <script>
 	import { registerServiceWorker } from '@scripts/utils/serviceWorkers'
 	registerServiceWorker('/sw.js')
@@ -20,10 +33,11 @@ import Layout from '@layouts/Layout.astro'
 	import MicroModal from 'micromodal'
 	MicroModal.init({ disableFocus: true, debug: false })
 
-	import { createEditor } from '@scripts/editor2/create'
-	import { initDragAndDrop } from '@scripts/editor2/initDragAndDrop'
-	import { reopenLastNote } from '@scripts/editor2/reopenLastNote'
-	import { initShortcuts } from '@scripts/editor2/shortcuts'
+	import { createEditor } from '@scripts/editor/create'
+	import { createEditor as createEditor2 } from '@scripts/editor2/create'
+	import { initDragAndDrop } from '@scripts/editor/initDragAndDrop'
+	import { reopenLastNote } from '@scripts/editor/reopenLastNote'
+	import { initShortcuts } from '@scripts/editor/shortcuts'
 	import { header } from '@scripts/header/elements'
 	import { initMenuElements } from '@scripts/menu/elements'
 	import { initMenuListeners } from '@scripts/menu/listeners'
@@ -47,7 +61,20 @@ import Layout from '@layouts/Layout.astro'
 	initMenuElements()
 	initStatus(header.headerEl)
 
-	state.editorEl = createEditor().options.element.firstChild as HTMLElement
+	console.debug(`Current editor version: v${state.editorVersion}`)
+	switch (state.editorVersion) {
+		case '1':
+		default: {
+			state.editor = await createEditor()
+			break
+		}
+		case '2': {
+			state.editor2 = createEditor2()
+			state.editorEl = state.editor2.options.element
+				.firstChild as HTMLElement
+			break
+		}
+	}
 
 	await loadByURL()
 	reopenLastNote()

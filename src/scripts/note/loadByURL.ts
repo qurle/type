@@ -5,6 +5,7 @@ import { clearCurrentId } from '@scripts/utils/currentNote'
 import { isEmptyString } from '@scripts/utils/isEmptyString'
 import { setTitle } from '@scripts/utils/setTitle'
 import { lock } from '@scripts/editor/lock'
+import { insertMD } from '@scripts/versions/insertMD'
 
 export async function loadByURL() {
 	const idEl = document.getElementById('id-storage')
@@ -19,7 +20,7 @@ export async function loadByURL() {
 			.then((response) => response.json())
 			.catch(() => showStatus(`couldn't load :(`))
 		idEl.remove()
-		state.editor.action(replaceAll(content))
+		insertMD(content)
 		state.editorEl.classList.remove('loading')
 		if (isEmptyString(content)) return
 

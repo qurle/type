@@ -29,7 +29,8 @@ export function updateNotesList() {
 export function showNotes() {
 	if (!state.hasNotes) return
 	renderNotes()
-	toggleNotesList(true)
+	console.log(state)
+	toggleNotesList(state.empty)
 }
 
 /**

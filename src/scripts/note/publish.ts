@@ -1,6 +1,6 @@
-import { getMarkdown } from '@milkdown/utils';
 import { isEmptyString } from '@scripts/utils/isEmptyString';
 import { showStatus } from '@scripts/render/showStatus';
+import { getMD } from '@scripts/versions/getMD';
 import { state } from '@scripts/state';
 
 /**
@@ -9,7 +9,7 @@ import { state } from '@scripts/state';
  * @param markdown Custom markdown
  * @returns true if sended, false if not
  */
-export function publish(id: string, markdown: string = state.editor.action(getMarkdown()) || '') {
+export function publish(id: string, markdown: string = getMD()) {
 	console.debug(`Publishing`)
 
 	if (isEmptyString(markdown)) {
@@ -51,7 +51,8 @@ function publishThenCopy(markdown: string, id: string) {
 			}).then(response => response.json()).then(body => {
 				const id = body.id
 				console.debug(`Got ID: ${id}`)
-				const url = `${location.origin}/note/${id}`
+				const editorVersion = state.editorVersion === "2" ? '/v2' : ''
+				const url = `${location.origin}${editorVersion}/note/${id}`
 				return new Blob([url], { type: "text/plain" })
 			})
 		})

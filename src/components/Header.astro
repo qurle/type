@@ -3,7 +3,8 @@ import '@styles/header.sass'
 import { Icon } from 'astro-icon/components'
 import Menu from '@components/Menu.astro'
 
-const { pro } = Astro.props
+const { editorVersion } = Astro.props
+console.log(editorVersion)
 ---
 
 <header class="editor-header">
@@ -14,7 +15,7 @@ const { pro } = Astro.props
 		<button class="back"><Icon name="back" /></button>
 		<button class="add"><Icon name="add" /></button>
 	</div>
-	{pro && <span class="subtitle">PRO</span>}
+	{editorVersion && <span class="subtitle">v{editorVersion}</span>}
 	<div class="right">
 		<div class="status"></div>
 		<Menu />

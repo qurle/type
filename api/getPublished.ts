@@ -40,7 +40,7 @@ async function getById(req) {
 
 	const note = await getNote(id)
 
-	if (!id) {
+	if (!note) {
 		return new Response('Note not found', {
 			status: 404,
 		})
@@ -50,7 +50,7 @@ async function getById(req) {
 		content: decode(note.content),
 		clientId: note.client_id
 	}), {
-		status: 200, statusText: "Returning Note",
+		status: 200, statusText: "Returning note",
 	})
 }
 

@@ -1,15 +1,21 @@
 import { state } from '@scripts/state'
 import { unlock } from '@scripts/editor/lock'
-import { replaceAll } from '@milkdown/kit/utils'
 import { clearCurrentId } from '@scripts/utils/currentNote'
+import { clearMD } from '@scripts/versions/clearMD'
 
 export function clearEditor() {
 	console.debug(`Clearing editor`)
-	if (![location.origin, location.origin + '/'].includes(location.href)) {
-		window.history.pushState({ page: null }, '', '/')
+	if (![
+		location.origin,
+		location.origin + '/',
+		location.origin + '/v2',
+		location.origin + '/v2/',
+	].includes(location.href)) {
+		const path = state.editorVersion === '2' ? '/v2' : '/'
+		window.history.pushState({ page: null }, '', path)
 	}
 	if (state.locked) unlock()
-	state.editor.action(replaceAll(''))
+	clearMD()
 	state.empty = true
 	state.editorEl.focus()
 	clearCurrentId()
