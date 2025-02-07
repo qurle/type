@@ -7,6 +7,7 @@ import { setCurrentId } from '@scripts/utils/currentNote'
 import { writeToFile } from '@scripts/storage/writeToFile'
 import { clearEditor } from '@scripts/editor/clear'
 import { updateNotesList } from '@scripts/render/notes'
+import { insertMD } from '@scripts/versions/insertMD'
 
 export async function uploadNotes(fileList: FileList) {
 	console.debug('File(s) uploading')
@@ -21,7 +22,7 @@ export async function uploadNotes(fileList: FileList) {
 			console.debug(`Replacing`)
 			// Generating new ID to avoid overwrites
 			setCurrentId(createId())
-			state.editor.action(replaceAll(t))
+			insertMD(t)
 		})
 	} else {
 		for (const file of files) {

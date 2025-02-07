@@ -24,6 +24,8 @@ export function updateActions(state: State) {
 		}
 		case 'locked': {
 			hide(menu.publishEl)
+			hide(menu.exportAllEl)
+			show(menu.downloadEl)
 			show(menu.copyAndEditEl)
 			break
 		}

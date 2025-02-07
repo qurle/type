@@ -1,5 +1,6 @@
 import { insert } from '@milkdown/kit/utils';
 import { state } from '@scripts/state';
+import { marked } from 'marked';
 
 export function insertMD(content: string, version = state.editorVersion) {
 	switch (version) {
@@ -7,6 +8,8 @@ export function insertMD(content: string, version = state.editorVersion) {
 		default:
 			return state.editor.action(insert(content))
 		case "2":
-			return state.editor2.commands.setContent(content, true)
+			const html = marked.parse(content)
+			console.log(html)
+			return state.editor2.commands.setContent(html, true)
 	}
 }

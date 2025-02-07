@@ -3,6 +3,11 @@ import { Editor } from '@tiptap/core'
 import StarterKit from '@tiptap/starter-kit'
 import Link from '@tiptap/extension-link'
 import Placeholder from '@tiptap/extension-placeholder'
+import Image from '@tiptap/extension-image'
+import TaskItem from '@tiptap/extension-task-item'
+import TaskList from '@tiptap/extension-task-list'
+import Typography from '@tiptap/extension-typography'
+import Underline from '@tiptap/extension-underline'
 import { Markdown } from 'tiptap-markdown'
 import { linkConfig, markdownConfig } from '@scripts/editor2/config'
 import { state } from '@scripts/state'
@@ -18,11 +23,21 @@ export function createEditor() {
 		element: document.getElementById('editor'),
 		extensions: [
 			StarterKit,
+
+			// TaskList,
+			// TaskItem,
+			Underline,
+			Typography,
+
 			Link.configure(linkConfig),
+			Markdown.configure(markdownConfig),
+
+			Image.configure({
+				allowBase64: true,
+			}),
 			Placeholder.configure({
 				placeholder: 'Write something …',
 			}),
-			Markdown.configure(markdownConfig),
 		],
 		autofocus: true,
 		editorProps: {
