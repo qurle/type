@@ -11,6 +11,7 @@ export function openInEditor(note: Note) {
 	if (!note) return
 
 	toggleNotesList(false)
+	state.editor.action(insert(note.content))
 	setFocus(state.editorEl)
 
 	window.history.pushState({ page: note.id }, '')
