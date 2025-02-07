@@ -1,8 +1,64 @@
 ---
-import ProEditor from '@components/ProEditor.astro'
+import Editor2 from '@components/Editor2.astro'
+import Header from '@components/Header.astro'
+import NoteList from '@components/NoteList.astro'
 import Layout from '@layouts/Layout.astro'
 ---
 
 <Layout>
-	<ProEditor />
+	<Header pro />
+	<main>
+		<Editor2 />
+		<NoteList />
+	</main>
 </Layout>
+
+<script>
+	import { registerServiceWorker } from '@scripts/utils/serviceWorkers'
+	registerServiceWorker('/sw.js')
+
+	import MicroModal from 'micromodal'
+	MicroModal.init({ disableFocus: true, debug: false })
+
+	import { createEditor } from '@scripts/editor2/create'
+	import { initDragAndDrop } from '@scripts/editor2/initDragAndDrop'
+	import { reopenLastNote } from '@scripts/editor2/reopenLastNote'
+	import { initShortcuts } from '@scripts/editor2/shortcuts'
+	import { header } from '@scripts/header/elements'
+	import { initMenuElements } from '@scripts/menu/elements'
+	import { initMenuListeners } from '@scripts/menu/listeners'
+	import { loadByURL } from '@scripts/note/loadByURL'
+	import { toggleAutosave } from '@scripts/note/save'
+	import { updateNotesList } from '@scripts/render/notes'
+	import { initStatus } from '@scripts/render/showStatus'
+	import { initState, state } from '@scripts/state'
+	import { setFocus } from '@scripts/utils/setFocus'
+	import {
+		initFocusListener,
+		initNavigationListener,
+		initUnloadListener,
+	} from '@scripts/utils/systemListenters'
+	import { initHeaderElements } from '@scripts/header/elements'
+	import { initHeaderListeners } from '@scripts/header/listeners'
+
+	await initState()
+	initHeaderElements()
+	initHeaderListeners()
+	initMenuElements()
+	initStatus(header.headerEl)
+
+	state.editorEl = createEditor().options.element.firstChild as HTMLElement
+
+	await loadByURL()
+	reopenLastNote()
+	updateNotesList()
+	setFocus(state.editorEl)
+	toggleAutosave(true)
+
+	initShortcuts(header.uploadInputEl)
+	initNavigationListener()
+	initFocusListener()
+	initUnloadListener()
+	initMenuListeners()
+	initDragAndDrop()
+</script>

@@ -2,6 +2,8 @@
 import '@styles/header.sass'
 import { Icon } from 'astro-icon/components'
 import Menu from '@components/Menu.astro'
+
+const { pro } = Astro.props
 ---
 
 <header class="editor-header">
@@ -12,6 +14,7 @@ import Menu from '@components/Menu.astro'
 		<button class="back"><Icon name="back" /></button>
 		<button class="add"><Icon name="add" /></button>
 	</div>
+	{pro && <span class="subtitle">PRO</span>}
 	<div class="right">
 		<div class="status"></div>
 		<Menu />
