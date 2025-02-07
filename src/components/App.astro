@@ -12,11 +12,6 @@ const noteId = captureNoteId.exec(Astro.url.pathname)?.[1] || false
 const { editorVersion } = Astro.props
 ---
 
-<script>
-	if (localStorage.getItem('saw-home') !== 'true') {
-		location.href = '/hello'
-	}
-</script>
 <Header editorVersion={editorVersion} />
 <main>
 	<Editor />
