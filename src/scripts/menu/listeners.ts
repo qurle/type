@@ -6,42 +6,43 @@ import { save } from '@scripts/note/save'
 import { currentAppearance, cycleAppearance } from '@scripts/render/appearance'
 import { state } from '@scripts/state'
 import { loadCurrentId } from '@scripts/utils/currentNote'
+import { toggleMenu } from '@scripts/menu/toggle'
 
 export function initMenuListeners() {
 	console.debug(`Assigning menu listeners`)
 	// Open menu
-	menu.showMenuEl.addEventListener('click', () => {
-		menu.showMenuEl.classList.toggle('active')
+	menu.toggleEl.addEventListener('click', () => {
+		toggleMenu(true)
 	})
 	// Hide menu on outside click
 	document.documentElement.addEventListener('click', (e: MouseEvent) => {
 		if (
-			!menu.dropdownEl.contains(e.target as Node) &&
-			!menu.showMenuEl.contains(e.target as Node)
+			!menu.popupEl.contains(e.target as Node) &&
+			!menu.toggleEl.contains(e.target as Node)
 		)
-			menu.showMenuEl.classList.remove('active')
+			toggleMenu(false)
 	})
 	// Publish note
 	menu.publishEl.addEventListener('click', () => {
 		if (state.empty) return
 		save('publish', true)
-		menu.showMenuEl.classList.remove('active')
+		toggleMenu(false)
 		publish(loadCurrentId())
 	})
 	// Download note as file
 	menu.downloadEl.addEventListener('click', () => {
 		if (state.empty) return
-		menu.showMenuEl.classList.remove('active')
+		toggleMenu(false)
 		exportFile()
 	})
 	// Download all notes as archive
 	menu.exportAllEl.addEventListener('click', () => {
-		menu.showMenuEl.classList.remove('active')
+		toggleMenu(false)
 		exportAll()
 	})
 	// Duplicate to local notes and unlock
 	menu.copyAndEditEl.addEventListener('click', () => {
-		menu.showMenuEl.classList.remove('active')
+		toggleMenu(false)
 		unlock()
 		save('copy')
 	})

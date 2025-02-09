@@ -1,24 +1,40 @@
-#actions
+#action-menu
     position: fixed
     bottom: 4rem
-    overflow-y: scroll
-
-    min-width: 300px
-    width: 50%
-    height: 50vh
-    max-height: 20rem
-
     z-index: 1
 
+.action-toggle
+    display: flex
+    padding: var(--space-m) var(--space-l)
+    gap: var(--space-m)
+    align-items: baseline
+    
+    position: relative
+    z-index: 2
+
+.action-popup
+    position: absolute
+    bottom: calc(100% + 1rem)
+    left: 50%
+    transform: translateX(-50%)
+    
+    overflow-y: scroll
+    z-index: 1
+
+    min-width: 300px
+    width: 50vw
+    height: 50vh
+    max-height: 20rem
+   
     border-radius: var(--radius-xl)
     padding: var(--space-m) 0
+    box-shadow: var(--shadow-l)
 
-    border: 1px solid var(--color-main-05)
-    background: color-mix(in hsl, var(--color-background) 50%, transparent)
-    -webkit-backdrop-filter: blur(50px) saturate(4) brightness(1.1)
-    backdrop-filter: blur(50px) saturate(4) brightness(1.1)
-
-    box-shadow: 0 32px 32px -16px var(--color-main-25) 
+    opacity: 0
+    pointer-events: none
+    scale: .5
+    transform-origin: bottom center
+    transition: opacity var(--transition-s), background-color var(--transition-s), scale var(--transition-m)
 
     .input-wrapper
         padding: var(--space-m) var(--space-l)
@@ -30,27 +46,32 @@
         margin: var(--space-s) var(--space-l)
         border-color: var(--color-main-15)
 
-    .action-list
+    &.active
+        opacity: 1
+        scale: 1
+        pointer-events: all
+
+.action-list
+    display: flex
+    flex-direction: column
+    gap: var(--space-s)
+
+    font-size: var(--font-size-s)
+    text-wrap: nowrap
+
+    transform-origin: center
+    transition: opacity var(--transition-s), background-color var(--transition-s), transform var(--transition-m)
+
+    button, li > a
         display: flex
-        flex-direction: column
-        gap: var(--space-s)
+        justify-content: space-between
+        gap: var(--space-xl)
 
-        font-size: var(--font-size-s)
-        text-wrap: nowrap
+        opacity: 1
+        transition: color var(--transition-s), transform var(--transition-s)
 
-        transform-origin: center
-        transition: opacity var(--transition-s), background-color var(--transition-s), transform var(--transition-m)
-
-        button, li > a
-            display: flex
-            justify-content: space-between
-            gap: var(--space-xl)
-
-            opacity: 1
-            transition: color var(--transition-s), transform var(--transition-s)
-
-            &:hover
-                color: var(--color-main-50)
+        &:hover
+            color: var(--color-main-50)
             &:active
                 transform: scale(.95)
 
@@ -59,16 +80,12 @@
                 text-align: right
                 color: var(--color-main-50)
 
-        .shortcut
-            display: flex
-            gap: var(--space-m)
-            font-size: var(--font-size-xs)
-            color: var(--color-main-25)
+    li > button
+        width: 100%
+        padding: var(--space-m) var(--space-l)
 
-        li > button
-                width: 100%
-                padding: var(--space-m) var(--space-l)
-
-        &.shown
-            opacity: 0
-            pointer-events: none
+.shortcut
+    display: flex
+    gap: var(--space-m)
+    font-size: var(--font-size-xs)
+    color: var(--color-main-25)

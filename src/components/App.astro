@@ -4,7 +4,7 @@ import Editor from '@components/Editor.astro'
 import NoteList from '@components/NoteList.astro'
 import Shortcuts from '@components/Shortcuts.astro'
 import Instructions from '@components/Instructions.astro'
-import Menu2 from './Actions.astro'
+import ActionsMenu from './ActionMenu.astro'
 
 // For loading published notes
 const captureNoteId = RegExp(/notes?\/(.*)\/?/, 'g')
@@ -14,7 +14,7 @@ const { editorVersion } = Astro.props
 ---
 
 <Header editorVersion={editorVersion} />
-<Menu2 />
+<ActionsMenu />
 <main>
 	<Editor />
 	<NoteList />
@@ -55,7 +55,7 @@ const { editorVersion } = Astro.props
 	await initState()
 	initHeaderElements()
 	initHeaderListeners()
-	initMenuElements()
+	// initMenuElements()
 	initStatus(header.headerEl)
 
 	console.debug(`Current editor version: v${state.editorVersion}`)
@@ -83,6 +83,6 @@ const { editorVersion } = Astro.props
 	initNavigationListener()
 	initFocusListener()
 	initUnloadListener()
-	initMenuListeners()
+	// initMenuListeners()
 	initDragAndDrop()
 </script>

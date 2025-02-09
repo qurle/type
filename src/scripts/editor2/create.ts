@@ -21,6 +21,7 @@ import { header } from '@scripts/header/elements'
 import { setTitle } from '@scripts/utils/setTitle'
 import { updateActions } from '@scripts/menu/updateActions'
 import { clearCurrentId } from '@scripts/utils/currentNote'
+import { toggleMenu } from '@scripts/menu/toggle'
 
 export function createEditor() {
 	return new Editor({
@@ -71,7 +72,7 @@ export function createEditor() {
 			state.updated = true
 			state.empty = editor.isEmpty
 
-			menu.showMenuEl.classList.remove('active')
+			toggleMenu(false)
 
 			if (state.empty) {
 				console.debug('Turned to empty')

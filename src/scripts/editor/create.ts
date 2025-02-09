@@ -16,6 +16,7 @@ import { commonmark } from '@milkdown/kit/preset/commonmark'
 import { gfm } from '@milkdown/kit/preset/gfm'
 import { automd } from '@milkdown/plugin-automd'
 import { header } from '@scripts/header/elements'
+import { toggleMenu } from '@scripts/menu/toggle'
 
 export async function createEditor() {
 	console.debug(`Loading editor`)
@@ -51,7 +52,7 @@ export function onUpdated(ctx, doc) {
 	state.updated = true
 	state.empty = doc.content.size <= 2
 
-	menu.showMenuEl.classList.remove('active')
+	toggleMenu(false)
 
 	if (state.empty) {
 		console.debug('Turned to empty')

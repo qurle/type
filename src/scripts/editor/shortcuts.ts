@@ -8,6 +8,7 @@ import { loadCurrentId } from '@scripts/utils/currentNote'
 import { getByClass } from '@scripts/utils/getElements'
 import { clearEditor } from '@scripts/editor/clear'
 import { unlock } from '@scripts/editor/lock'
+import { toggleMenu } from '@scripts/menu/toggle'
 
 export function initShortcuts(uploadInputEl: HTMLInputElement) {
 	document.addEventListener('keydown', (e) => {
@@ -46,11 +47,10 @@ export function initShortcuts(uploadInputEl: HTMLInputElement) {
 					save('copy')
 					return
 				}
-				case 'KeyD': {
+				case 'KeyK': {
 					e.preventDefault()
 					if (e.repeat) return
-
-					showBorders(state.mainEl)
+					toggleMenu(null)
 					return
 				}
 				// Mortal combat mode
@@ -68,8 +68,9 @@ export function initShortcuts(uploadInputEl: HTMLInputElement) {
 					if (getByClass('is-open', document.body)) {
 						return
 					}
-					if (menu.showMenuEl.classList.contains('active')) {
-						menu.showMenuEl.classList.remove('active')
+					// Rewrite this part to state like menu.open
+					if (menu.toggleEl.classList.contains('active')) {
+						toggleMenu(false)
 						state.editorEl.focus()
 						return
 					}
