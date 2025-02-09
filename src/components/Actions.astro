@@ -1,0 +1,138 @@
+---
+import '@styles/actions.sass'
+
+import { menuActions } from '@scripts/menu/actions'
+---
+
+<div id="actions" class="shown">
+	<div class="input-wrapper">
+		<input
+			type="text"
+			id="action-search"
+			role="combobox"
+			placeholder="Search for functions"
+			autocomplete="off"
+		/>
+	</div>
+	<hr />
+	<ul class="action-list" role="listbox">
+		{
+			menuActions.map((a) => (
+				<li
+					role="option"
+					id={'action-' + a.id}
+					hidden={a.hidden ? 'hidden' : undefined}
+				>
+					<button class="action">
+						<span class="name">{a.name}</span>
+						{a.shortcut && (
+							<span class="shortcut">
+								{a.shortcut.map((key) => (
+									<kbd>{key}</kbd>
+								))}
+							</span>
+						)}
+					</button>
+				</li>
+			))
+		}
+	</ul>
+</div>
+<script>
+	import { getByClass } from '@scripts/utils/getElements'
+	import { menuActions } from '@scripts/menu/actions'
+	import fuzzysort from 'fuzzysort'
+	import createFuzzySearch from '@nozbe/microfuzz'
+
+	const actionsEl = document.getElementById('actions')
+	const actionListEl = getByClass('action-list', actionsEl)
+	const searchEl = document.getElementById('action-search')
+
+	const options = {
+		keys: ['name', 'aliases'],
+		limit: 100,
+		threshold: 0.5,
+		all: true,
+	}
+
+	const fuzzySearch = createFuzzySearch(menuActions, {
+		key: 'name',
+		// getText: (item) => [item.aliases],
+	})
+
+	searchEl.addEventListener('input', (e: InputEvent) => {
+		actionListEl.hidden = true
+		const value = (e.target as HTMLInputElement).value
+
+		const results = fuzzysort.go(value, menuActions, options)
+		console.debug(`Found results of ${value}:`)
+		console.debug(results.map((el) => el.obj.name + ' at ' + el.score))
+
+		actionListEl.replaceChildren()
+		results.forEach((el) => {
+			// const actionEl = document.getElementById('action-' + el.obj.id)
+			const actionEl = document.createElement('li')
+			actionEl.id = 'action-' + el.obj.id
+			const actionButtonEl = document.createElement('button')
+			actionButtonEl.className = 'action'
+			const nameEl = document.createElement('span')
+			nameEl.className = 'name'
+			nameEl.textContent = el.obj.name
+			actionButtonEl.appendChild(nameEl)
+			if (el.obj.shortcut) {
+				const shortcutEl = document.createElement('span')
+				shortcutEl.className = 'shortcut'
+				for (const key of el.obj.shortcut) {
+					const keyEl = document.createElement('kbd')
+					keyEl.textContent = key
+					shortcutEl.appendChild(keyEl)
+				}
+				actionButtonEl.appendChild(shortcutEl)
+			}
+			actionEl.appendChild(actionButtonEl)
+			actionListEl.appendChild(actionEl)
+		})
+	})
+
+	// searchEl.addEventListener('input', (e: InputEvent) => {
+	// 	actionListEl.hidden = true
+	// 	const value = (e.target as HTMLInputElement).value
+
+	// 	let results = fuzzySearch(value)
+	// 	console.debug(`Found results of ${value}:`)
+	// 	console.debug(
+	// 		results.map((el) => el.item.name + ' at ' + el.score),
+	// 	)
+
+	// 	// results = results.sort((a,b) => b.score - a.score)
+
+	// 	if (!results) return
+	// 	actionListEl.replaceChildren()
+	// 	results.forEach((el) => {
+	// 		// const actionEl = document.getElementById('action-' + el.obj.id)
+	// 		const actionEl = document.createElement('li')
+	// 		actionEl.id = 'action-' + el.item.id
+	// 		const actionButtonEl = document.createElement('button')
+	// 		actionButtonEl.className = 'action'
+	// 		const nameEl = document.createElement('span')
+	// 		nameEl.className = 'name'
+	// 		nameEl.textContent = el.item.name
+	// 		actionButtonEl.appendChild(nameEl)
+	// 		if (el.item.shortcut) {
+	// 			const shortcutEl = document.createElement('span')
+	// 			shortcutEl.className = 'shortcut'
+	// 			for (const key of el.item.shortcut) {
+	// 				const keyEl = document.createElement('kbd')
+	// 				keyEl.textContent = key
+	// 				shortcutEl.appendChild(keyEl)
+	// 			}
+	// 			actionButtonEl.appendChild(shortcutEl)
+	// 		}
+	// 		actionEl.appendChild(actionButtonEl)
+	// 		actionListEl.appendChild(actionEl)
+	// 	})
+	// })
+
+	// Run this whenever search term changes
+	// Only matching items will be returned, sorted by how well they match `queryText`
+</script>
