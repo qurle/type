@@ -1,4 +1,4 @@
-import { menu } from '@scripts/menu/elements';
+import { menu } from '@scripts/menu/classes/Menu';
 
 const activeClass = 'active'
 
@@ -7,8 +7,12 @@ export function toggleMenu(show: boolean = null) {
 		menu.popupEl.classList.toggle(activeClass)
 		return
 	}
-	if (show)
+	if (show) {
+		menu.inputEl.focus()
 		menu.popupEl.classList.add(activeClass)
-	else
+	}
+	else {
+		menu.inputEl.blur()
 		menu.popupEl.classList.remove(activeClass)
+	}
 }

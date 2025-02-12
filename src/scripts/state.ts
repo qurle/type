@@ -5,11 +5,13 @@ import { getOpfs } from '@scripts/storage/getOpfs';
 import { getNotes } from '@scripts/storage/getNotes';
 import { getByTag } from '@scripts/utils/getElements';
 import { getEditorVersion } from '@scripts/utils/getEditorVersion';
+import type { Menu } from '@scripts/menu/classes/Menu';
 
 export const state = {
 	// Editor
 	editor: null as Editor,						// Global editor object
 	editor2: null as Editor2,					// Global editor 2 object
+	menu: null as Menu,
 	locked: false,								// UI is locked (view-only)	
 	empty: true,								// Editor is empty
 	wasEmpty: true,								// Did not finish transition from empty state

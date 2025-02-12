@@ -1,34 +1,34 @@
-type MenuAction = {
-	id: string,
-	name: string,
-	shortcut?: string[],
-	shortcutMac?: string[],
-	hidden?: boolean,
-	aliases?: string,
-	callback?: (...args: any) => void
-}
+import { MenuAction } from '@scripts/menu/classes/MenuAction'
 
 const ctrl = 'Ctrl'
 const shift = 'Shift'
 const cmd = '⌘'
 const shiftMac = '⇧'
 
+export const fuzzySortOptions = {
+	keys: ['name', 'aliases'],
+	limit: 100,
+	threshold: 0.3,
+}
+
 export const menuActions: MenuAction[] = [
 	{
 		id: 'open',
 		name: 'Open document',
 		shortcut: [ctrl, 'O'],
-		aliases: 'upload|file'
+		aliases: 'upload|file',
 	},
 	{
 		id: 'publish',
 		name: 'Publish',
-		shortcut: [ctrl, shift, 'P']
+		shortcut: [ctrl, shift, 'P'],
+		hidden: true
 	},
 	{
 		id: 'copyAndEdit',
 		name: 'Copy and edit',
-		shortcut: [ctrl, shift, 'E']
+		shortcut: [ctrl, shift, 'E'],
+		hidden: false
 	},
 	{
 		id: 'download',
@@ -87,4 +87,4 @@ export const menuActions: MenuAction[] = [
 		id: 'about',
 		name: 'About type.',
 	},
-]
+].map(el => new MenuAction(el))

@@ -13,7 +13,7 @@ h1
 h2
     &:not(:first-child)
         padding-top: var(--space-xl)
-        font-size: 1.4em
+        font-size: 1.5em
 
 h3
     &:not(:first-child)
@@ -27,6 +27,9 @@ h4, h5
 
 h5
     font-size: 0.8em
+
+strong
+    font-weight: 600
 
 p
     line-height: 140%
@@ -69,13 +72,13 @@ input::placeholder
     display: block
     width: fit-content
     padding: var(--space-m) calc(var(--space-l) + var(--space-m)) calc(var(--space-m) + 2px)
-   
-    color: var(--color-main) 
+
+    color: var(--color-main)
     border: 1px solid var(--color-main-15)
-    
+
     border-radius: calc(1.5 * var(--space-m))
     text-decoration: none
-   
+
     cursor: pointer
     user-select: none
 
@@ -94,6 +97,27 @@ input::placeholder
     // I'm not a fan of vendor prefixes, so shout out to Safari here
     -webkit-backdrop-filter: blur(50px) saturate(4) brightness(1.1)
     backdrop-filter: blur(50px) saturate(4) brightness(1.1)
+
+[data-placeholder]:not([data-placeholder=""])
+    &[data-placeholder-show]
+        &::after
+            opacity: 1
+    &::after
+        content: attr(data-placeholder)
+        position: absolute
+        top: 50%
+        left: 50%
+        transform: translate(-50%, -50%)
+  
+        font-size: var(--font-size-s)
+        color: var(--color-main-50)
+        text-align: center
+        white-space: pre-wrap
+
+        opacity: 0
+        pointer-events: none
+        transition: opacity var(--transition-m)
+
 
 :root[data-theme="digital"]
     @include digital

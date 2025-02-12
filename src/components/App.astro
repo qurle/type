@@ -24,6 +24,7 @@ const { editorVersion } = Astro.props
 {noteId && <span id="id-storage" data-id={noteId} hidden />}
 <span id="v" data-v={editorVersion || 1} hidden></span>
 <script>
+	// Bad code doesn't mean bad product 🙏🏻
 	import { registerServiceWorker } from '@scripts/utils/serviceWorkers'
 	registerServiceWorker('/sw.js')
 
@@ -36,8 +37,6 @@ const { editorVersion } = Astro.props
 	import { reopenLastNote } from '@scripts/editor/reopenLastNote'
 	import { initShortcuts } from '@scripts/editor/shortcuts'
 	import { header } from '@scripts/header/elements'
-	import { initMenuElements } from '@scripts/menu/elements'
-	import { initMenuListeners } from '@scripts/menu/listeners'
 	import { loadByURL } from '@scripts/note/loadByURL'
 	import { toggleAutosave } from '@scripts/note/save'
 	import { updateNotesList } from '@scripts/render/notes'

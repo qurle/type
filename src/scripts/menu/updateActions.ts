@@ -1,4 +1,4 @@
-import { menu } from '@scripts/menu/elements'
+import { menu } from '@scripts/menu/classes/Menu'
 
 type State =
 	'empty' | 'notEmpty' | 'locked' | 'unlocked'

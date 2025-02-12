@@ -1,4 +1,4 @@
-import { menu } from '@scripts/menu/elements'
+import { menu } from '@scripts/menu/classes/Menu'
 import { exportAll, exportFile } from '@scripts/note/export'
 import { unlock } from '@scripts/editor/lock'
 import { publish } from '@scripts/note/publish'
@@ -23,47 +23,47 @@ export function initMenuListeners() {
 			toggleMenu(false)
 	})
 	// Publish note
-	menu.publishEl.addEventListener('click', () => {
-		if (state.empty) return
-		save('publish', true)
-		toggleMenu(false)
-		publish(loadCurrentId())
-	})
-	// Download note as file
-	menu.downloadEl.addEventListener('click', () => {
-		if (state.empty) return
-		toggleMenu(false)
-		exportFile()
-	})
-	// Download all notes as archive
-	menu.exportAllEl.addEventListener('click', () => {
-		toggleMenu(false)
-		exportAll()
-	})
-	// Duplicate to local notes and unlock
-	menu.copyAndEditEl.addEventListener('click', () => {
-		toggleMenu(false)
-		unlock()
-		save('copy')
-	})
+	// menu.publishEl.addEventListener('click', () => {
+	// 	if (state.empty) return
+	// 	save('publish', true)
+	// 	toggleMenu(false)
+	// 	publish(loadCurrentId())
+	// })
+	// // Download note as file
+	// menu.downloadEl.addEventListener('click', () => {
+	// 	if (state.empty) return
+	// 	toggleMenu(false)
+	// 	exportFile()
+	// })
+	// // Download all notes as archive
+	// menu.exportAllEl.addEventListener('click', () => {
+	// 	toggleMenu(false)
+	// 	exportAll()
+	// })
+	// // Duplicate to local notes and unlock
+	// menu.copyAndEditEl.addEventListener('click', () => {
+	// 	toggleMenu(false)
+	// 	unlock()
+	// 	save('copy')
+	// })
 
-	// Set actual vaulues
-	menu.fontValueEl.textContent = currentAppearance('font')
-	menu.themeValueEl.textContent = currentAppearance('theme')
-	menu.spellValueEl.textContent = state.editorEl.spellcheck ? 'on' : 'off'
+	// // Set actual vaulues
+	// menu.fontValueEl.textContent = currentAppearance('font')
+	// menu.themeValueEl.textContent = currentAppearance('theme')
+	// menu.spellValueEl.textContent = state.editorEl.spellcheck ? 'on' : 'off'
 
-	// Change font
-	menu.fontEl.addEventListener('click', () => {
-		menu.fontValueEl.textContent = cycleAppearance('font')
-	})
-	// Change theme
-	menu.themeEl.addEventListener('click', () => {
-		menu.themeValueEl.textContent = cycleAppearance('theme')
-	})
-	// Change spellcheck
-	menu.spellEl.addEventListener('click', () => {
-		state.editorEl.spellcheck = !state.editorEl.spellcheck
-		menu.spellValueEl.textContent = state.editorEl.spellcheck ? 'on' : 'off'
-		localStorage.setItem('spell', state.editorEl.spellcheck.toString())
-	})
+	// // Change font
+	// menu.fontEl.addEventListener('click', () => {
+	// 	menu.fontValueEl.textContent = cycleAppearance('font')
+	// })
+	// // Change theme
+	// menu.themeEl.addEventListener('click', () => {
+	// 	menu.themeValueEl.textContent = cycleAppearance('theme')
+	// })
+	// // Change spellcheck
+	// menu.spellEl.addEventListener('click', () => {
+	// 	state.editorEl.spellcheck = !state.editorEl.spellcheck
+	// 	menu.spellValueEl.textContent = state.editorEl.spellcheck ? 'on' : 'off'
+	// 	localStorage.setItem('spell', state.editorEl.spellcheck.toString())
+	// })
 }

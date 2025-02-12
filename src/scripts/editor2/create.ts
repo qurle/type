@@ -15,7 +15,6 @@ import Underline from '@tiptap/extension-underline'
 import { Markdown } from 'tiptap-markdown'
 import { linkConfig, markdownConfig } from '@scripts/editor2/config'
 import { state } from '@scripts/state'
-import { menu } from '@scripts/menu/elements'
 import { toggleNotesList, updateNotesList } from '@scripts/render/notes'
 import { header } from '@scripts/header/elements'
 import { setTitle } from '@scripts/utils/setTitle'
@@ -48,9 +47,9 @@ export function createEditor() {
 			Image.configure({
 				allowBase64: true,
 			}),
-			Placeholder.configure({
-				placeholder: 'Write something …',
-			}),
+			// Placeholder.configure({
+			// 	placeholder: 'Write something …',
+			// }),
 		],
 		autofocus: true,
 		editorProps: {

@@ -1,8 +1,7 @@
-import { menu } from '@scripts/menu/elements'
+import { menu } from '@scripts/menu/classes/Menu'
 import { exportFile } from '@scripts/note/export'
 import { publish } from '@scripts/note/publish'
 import { save } from '@scripts/note/save'
-import { showBorders } from '@scripts/render/showBorders'
 import { state } from '@scripts/state'
 import { loadCurrentId } from '@scripts/utils/currentNote'
 import { getByClass } from '@scripts/utils/getElements'
@@ -50,7 +49,8 @@ export function initShortcuts(uploadInputEl: HTMLInputElement) {
 				case 'KeyK': {
 					e.preventDefault()
 					if (e.repeat) return
-					toggleMenu(null)
+					console.log('key k')
+					state.menu.toggle()
 					return
 				}
 				// Mortal combat mode

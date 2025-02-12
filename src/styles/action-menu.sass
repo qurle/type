@@ -1,4 +1,8 @@
 #action-menu
+    display: flex
+    flex-direction: column
+    align-items: center
+
     position: fixed
     bottom: 4rem
     z-index: 1
@@ -8,33 +12,30 @@
     padding: var(--space-m) var(--space-l)
     gap: var(--space-m)
     align-items: baseline
-    
+
     position: relative
     z-index: 2
 
 .action-popup
     position: absolute
     bottom: calc(100% + 1rem)
-    left: 50%
-    transform: translateX(-50%)
-    
+
     overflow-y: scroll
     z-index: 1
 
-    min-width: 300px
-    width: 50vw
+    width: clamp(300px, 50vw, var(--page-width))
     height: 50vh
     max-height: 20rem
-   
+
     border-radius: var(--radius-xl)
     padding: var(--space-m) 0
-    box-shadow: var(--shadow-l)
+    box-shadow: none
 
     opacity: 0
     pointer-events: none
     scale: .5
     transform-origin: bottom center
-    transition: opacity var(--transition-s), background-color var(--transition-s), scale var(--transition-m)
+    transition: opacity var(--transition-s), background-color var(--transition-s), scale var(--transition-m), box-shadow var(--transition-m),
 
     .input-wrapper
         padding: var(--space-m) var(--space-l)
@@ -44,11 +45,12 @@
 
     hr
         margin: var(--space-s) var(--space-l)
-        border-color: var(--color-main-15)
+        border-color: var(--color-main-05)
 
-    &.active
+    &.opened
         opacity: 1
         scale: 1
+        box-shadow: var(--shadow-l)
         pointer-events: all
 
 .action-list
@@ -56,15 +58,22 @@
     flex-direction: column
     gap: var(--space-s)
 
+    padding: var(--space-s) var(--space-m)
+
     font-size: var(--font-size-s)
     text-wrap: nowrap
 
     transform-origin: center
     transition: opacity var(--transition-s), background-color var(--transition-s), transform var(--transition-m)
 
-    button, li > a
+    button, a
+        width: 100%
         display: flex
         justify-content: space-between
+        align-items: baseline
+
+        border-radius: var(--radius-l)
+        padding: var(--space-m) calc(var(--space-l) - var(--space-m))
         gap: var(--space-xl)
 
         opacity: 1
@@ -72,17 +81,12 @@
 
         &:hover
             color: var(--color-main-50)
-            &:active
-                transform: scale(.95)
-
-            > .value
-                width: 6ch
-                text-align: right
-                color: var(--color-main-50)
-
-    li > button
-        width: 100%
-        padding: var(--space-m) var(--space-l)
+        &:active
+            background: var(--color-main-05)
+            transform: scale(.95)
+        &.active,
+        &:focus-visible
+            background: var(--color-main-05)
 
 .shortcut
     display: flex

@@ -1,4 +1,4 @@
-import { menu } from '@scripts/menu/elements'
+import { menu } from '@scripts/menu/classes/Menu'
 import { updateActions } from '@scripts/menu/updateActions'
 import { toggleNotesList, updateNotesList } from '@scripts/render/notes'
 import { state } from '@scripts/state'
