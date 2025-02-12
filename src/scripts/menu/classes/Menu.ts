@@ -75,6 +75,7 @@ export class Menu {
 		return open
 	}
 
+	// I feel sorry for this code
 	setActions(array: MenuAction[]) {
 		this.actions = array
 		this.actionsEl.replaceChildren()
@@ -89,7 +90,6 @@ export class Menu {
 
 		delete this.actionsEl.dataset.placeholderShow
 
-		// I feel sorry for this code
 		array.forEach((el, i) => {
 			const actionEl = el.renderAction()
 			if (array.length > 1) {

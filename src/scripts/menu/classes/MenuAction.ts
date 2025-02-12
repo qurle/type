@@ -60,6 +60,7 @@ export class MenuAction {
 	}
 
 	run() {
+		console.debug(`Running ${this.name}`)
 		// this?.callback()
 	}
 }
