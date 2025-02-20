@@ -1,7 +1,10 @@
+import { state } from '@scripts/state'
+
 export const modes = {
 	font: ['serif', 'mono', 'sans'],
 	theme: ['light', 'dark', 'digital']
 }
+
 
 export function cycleAppearance(mode: keyof typeof modes) {
 	const modeArray = modes[mode]
@@ -13,7 +16,7 @@ export function cycleAppearance(mode: keyof typeof modes) {
 	return nextValue
 }
 
-export function currentAppearance(mode: keyof typeof modes) {
+export function getAppearance(mode: keyof typeof modes) {
 	return localStorage.getItem(mode) || document.documentElement.dataset[mode]
 }
 

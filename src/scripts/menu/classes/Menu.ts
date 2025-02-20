@@ -2,32 +2,37 @@ import { state } from '@scripts/state';
 import { getByClass, getById, getByTag } from '@scripts/utils/getElements'
 import type { MenuAction } from '@scripts/menu/classes/MenuAction';
 import fuzzysort from 'fuzzysort';
-import { fuzzySortOptions, menuActions } from '@scripts/menu/config';
+import { fuzzySortOptions, allActions, type MenuActionId } from '@scripts/menu/config';
 
-type State =
-	'empty' | 'notEmpty' | 'locked' | 'unlocked'
+type menuUpdateEvent =
+	'spellcheckOff' | 'spellcheckOn' |
+	'themeLight' | 'themeDark' | 'themeDigital' |
+	'fontSans' | 'fontSerif' | 'fontMono' |
+	'empty' | 'reading' | 'writing'
+
 const openClass = 'opened'
 
 export class Menu {
-	rootEl: HTMLElement;
-	toggleEl: HTMLButtonElement;
-	popupEl: HTMLElement;
-	inputEl: HTMLInputElement;
-	actionsEl: HTMLElement;
+	rootEl: HTMLElement
+	toggleEl: HTMLButtonElement
+	popupEl: HTMLElement
+	inputEl: HTMLInputElement
+	actionsEl: HTMLElement
 
-	opened: boolean = false;
-	actions: MenuAction[] = [];
+	opened: boolean = false
+	actions: MenuAction[] = []
+	selected: number = null
 
-	downloadEl: HTMLElement;
-	exportAllEl: HTMLElement;
-	publishEl: HTMLElement;
-	copyAndEditEl: HTMLElement;
-	fontEl: HTMLElement;
-	fontValueEl: HTMLElement;
-	themeEl: HTMLElement;
-	themeValueEl: HTMLElement;
-	spellEl: HTMLElement;
-	spellValueEl: HTMLElement;
+	downloadEl: HTMLElement
+	exportAllEl: HTMLElement
+	publishEl: HTMLElement
+	copyAndEditEl: HTMLElement
+	fontEl: HTMLElement
+	fontValueEl: HTMLElement
+	themeEl: HTMLElement
+	themeValueEl: HTMLElement
+	spellEl: HTMLElement
+	spellValueEl: HTMLElement
 
 	constructor(parentElement = document.documentElement) {
 		this.rootEl = getById('action-menu')
@@ -35,35 +40,42 @@ export class Menu {
 		this.popupEl = getByClass('action-popup', this.rootEl)
 		this.actionsEl = getByClass('action-list', this.rootEl)
 		this.inputEl = getByTag('input', this.rootEl) as HTMLInputElement
+		this.actions = allActions.filter(x => !x.searchOnly)
 
-		this.setActions(menuActions.filter(el => !el.hidden))
+		console.debug(`Init render`)
+		this.renderActions()
+
 		this.inputEl.addEventListener('input', (e: InputEvent) => {
 			this.actionsEl.hidden = true
 			const value = (e.target as HTMLInputElement).value
 
 			if (!value) {
-				this.setActions(menuActions.filter(el => !el.hidden))
+				this.actions = allActions.filter(x => !x.searchOnly)
+				console.debug(`Rendering without search`)
+				this.renderActions()
 				return
 			}
 
-			const results = fuzzysort.go(value, menuActions, fuzzySortOptions)
-			this.setActions(results.map((el) => el.obj))
+			const results = fuzzysort.go(value, allActions, fuzzySortOptions)
+			this.renderActions(results.map(x => x.obj))
 		})
 
 		this.toggleEl.addEventListener('click', () => {
-			this.toggle(true)
+			this.toggle()
 		})
 	}
 
 	/**
 	 * Hide or show options menu
-	 * @param show Force show. Toggle mode in not defined
-	 * @returns If menu is currently open
+	 * @param show Force show. Do not define if you want toggle behaviour
+	 * @returns Is menu is currently open
 	 */
 	toggle(show: boolean = undefined): boolean {
-		console.debug(`Toggling menu with show: ${show}`)
 		const open = show === undefined ? !this.opened : show
+		console.debug(`Toggling menu with show: ${show}. ${open ? 'Opening' : 'Closing'}`)
 		if (open) {
+			state.editorEl.blur()
+			window.getSelection().removeAllRanges()
 			this.popupEl.classList.add(openClass)
 			this.inputEl.focus()
 			this.opened = true
@@ -75,122 +87,146 @@ export class Menu {
 		return open
 	}
 
-	// I feel sorry for this code
-	setActions(array: MenuAction[]) {
-		this.actions = array
+	// Hidden actions are always ignored!
+	renderActions(array: MenuAction[] = this.actions) {
+		this.actions = array.filter(x => !x.hidden)
+		this.selected = 0
 		this.actionsEl.replaceChildren()
-		this.inputEl.onkeydown = () => { }
 
-		console.debug(`Setting ${array.length} actions`)
-
-		if (array.length === 0) {
+		if (this.actions.length === 0) {
 			this.actionsEl.dataset.placeholderShow = 'true'
 			return
 		}
 
+		this.inputEl.onkeydown = null
 		delete this.actionsEl.dataset.placeholderShow
 
-		array.forEach((el, i) => {
-			const actionEl = el.renderAction()
-			if (array.length > 1) {
-				actionEl.addEventListener('keydown', (e) => {
-					switch (e.key) {
-						case 'ArrowUp': {
-							if (i > 0) array[i - 1].setFocused(); else {
-								e.preventDefault()
-								this.inputEl.focus()
-							}
-							break
-						}
-						case 'ArrowDown': {
-							if (i < array.length - 1) array[i + 1].setFocused(); else this.inputEl.focus()
-							break
-						}
-					}
-				})
-			}
-			this.actionsEl.appendChild(actionEl)
-		})
-
-		array[0].setVisiblyFocused()
-
-		if (array.length === 1) {
-			this.inputEl.addEventListener('keydown', (e) => {
-				if (e.key === 'Enter') array[0].run()
-			})
-			return
-		}
-
-		this.inputEl.onkeydown = (e) => {
+		this.inputEl.onkeydown = e => {
 			switch (e.key) {
+				case 'Tab': {
+					e.preventDefault()
+					break
+				}
 				case 'ArrowUp': {
 					e.preventDefault()
-					array[0].resetFocus()
-					array[array.length - 1].setFocused()
+					this.select(--this.selected, true)
 					break
 				}
 				case 'ArrowDown': {
 					e.preventDefault()
-					array[0].resetFocus()
-					array[1]?.setFocused()
+					this.select(++this.selected, true)
 					break
 				}
 				case 'Enter': {
 					e.preventDefault()
-					if (array.length >= 1)
-						array[0].run()
-					break
+					if (e.repeat) return
+					this.actions[this.selected].run()
 				}
 			}
 		}
+
+		this.actions.forEach((x, i) => {
+			const el = this.actionsEl.appendChild(x.renderAction(i))
+			// Fixing tab navigation buy switching back to input
+			el.addEventListener('mouseup', () => this.inputEl.focus())
+			el.addEventListener('mouseleave', () => this.inputEl.focus())
+		})
+		this.select(0)
+
+		this.actionsEl.addEventListener('mouseover', (e) => {
+			const target = e.target as HTMLElement
+			if (target.tagName.toLowerCase() === 'button') {
+				this.select(+target.dataset.index)
+			}
+		})
+
+		this.actionsEl.addEventListener('focusin', (e) => {
+			const target = e.target as HTMLElement
+			if (target.tagName.toLowerCase() === 'button') {
+				this.select(+target.dataset.index)
+			}
+		})
 	}
 
-	updateActions(state: State) {
+	select(i: number, scrollTo = false) {
+		const length = this.actions.length
+		if (i < 0) i = length + i
+		if (i >= length) i = i - length
+		this.selected = i
+		this.actions[i].select(scrollTo)
+	}
+
+	// hide(id: MenuActionId) {
+	// 	menuActions.find(x => x.id === id).hidden = true
+	// }
+
+	// show(id: MenuActionId) {
+	// 	menuActions.find(x => x.id === id).hidden = false
+
+	// }
+
+
+	updateActions(event: menuUpdateEvent) {
 		console.debug(`Updating menu actions`)
-		switch (state) {
-			case 'empty': {
-				hide(this.publishEl)
-				hide(this.downloadEl)
-				show(this.exportAllEl)
+		switch (event) {
+			case 'empty':
+				hide('publish')
+				hide('download')
+				hide('copyAndEdit')
+				show('exportAll')
 				break
-			}
-			case 'notEmpty': {
-				show(this.publishEl)
-				show(this.downloadEl)
-				hide(this.exportAllEl)
+			case 'writing':
+				show('publish')
+				show('download')
+				hide('exportAll')
 				break
-			}
-			case 'locked': {
-				hide(this.publishEl)
-				hide(this.exportAllEl)
-				show(this.downloadEl)
-				show(this.copyAndEditEl)
+			case 'reading':
+				hide('publish')
+				hide('exportAll')
+				show('download')
+				show('copyAndEdit')
 				break
-			}
-			case 'unlocked': {
-				show(this.publishEl)
-				hide(this.copyAndEditEl)
+			case 'fontSans':
+				hide('fontSans')
+				show('fontSerif')
+				show('fontMono')
 				break
-			}
+			case 'fontSerif':
+				show('fontSans')
+				hide('fontSerif')
+				show('fontMono')
+				break
+			case 'fontMono':
+				show('fontSans')
+				show('fontSerif')
+				hide('fontMono')
+				break
+			case 'spellcheckOff':
+				hide('spellOff')
+				show('spellOn')
+				break
+			case 'spellcheckOn':
+				show('spellOff')
+				hide('spellOn')
+				break
+			case 'themeLight':
+				hide('themeLight')
+				show('themeDark')
+				show('themeDigital')
+				break
+			case 'themeDark':
+				show('themeLight')
+				hide('themeDark')
+				show('themeDigital')
+				break
+			case 'themeDigital':
+				show('themeLight')
+				show('themeDark')
+				hide('themeDigital')
+				break
 		}
+		this.renderActions()
 	}
-}
-
-export const menu = {
-	rootEl: null as HTMLElement,
-	toggleEl: null as HTMLElement,
-	popupEl: null as HTMLElement,
-	inputEl: null as HTMLElement,
-	// downloadEl: null as HTMLElement,
-	// exportAllEl: null as HTMLElement,
-	// publishEl: null as HTMLElement,
-	// copyAndEditEl: null as HTMLElement,
-	// fontEl: null as HTMLElement,
-	// fontValueEl: null as HTMLElement,
-	// themeEl: null as HTMLElement,
-	// themeValueEl: null as HTMLElement,
-	// spellEl: null as HTMLElement,
-	// spellValueEl: null as HTMLElement,
 }
 
 export function initMenuElements(parentElement = document.documentElement) {
@@ -200,16 +236,11 @@ export function initMenuElements(parentElement = document.documentElement) {
 	this.inputEl = getByTag('input', this.rootEl)
 }
 
-
-
-function hide(el: HTMLElement, directly = false) {
-	if (!directly)
-		el = el.parentElement
-	el.hidden = true
+function hide(id: MenuActionId) {
+	allActions.find(x => x.id === id).hidden = true
 }
 
-function show(el: HTMLElement, directly = false) {
-	if (!directly)
-		el = el.parentElement
-	el.hidden = false
+function show(id: MenuActionId) {
+	allActions.find(x => x.id === id).hidden = false
+
 }

@@ -10,7 +10,7 @@ import '@styles/action-menu.sass'
 			<kbd>Ctrl</kbd><kbd>K</kbd>
 		</span>
 	</button>
-	<div class="action-popup bg-blur" role="dialog">
+	<div class="action-popup bg-blur" role="dialog" tabindex="-1">
 		<div class="input-wrapper">
 			<input
 				type="text"
@@ -19,6 +19,7 @@ import '@styles/action-menu.sass'
 				placeholder="Search for actions"
 				autocomplete="off"
 			/>
+			<hr />
 		</div>
 		<ul class="action-list" role="listbox" data-placeholder="nothing found">
 		</ul>

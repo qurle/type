@@ -1,3 +1,4 @@
+import { openFilePicker } from '@scripts/header/listeners'
 import { MenuAction } from '@scripts/menu/classes/MenuAction'
 
 const ctrl = 'Ctrl'
@@ -11,33 +12,38 @@ export const fuzzySortOptions = {
 	threshold: 0.3,
 }
 
-export const menuActions: MenuAction[] = [
+const allActionsData: Partial<MenuAction>[] = [
 	{
 		id: 'open',
 		name: 'Open document',
 		shortcut: [ctrl, 'O'],
 		aliases: 'upload|file',
+		callback: openFilePicker
 	},
 	{
 		id: 'publish',
 		name: 'Publish',
 		shortcut: [ctrl, shift, 'P'],
-		hidden: true
+		aliases: 'share',
+		hidden: true,
 	},
 	{
 		id: 'copyAndEdit',
 		name: 'Copy and edit',
 		shortcut: [ctrl, shift, 'E'],
+		aliases: 'duplicate',
 		hidden: false
 	},
 	{
 		id: 'download',
 		name: 'Download',
-		shortcut: [ctrl, shift, 'S']
+		shortcut: [ctrl, shift, 'S'],
+		aliases: 'save|export',
 	},
 	{
-		id: 'export-all',
+		id: 'exportAll',
 		name: 'Export all',
+		aliases: 'save',
 	},
 	{
 		id: 'font',
@@ -46,14 +52,17 @@ export const menuActions: MenuAction[] = [
 	{
 		id: 'fontSans',
 		name: 'Use sans-serif font',
+		searchOnly: true
 	},
 	{
 		id: 'fontSerif',
 		name: 'Use serif font',
+		searchOnly: true,
 	},
 	{
 		id: 'fontMono',
 		name: 'Use monospace font',
+		searchOnly: true,
 	},
 	{
 		id: 'theme',
@@ -62,10 +71,17 @@ export const menuActions: MenuAction[] = [
 	{
 		id: 'themeLight',
 		name: 'Use light theme',
+		searchOnly: true,
 	},
 	{
 		id: 'themeDark',
 		name: 'Use dark theme',
+		searchOnly: true,
+	},
+	{
+		id: 'themeDigital',
+		name: 'Use really digital theme',
+		searchOnly: true,
 	},
 	{
 		id: 'spellOn',
@@ -87,4 +103,9 @@ export const menuActions: MenuAction[] = [
 		id: 'about',
 		name: 'About type.',
 	},
-].map(el => new MenuAction(el))
+] as const;
+
+export type MenuActionId = typeof allActionsData[number]['id'];
+
+export const allActions: MenuAction[] = (allActionsData as unknown as Partial<MenuAction>[])
+	.map(x => new MenuAction(x));

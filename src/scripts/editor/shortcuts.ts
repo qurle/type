@@ -1,4 +1,3 @@
-import { menu } from '@scripts/menu/classes/Menu'
 import { exportFile } from '@scripts/note/export'
 import { publish } from '@scripts/note/publish'
 import { save } from '@scripts/note/save'
@@ -7,9 +6,9 @@ import { loadCurrentId } from '@scripts/utils/currentNote'
 import { getByClass } from '@scripts/utils/getElements'
 import { clearEditor } from '@scripts/editor/clear'
 import { unlock } from '@scripts/editor/lock'
-import { toggleMenu } from '@scripts/menu/toggle'
+import { openFilePicker } from '@scripts/header/listeners'
 
-export function initShortcuts(uploadInputEl: HTMLInputElement) {
+export function initShortcuts() {
 	document.addEventListener('keydown', (e) => {
 		// Ctrl / Cmd actions
 		if (e.ctrlKey || e.metaKey) {
@@ -57,7 +56,7 @@ export function initShortcuts(uploadInputEl: HTMLInputElement) {
 				case 'KeyO': {
 					e.preventDefault()
 					if (e.repeat) return
-					uploadInputEl.click()
+					openFilePicker()
 					return
 				}
 			}
@@ -69,8 +68,8 @@ export function initShortcuts(uploadInputEl: HTMLInputElement) {
 						return
 					}
 					// Rewrite this part to state like menu.open
-					if (menu.toggleEl.classList.contains('active')) {
-						toggleMenu(false)
+					if (state.menu.opened) {
+						state.menu.toggle(false)
 						state.editorEl.focus()
 						return
 					}

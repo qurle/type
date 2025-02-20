@@ -14,13 +14,11 @@ import Typography from '@tiptap/extension-typography'
 import Underline from '@tiptap/extension-underline'
 import { Markdown } from 'tiptap-markdown'
 import { linkConfig, markdownConfig } from '@scripts/editor2/config'
-import { state } from '@scripts/state'
+import { state, updateStatus } from '@scripts/state'
 import { toggleNotesList, updateNotesList } from '@scripts/render/notes'
 import { header } from '@scripts/header/elements'
 import { setTitle } from '@scripts/utils/setTitle'
-import { updateActions } from '@scripts/menu/updateActions'
 import { clearCurrentId } from '@scripts/utils/currentNote'
-import { toggleMenu } from '@scripts/menu/toggle'
 
 export function createEditor() {
 	return new Editor({
@@ -60,18 +58,19 @@ export function createEditor() {
 		injectCSS: false,
 
 		onCreate({ editor }) {
+			updateStatus('empty')
 			state.editorEl = editor.options.element.firstChild as HTMLElement
 			state.editorEl.ariaLabel = 'Your note'
+			state.editorEl.focus()
 			if (state.hasNotes) state.editorEl.classList.add('collapsed')
-			state.editorEl.spellcheck =
-				localStorage.getItem('spell') === 'true' || false
+			state.editorEl.spellcheck = state.spellcheck
 			state.wasEmpty = true
 		},
 		onUpdate({ editor }) {
+			console.debug(`Editor updated`)
 			state.updated = true
 			state.empty = editor.isEmpty
-
-			toggleMenu(false)
+			state.menu.toggle(false)
 
 			if (state.empty) {
 				console.debug('Turned to empty')
@@ -80,7 +79,7 @@ export function createEditor() {
 				header.headerLeftEl.dataset.context = 'notes'
 				setTitle()
 				updateNotesList()
-				updateActions('empty')
+				state.menu.updateActions('empty')
 				clearCurrentId()
 				state.wasEmpty = true
 			} else if (state.wasEmpty) {
@@ -91,7 +90,7 @@ export function createEditor() {
 				header.headerLeftEl.dataset.context = 'editor'
 				state.wasEmpty = false
 				// Change buttons in menu
-				if (!state.locked) updateActions('notEmpty')
+				if (!state.locked) state.menu.updateActions('writing')
 			}
 		},
 	})

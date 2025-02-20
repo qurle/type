@@ -8,7 +8,6 @@
     z-index: 1
 
 .action-toggle
-    // add :hover and .active state
     display: flex
     padding: var(--space-m) var(--space-l)
     gap: var(--space-m)
@@ -17,11 +16,18 @@
     position: relative
     z-index: 2
 
+    transition: transform var(--transition-s)
+    &:hover
+        transform: scale(1.03)
+    &:active
+        transform: scale(.97)
+
 .action-popup
+    display: flex
+    flex-direction: column
+
     position: absolute
     bottom: calc(100% + 1rem)
-
-    overflow-y: scroll
     z-index: 1
 
     width: clamp(300px, 50vw, var(--page-width))
@@ -29,7 +35,6 @@
     max-height: 20rem
 
     border-radius: var(--radius-xl)
-    padding: var(--space-m) 0
     box-shadow: none
 
     opacity: 0
@@ -38,11 +43,9 @@
     transform-origin: bottom center
     transition: opacity var(--transition-s), background-color var(--transition-s), scale var(--transition-s), box-shadow var(--transition-s),
 
-    .input-wrapper
-        padding: var(--space-m) var(--space-l)
-
     input
         width: 100%
+        padding: var(--space-l) var(--space-l) var(--space-m)
 
     hr
         margin: var(--space-s) var(--space-l)
@@ -58,8 +61,10 @@
     display: flex
     flex-direction: column
     gap: var(--space-s)
-
     padding: var(--space-s) var(--space-m)
+
+    height: 100%
+    overflow-y: scroll
 
     font-size: var(--font-size-s)
     text-wrap: nowrap
@@ -69,25 +74,33 @@
 
     button, a
         width: 100%
+        position: relative
+
         display: flex
         justify-content: space-between
         align-items: baseline
 
-        border-radius: var(--radius-l)
-        padding: var(--space-m) calc(var(--space-l) - var(--space-m))
+        scroll-margin: var(--space-xl)
+        padding: var(--space-m) 
         gap: var(--space-xl)
 
-        opacity: 1
-        transition: color var(--transition-s), transform var(--transition-s)
+        &::before
+            content: ''
+            position: absolute
+            inset: 0 calc(-0.5 * var(--space-s))
+            border-radius: var(--radius-l)
+            background: transparent
+            z-index: -1
+            transform: scale(0.97)
+            transition: transform var(--transition-s)
 
-        &:hover
-            color: var(--color-main-50)
+        transition: transform var(--transition-s)
         &:active
-            background: var(--color-main-05)
-            transform: scale(.95)
-        &.active,
-        &:focus-visible
-            background: var(--color-main-05)
+            transform: scale(.97)
+        &.active
+            &::before
+                transform: scale(1)
+                background: var(--color-main-05)
 
 .shortcut
     display: flex

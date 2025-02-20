@@ -3,31 +3,39 @@ import 'fuzzysort'
 // To your arms, into your arms
 // I will go when I'm low
 
-export class MenuAction {
-	id: string;
-	name: string;
-	shortcut?: string[];
-	shortcutMac?: string[];
-	hidden?: boolean;
-	aliases?: string;
-	listEl?: HTMLLIElement;
-	buttonEl?: HTMLButtonElement;
-	callback?: (...args: any) => void;
+let selectedEl: HTMLElement = null
 
-	constructor({ id: id, name: name, shortcut: shortcut, aliases: aliases, hidden: hidden }:Partial<MenuAction>) {
-		this.id = id
-		this.name = name
-		this.shortcut = shortcut || null
-		this.aliases = aliases || null
-		this.hidden = hidden || false
+export class MenuAction {
+	id: string
+	name: string
+	shortcut?: string[]
+	shortcutMac?: string[]
+	searchOnly?: boolean
+	hidden?: boolean
+	aliases?: string
+	listEl?: HTMLLIElement
+	buttonEl?: HTMLButtonElement
+	selected?: boolean
+	callback?: (...args: any) => void
+
+	constructor(action: Partial<MenuAction>) {
+		for (const key in action)
+			if (action.hasOwnProperty(key))
+				this[key] = action[key]
 	}
 
-	renderAction() {
-		// const actionEl = document.getElementById('action-' + el.obj.id)
+	renderAction(index: number) {
 		this.listEl = document.createElement('li')
-		this.listEl.id = 'action-' + this.id
 		this.buttonEl = document.createElement('button')
 		this.buttonEl.className = 'action'
+		this.buttonEl.dataset.index = index.toString()
+		this.buttonEl.addEventListener('click', (e) => {
+			e.preventDefault()
+			this.run()
+		})
+		this.buttonEl.addEventListener('keydown', (e) => {
+			if (e.key === 'Tab') e.preventDefault()
+		})
 		const nameEl = document.createElement('span')
 		nameEl.className = 'name'
 		nameEl.textContent = this.name
@@ -46,21 +54,16 @@ export class MenuAction {
 		return this.listEl
 	}
 
-	setFocused() {
-		this.buttonEl.focus()
-	}
-
-	setVisiblyFocused() {
-		this.buttonEl.classList.add('active')
-	}
-
-	resetFocus() {
-		this.buttonEl.blur()
-		this.buttonEl.classList.remove('active')
+	select(scrollTo = false) {
+		selectedEl?.classList.remove('active')
+		selectedEl = this.buttonEl
+		selectedEl.classList.add('active')
+		scrollTo && selectedEl.scrollIntoView(false)
 	}
 
 	run() {
 		console.debug(`Running ${this.name}`)
-		// this?.callback()
+		console.debug(this?.callback)
+		this?.callback()
 	}
 }
