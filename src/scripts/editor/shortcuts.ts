@@ -1,12 +1,12 @@
-import { exportFile } from '@scripts/note/export'
-import { publish } from '@scripts/note/publish'
+import { exportFile } from '@scripts/actions/export'
+import { publish } from '@scripts/actions/publish'
 import { save } from '@scripts/note/save'
 import { state } from '@scripts/state'
-import { loadCurrentId } from '@scripts/utils/currentNote'
+import { getCurrentId } from '@scripts/utils/currentNote'
 import { getByClass } from '@scripts/utils/getElements'
 import { clearEditor } from '@scripts/editor/clear'
 import { unlock } from '@scripts/editor/lock'
-import { openFilePicker } from '@scripts/header/listeners'
+import { openFilePicker } from '@scripts/actions/openFilePicker'
 
 export function initShortcuts() {
 	document.addEventListener('keydown', (e) => {
@@ -32,7 +32,7 @@ export function initShortcuts() {
 					if (state.empty) return
 
 					save('publish', true)
-					publish(loadCurrentId())
+					publish()
 					return
 				}
 				case 'KeyE': {

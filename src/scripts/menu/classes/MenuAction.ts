@@ -5,6 +5,7 @@ import 'fuzzysort'
 
 let selectedEl: HTMLElement = null
 
+
 export class MenuAction {
 	id: string
 	name: string
@@ -12,11 +13,12 @@ export class MenuAction {
 	shortcutMac?: string[]
 	searchOnly?: boolean
 	hidden?: boolean
-	aliases?: string
+	aliases?: string				
 	listEl?: HTMLLIElement
 	buttonEl?: HTMLButtonElement
 	selected?: boolean
 	callback?: (...args: any) => void
+	closesMenu?: boolean
 
 	constructor(action: Partial<MenuAction>) {
 		for (const key in action)

@@ -1,11 +1,11 @@
 import { menu } from '@scripts/menu/classes/Menu'
-import { exportAll, exportFile } from '@scripts/note/export'
+import { exportAll, exportFile } from '@scripts/actions/export'
 import { unlock } from '@scripts/editor/lock'
-import { publish } from '@scripts/note/publish'
+import { publish } from '@scripts/actions/publish'
 import { save } from '@scripts/note/save'
 import { getAppearance, cycleAppearance } from '@scripts/render/appearance'
 import { state } from '@scripts/state'
-import { loadCurrentId } from '@scripts/utils/currentNote'
+import { getCurrentId } from '@scripts/utils/currentNote'
 import { toggleMenu } from '@scripts/menu/toggle'
 
 export function initMenuListeners() {
@@ -22,24 +22,7 @@ export function initMenuListeners() {
 		)
 			toggleMenu(false)
 	})
-	// Publish note
-	// menu.publishEl.addEventListener('click', () => {
-	// 	if (state.empty) return
-	// 	save('publish', true)
-	// 	toggleMenu(false)
-	// 	publish(loadCurrentId())
-	// })
-	// // Download note as file
-	// menu.downloadEl.addEventListener('click', () => {
-	// 	if (state.empty) return
-	// 	toggleMenu(false)
-	// 	exportFile()
-	// })
-	// // Download all notes as archive
-	// menu.exportAllEl.addEventListener('click', () => {
-	// 	toggleMenu(false)
-	// 	exportAll()
-	// })
+
 	// // Duplicate to local notes and unlock
 	// menu.copyAndEditEl.addEventListener('click', () => {
 	// 	toggleMenu(false)

@@ -17,7 +17,3 @@ export function initHeaderListeners() {
 		uploadNotes(header.filePickerEl.files)
 	})
 }
-
-export function openFilePicker() {
-	header.filePickerEl.click()
-}

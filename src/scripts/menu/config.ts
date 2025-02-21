@@ -1,5 +1,8 @@
-import { openFilePicker } from '@scripts/header/listeners'
+import { exportAll, exportFile } from '@scripts/actions/export'
+import { openFilePicker } from '@scripts/actions/openFilePicker'
+import { publish } from '@scripts/actions/publish'
 import { MenuAction } from '@scripts/menu/classes/MenuAction'
+import { getCurrentId } from '@scripts/utils/currentNote'
 
 const ctrl = 'Ctrl'
 const shift = 'Shift'
@@ -26,6 +29,7 @@ const allActionsData: Partial<MenuAction>[] = [
 		shortcut: [ctrl, shift, 'P'],
 		aliases: 'share',
 		hidden: true,
+		callback: publish
 	},
 	{
 		id: 'copyAndEdit',
@@ -39,11 +43,13 @@ const allActionsData: Partial<MenuAction>[] = [
 		name: 'Download',
 		shortcut: [ctrl, shift, 'S'],
 		aliases: 'save|export',
+		callback: exportFile
 	},
 	{
 		id: 'exportAll',
 		name: 'Export all',
 		aliases: 'save',
+		callback: exportAll
 	},
 	{
 		id: 'font',
