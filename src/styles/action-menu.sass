@@ -30,7 +30,7 @@
     bottom: calc(100% + 1rem)
     z-index: 1
 
-    width: clamp(300px, 50vw, var(--page-width))
+    width: clamp(300px, 50vw, calc(0.8 * var(--page-width)))
     height: 50vh
     max-height: 20rem
 
@@ -72,6 +72,11 @@
     transform-origin: center
     transition: opacity var(--transition-s), background-color var(--transition-s), transform var(--transition-m)
 
+    li
+        animation: show-up linear both
+        animation-timeline: view()
+        animation-range: entry
+
     button, a
         width: 100%
         position: relative
@@ -81,7 +86,7 @@
         align-items: baseline
 
         scroll-margin: var(--space-xl)
-        padding: var(--space-m) 
+        padding: var(--space-m)
         gap: var(--space-xl)
 
         &::before
@@ -94,7 +99,7 @@
             transform: scale(0.97)
             transition: transform var(--transition-s)
 
-        transition: transform var(--transition-s)
+            transition: transform var(--transition-s)
         &:active
             transform: scale(.97)
         &.active
@@ -107,3 +112,7 @@
     gap: var(--space-m)
     font-size: var(--font-size-xs)
     color: var(--color-main-25)
+
+@keyframes show-up
+  from
+    opacity: 0

@@ -23,8 +23,6 @@ export const state = {
 	editorVersion: '1',
 
 	// Settings
-	theme: null,								// Current theme
-	font: null,									// Current font
 	spellcheck: null as boolean,				// Is spellcheck on
 
 	// Storage
@@ -44,8 +42,6 @@ export async function initState() {
 	state.editorVersion = getEditorVersion()
 
 	state.spellcheck = localStorage.getItem('spell') === 'true' || false
-	state.theme = getAppearance('theme')
-	state.font = getAppearance('font')
 
 	state.opfs = await getOpfs()
 	state.notes = await getNotes(state.opfs)

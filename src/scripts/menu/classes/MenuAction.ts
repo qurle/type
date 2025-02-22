@@ -1,3 +1,4 @@
+import { state } from '@scripts/state'
 import 'fuzzysort'
 
 // To your arms, into your arms
@@ -5,20 +6,30 @@ import 'fuzzysort'
 
 let selectedEl: HTMLElement = null
 
-
 export class MenuAction {
+	/** The unique identifier for the action */
 	id: string
+	/** The display name of the action */
 	name: string
+	/** The keyboard shortcuts for the action */
 	shortcut?: string[]
+	/** The keyboard shortcuts for the action on Mac */
 	shortcutMac?: string[]
+	/** Indicates if the action is only searchable and not visible in the menu */
 	searchOnly?: boolean
+	/** Indicates if the action is hidden */
 	hidden?: boolean
-	aliases?: string				
+	/** Alternative names for the fuzzysearch */
+	aliases?: string
+	/** The list element associated with the action */
 	listEl?: HTMLLIElement
+	/** The button element associated with the action */
 	buttonEl?: HTMLButtonElement
-	selected?: boolean
-	callback?: (...args: any) => void
+	/** Indicates if the menu should be closed after the action is triggered */
 	closesMenu?: boolean
+	/** The callback function to be executed when the action is triggered */
+	callback?: (...args: any) => void
+
 
 	constructor(action: Partial<MenuAction>) {
 		for (const key in action)
@@ -67,5 +78,6 @@ export class MenuAction {
 		console.debug(`Running ${this.name}`)
 		console.debug(this?.callback)
 		this?.callback()
+		if (this?.closesMenu) state.menu.toggle(false)
 	}
 }

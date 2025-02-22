@@ -23,17 +23,6 @@ export class Menu {
 	actions: MenuAction[] = []
 	selected: number = null
 
-	downloadEl: HTMLElement
-	exportAllEl: HTMLElement
-	publishEl: HTMLElement
-	copyAndEditEl: HTMLElement
-	fontEl: HTMLElement
-	fontValueEl: HTMLElement
-	themeEl: HTMLElement
-	themeValueEl: HTMLElement
-	spellEl: HTMLElement
-	spellValueEl: HTMLElement
-
 	constructor(parentElement = document.documentElement) {
 		this.rootEl = getById('action-menu')
 		this.toggleEl = getByClass('action-toggle', this.rootEl) as HTMLButtonElement
@@ -156,14 +145,13 @@ export class Menu {
 		this.actions[i].select(scrollTo)
 	}
 
-	// hide(id: MenuActionId) {
-	// 	menuActions.find(x => x.id === id).hidden = true
-	// }
+	hide(id: MenuActionId) {
+		this.actions.find(x => x.id === id).hidden = true
+	}
 
-	// show(id: MenuActionId) {
-	// 	menuActions.find(x => x.id === id).hidden = false
-
-	// }
+	show(id: MenuActionId) {
+		this.actions.find(x => x.id === id).hidden = false
+	}
 
 
 	updateActions(event: menuUpdateEvent) {
@@ -226,6 +214,7 @@ export class Menu {
 				break
 		}
 		this.renderActions()
+		this.select(this.selected)
 	}
 }
 
@@ -242,5 +231,4 @@ function hide(id: MenuActionId) {
 
 function show(id: MenuActionId) {
 	allActions.find(x => x.id === id).hidden = false
-
 }

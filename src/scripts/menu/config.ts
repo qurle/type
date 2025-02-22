@@ -1,8 +1,11 @@
 import { exportAll, exportFile } from '@scripts/actions/export'
+import { cycleFonts, useFont } from '@scripts/actions/fonts'
 import { openFilePicker } from '@scripts/actions/openFilePicker'
 import { publish } from '@scripts/actions/publish'
+import { toggleSpellcheck } from '@scripts/actions/spellcheck'
+import { cycleThemes, useTheme } from '@scripts/actions/themes'
 import { MenuAction } from '@scripts/menu/classes/MenuAction'
-import { getCurrentId } from '@scripts/utils/currentNote'
+import MicroModal from 'micromodal';
 
 const ctrl = 'Ctrl'
 const shift = 'Shift'
@@ -21,7 +24,8 @@ const allActionsData: Partial<MenuAction>[] = [
 		name: 'Open document',
 		shortcut: [ctrl, 'O'],
 		aliases: 'upload|file',
-		callback: openFilePicker
+		closesMenu: true,
+		callback: openFilePicker,
 	},
 	{
 		id: 'publish',
@@ -29,6 +33,7 @@ const allActionsData: Partial<MenuAction>[] = [
 		shortcut: [ctrl, shift, 'P'],
 		aliases: 'share',
 		hidden: true,
+		closesMenu: true,
 		callback: publish
 	},
 	{
@@ -36,6 +41,7 @@ const allActionsData: Partial<MenuAction>[] = [
 		name: 'Copy and edit',
 		shortcut: [ctrl, shift, 'E'],
 		aliases: 'duplicate',
+		closesMenu: true,
 		hidden: false
 	},
 	{
@@ -43,71 +49,94 @@ const allActionsData: Partial<MenuAction>[] = [
 		name: 'Download',
 		shortcut: [ctrl, shift, 'S'],
 		aliases: 'save|export',
+		closesMenu: true,
 		callback: exportFile
 	},
 	{
 		id: 'exportAll',
 		name: 'Export all',
 		aliases: 'save',
+		closesMenu: true,
 		callback: exportAll
 	},
 	{
 		id: 'font',
 		name: 'Change font',
+		callback: cycleFonts
 	},
 	{
 		id: 'fontSans',
 		name: 'Use sans-serif font',
-		searchOnly: true
+		searchOnly: true,
+		callback: () => useFont('sans')
 	},
 	{
 		id: 'fontSerif',
 		name: 'Use serif font',
 		searchOnly: true,
+		callback: () => useFont('serif')
+
 	},
 	{
 		id: 'fontMono',
 		name: 'Use monospace font',
 		searchOnly: true,
+		callback: () => useFont('mono')
 	},
 	{
 		id: 'theme',
 		name: 'Change theme',
+		callback: cycleThemes
 	},
 	{
 		id: 'themeLight',
 		name: 'Use light theme',
 		searchOnly: true,
+		callback: () => useTheme('light')
 	},
 	{
 		id: 'themeDark',
 		name: 'Use dark theme',
 		searchOnly: true,
+		callback: () => useTheme('dark')
 	},
 	{
 		id: 'themeDigital',
 		name: 'Use really digital theme',
 		searchOnly: true,
+		callback: () => useTheme('digital')
+
 	},
 	{
 		id: 'spellOn',
 		name: 'Turn spellcheck on',
+		aliases: 'errors',
+		callback: () => toggleSpellcheck(true)
 	},
 	{
 		id: 'spellOff',
 		name: 'Turn spellcheck off',
+		aliases: 'errors',
+		callback: () => toggleSpellcheck(false)
 	},
 	{
 		id: 'mdHandbook',
 		name: 'How to markdown',
+		closesMenu: true,
+		// Inline it
+		callback: () => MicroModal.show('modal-instructions'),
 	},
 	{
 		id: 'shortcuts',
 		name: 'Show all shortcuts',
+		closesMenu: true,
+		callback: () => MicroModal.show('modal-shortcuts'),
 	},
 	{
 		id: 'about',
 		name: 'About type.',
+		closesMenu: true,
+		callback: () => window.open('/hello', '_blank')
 	},
 ] as const;
 
