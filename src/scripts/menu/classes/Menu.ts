@@ -4,7 +4,7 @@ import type { MenuAction } from '@scripts/menu/classes/MenuAction';
 import fuzzysort from 'fuzzysort';
 import { fuzzySortOptions, allActions, type MenuActionId } from '@scripts/menu/config';
 
-type menuUpdateEvent =
+export type MenuUpdateEvent =
 	'spellcheckOff' | 'spellcheckOn' |
 	'themeLight' | 'themeDark' | 'themeDigital' |
 	'fontSans' | 'fontSerif' | 'fontMono' |
@@ -33,25 +33,37 @@ export class Menu {
 
 		console.debug(`Init render`)
 		this.renderActions()
-
-		this.inputEl.addEventListener('input', (e: InputEvent) => {
-			this.actionsEl.hidden = true
-			const value = (e.target as HTMLInputElement).value
-
-			if (!value) {
-				this.actions = allActions.filter(x => !x.searchOnly)
-				console.debug(`Rendering without search`)
-				this.renderActions()
-				return
+		this.inputEl.addEventListener('input', () => this.search())
+		this.toggleEl.addEventListener('click', () => this.toggle())
+		this.actionsEl.addEventListener('mousemove', (e) => {
+			const target = e.target as HTMLElement
+			if (target.tagName.toLowerCase() === 'button') {
+				this.select(+target.dataset.index)
 			}
-
-			const results = fuzzysort.go(value, allActions, fuzzySortOptions)
-			this.renderActions(results.map(x => x.obj))
 		})
-
-		this.toggleEl.addEventListener('click', () => {
-			this.toggle()
+		this.actionsEl.addEventListener('focusin', (e) => {
+			const target = e.target as HTMLElement
+			if (target.tagName.toLowerCase() === 'button') {
+				this.select(+target.dataset.index)
+			}
 		})
+	}
+
+	search(queryChanged = true) {
+		const value = this.inputEl.value
+
+		if (!value) {
+			this.actions = allActions.filter(x => !x.searchOnly)
+			console.debug(`Rendering without search`)
+			this.renderActions()
+			return
+		}
+
+		this.renderActions(queryChanged, this.fuzz(value))
+	}
+
+	fuzz(query: string) {
+		return fuzzysort.go(query, allActions, fuzzySortOptions).map(x => x.obj)
 	}
 
 	/**
@@ -77,9 +89,9 @@ export class Menu {
 	}
 
 	// Hidden actions are always ignored!
-	renderActions(array: MenuAction[] = this.actions) {
+	renderActions(queryChanged = false, array: MenuAction[] = this.actions) {
 		this.actions = array.filter(x => !x.hidden)
-		this.selected = 0
+		this.selected ||= 0
 		this.actionsEl.replaceChildren()
 
 		if (this.actions.length === 0) {
@@ -117,24 +129,10 @@ export class Menu {
 		this.actions.forEach((x, i) => {
 			const el = this.actionsEl.appendChild(x.renderAction(i))
 			// Fixing tab navigation buy switching back to input
-			el.addEventListener('mouseup', () => this.inputEl.focus())
-			el.addEventListener('mouseleave', () => this.inputEl.focus())
+			el.onmouseup = () => this.inputEl.focus()
+			el.onmouseleave = () => this.inputEl.focus()
 		})
-		this.select(0)
-
-		this.actionsEl.addEventListener('mouseover', (e) => {
-			const target = e.target as HTMLElement
-			if (target.tagName.toLowerCase() === 'button') {
-				this.select(+target.dataset.index)
-			}
-		})
-
-		this.actionsEl.addEventListener('focusin', (e) => {
-			const target = e.target as HTMLElement
-			if (target.tagName.toLowerCase() === 'button') {
-				this.select(+target.dataset.index)
-			}
-		})
+		this.select(queryChanged ? 0 : this.selected)
 	}
 
 	select(i: number, scrollTo = false) {
@@ -146,16 +144,17 @@ export class Menu {
 	}
 
 	hide(id: MenuActionId) {
-		this.actions.find(x => x.id === id).hidden = true
+		allActions.find(x => x.id === id).hidden = true
+		try { this.select(++this.selected) } catch { }
 	}
 
 	show(id: MenuActionId) {
-		this.actions.find(x => x.id === id).hidden = false
+		allActions.find(x => x.id === id).hidden = false
 	}
 
 
-	updateActions(event: menuUpdateEvent) {
-		console.debug(`Updating menu actions`)
+	updateActions(event: MenuUpdateEvent) {
+		console.debug(`Updating menu actions by ${event}`)
 		switch (event) {
 			case 'empty':
 				hide('publish')
@@ -190,12 +189,12 @@ export class Menu {
 				hide('fontMono')
 				break
 			case 'spellcheckOff':
-				hide('spellOff')
-				show('spellOn')
+				hide('spellcheckOff')
+				show('spellcheckOn')
 				break
 			case 'spellcheckOn':
-				show('spellOff')
-				hide('spellOn')
+				show('spellcheckOff')
+				hide('spellcheckOn')
 				break
 			case 'themeLight':
 				hide('themeLight')
@@ -213,8 +212,8 @@ export class Menu {
 				hide('themeDigital')
 				break
 		}
-		this.renderActions()
-		this.select(this.selected)
+		this.search(false)
+		// this.select(this.selected)
 	}
 }
 

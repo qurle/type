@@ -14,6 +14,7 @@ import { commonmark } from '@milkdown/kit/preset/commonmark'
 import { gfm } from '@milkdown/kit/preset/gfm'
 import { automd } from '@milkdown/plugin-automd'
 import { header } from '@scripts/header/elements'
+import { getSpellcheck } from '@scripts/actions/spellcheck'
 
 export async function createEditor() {
 	console.debug(`Loading editor`)
@@ -42,7 +43,7 @@ export function onMounted() {
 	state.editorEl.ariaLabel = 'Your note'
 	state.editorEl.focus()
 	if (state.hasNotes) state.editorEl.classList.add('collapsed')
-	state.editorEl.spellcheck = state.spellcheck
+	state.editorEl.spellcheck = getSpellcheck()
 	state.wasEmpty = true
 }
 

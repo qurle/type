@@ -54,7 +54,6 @@ const { editorVersion } = Astro.props
 	await initState()
 	initHeaderElements()
 	initHeaderListeners()
-	// initMenuElements()
 	initStatus(header.headerEl)
 
 	console.debug(`Current editor version: v${state.editorVersion}`)
@@ -82,6 +81,5 @@ const { editorVersion } = Astro.props
 	initNavigationListener()
 	initFocusListener()
 	initUnloadListener()
-	// initMenuListeners()
 	initDragAndDrop()
 </script>

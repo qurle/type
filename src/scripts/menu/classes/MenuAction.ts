@@ -7,10 +7,9 @@ import 'fuzzysort'
 let selectedEl: HTMLElement = null
 
 export class MenuAction {
-	/** The unique identifier for the action */
 	id: string
-	/** The display name of the action */
 	name: string
+	icon: string
 	/** The keyboard shortcuts for the action */
 	shortcut?: string[]
 	/** The keyboard shortcuts for the action on Mac */
@@ -49,10 +48,27 @@ export class MenuAction {
 		this.buttonEl.addEventListener('keydown', (e) => {
 			if (e.key === 'Tab') e.preventDefault()
 		})
+
+		const leftEl = document.createElement('div')
+		leftEl.className = 'left'
+
+		const iconContainerEl = document.createElement('div')
+		iconContainerEl.className = 'icon-container'
+
+		if (this.icon) {
+			const iconEl = document.createElement('img')
+			iconEl.className = 'icon'
+			iconEl.src = `/icons/actions/${this.icon}.svg`
+			iconEl.alt = ''
+			iconContainerEl.appendChild(iconEl)
+		}
+
 		const nameEl = document.createElement('span')
 		nameEl.className = 'name'
 		nameEl.textContent = this.name
-		this.buttonEl.appendChild(nameEl)
+		leftEl.appendChild(iconContainerEl)
+		leftEl.appendChild(nameEl)
+		this.buttonEl.appendChild(leftEl)
 		if (this.shortcut) {
 			const shortcutEl = document.createElement('span')
 			shortcutEl.className = 'shortcut'

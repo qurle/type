@@ -6,7 +6,7 @@ import { getNotes } from '@scripts/storage/getNotes';
 import { getByTag } from '@scripts/utils/getElements';
 import { getEditorVersion } from '@scripts/utils/getEditorVersion';
 import type { Menu } from '@scripts/menu/classes/Menu';
-import { getAppearance } from './render/appearance';
+import { initFont } from '@scripts/actions/fonts';
 
 type Status = 'empty' | 'writing' | 'reading'
 
@@ -40,12 +40,11 @@ export async function initState() {
 	state.empty = true
 	state.updated = false
 	state.editorVersion = getEditorVersion()
-
-	state.spellcheck = localStorage.getItem('spell') === 'true' || false
-
 	state.opfs = await getOpfs()
 	state.notes = await getNotes(state.opfs)
 	state.hasNotes = state.notes?.length > 0
+
+	initFont()
 
 	state.mainEl = getByTag('main')
 }

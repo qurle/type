@@ -22,6 +22,7 @@ const allActionsData: Partial<MenuAction>[] = [
 	{
 		id: 'open',
 		name: 'Open document',
+		icon: 'MaterialSymbolsLightUploadFileOutlineRounded',
 		shortcut: [ctrl, 'O'],
 		aliases: 'upload|file',
 		closesMenu: true,
@@ -30,6 +31,7 @@ const allActionsData: Partial<MenuAction>[] = [
 	{
 		id: 'publish',
 		name: 'Publish',
+		icon: 'MaterialSymbolsLightLinkRounded',
 		shortcut: [ctrl, shift, 'P'],
 		aliases: 'share',
 		hidden: true,
@@ -39,6 +41,7 @@ const allActionsData: Partial<MenuAction>[] = [
 	{
 		id: 'copyAndEdit',
 		name: 'Copy and edit',
+		icon: 'MaterialSymbolsLightFileCopyOutlineRounded',
 		shortcut: [ctrl, shift, 'E'],
 		aliases: 'duplicate',
 		closesMenu: true,
@@ -47,6 +50,7 @@ const allActionsData: Partial<MenuAction>[] = [
 	{
 		id: 'download',
 		name: 'Download',
+		icon: 'MaterialSymbolsLightCloudDownloadOutlineRounded',
 		shortcut: [ctrl, shift, 'S'],
 		aliases: 'save|export',
 		closesMenu: true,
@@ -55,6 +59,7 @@ const allActionsData: Partial<MenuAction>[] = [
 	{
 		id: 'exportAll',
 		name: 'Export all',
+		icon: 'MaterialSymbolsLightFolderZipOutlineRounded',
 		aliases: 'save',
 		closesMenu: true,
 		callback: exportAll
@@ -62,17 +67,20 @@ const allActionsData: Partial<MenuAction>[] = [
 	{
 		id: 'font',
 		name: 'Change font',
+		icon: 'MaterialSymbolsLightInsertTextOutlineRounded',
 		callback: cycleFonts
 	},
 	{
 		id: 'fontSans',
 		name: 'Use sans-serif font',
+		icon: 'MaterialSymbolsLightFontDownloadOutlineRounded',
 		searchOnly: true,
 		callback: () => useFont('sans')
 	},
 	{
 		id: 'fontSerif',
 		name: 'Use serif font',
+		icon: 'MaterialSymbolsLightSerifOutlineRounded',
 		searchOnly: true,
 		callback: () => useFont('serif')
 
@@ -80,48 +88,56 @@ const allActionsData: Partial<MenuAction>[] = [
 	{
 		id: 'fontMono',
 		name: 'Use monospace font',
+		icon: 'MaterialSymbolsLightSlabSerifOutlineRounded',
 		searchOnly: true,
 		callback: () => useFont('mono')
 	},
 	{
 		id: 'theme',
 		name: 'Change theme',
+		icon: 'MaterialSymbolsLightPaletteOutline',
 		callback: cycleThemes
 	},
 	{
 		id: 'themeLight',
 		name: 'Use light theme',
+		icon: 'MaterialSymbolsLightSunnyOutlineRounded',
 		searchOnly: true,
 		callback: () => useTheme('light')
 	},
 	{
 		id: 'themeDark',
 		name: 'Use dark theme',
+		icon: 'MaterialSymbolsLightDarkModeOutlineRounded',
 		searchOnly: true,
 		callback: () => useTheme('dark')
 	},
 	{
 		id: 'themeDigital',
 		name: 'Use really digital theme',
+		icon: 'MaterialSymbolsLightChargerOutlineRounded',
 		searchOnly: true,
 		callback: () => useTheme('digital')
 
 	},
 	{
-		id: 'spellOn',
+		id: 'spellcheckOn',
 		name: 'Turn spellcheck on',
+		icon: 'MaterialSymbolsLightFormatUnderlinedSquiggleRounded',
 		aliases: 'errors',
 		callback: () => toggleSpellcheck(true)
 	},
 	{
-		id: 'spellOff',
+		id: 'spellcheckOff',
 		name: 'Turn spellcheck off',
+		icon: 'MaterialSymbolsLightFormatUnderlinedSquiggleRounded',
 		aliases: 'errors',
 		callback: () => toggleSpellcheck(false)
 	},
 	{
 		id: 'mdHandbook',
 		name: 'How to markdown',
+		icon: 'MaterialSymbolsLightMarkdownOutlineRounded',
 		closesMenu: true,
 		// Inline it
 		callback: () => MicroModal.show('modal-instructions'),
@@ -129,12 +145,14 @@ const allActionsData: Partial<MenuAction>[] = [
 	{
 		id: 'shortcuts',
 		name: 'Show all shortcuts',
+		icon: 'MaterialSymbolsLightKeyboardAltOutlineRounded',
 		closesMenu: true,
 		callback: () => MicroModal.show('modal-shortcuts'),
 	},
 	{
 		id: 'about',
 		name: 'About type.',
+		icon: 'MaterialSymbolsLightFavoriteOutlineRounded',
 		closesMenu: true,
 		callback: () => window.open('/hello', '_blank')
 	},

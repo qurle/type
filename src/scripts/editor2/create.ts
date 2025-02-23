@@ -19,6 +19,7 @@ import { toggleNotesList, updateNotesList } from '@scripts/render/notes'
 import { header } from '@scripts/header/elements'
 import { setTitle } from '@scripts/utils/setTitle'
 import { clearCurrentId } from '@scripts/utils/currentNote'
+import { getSpellcheck } from '@scripts/actions/spellcheck'
 
 export function createEditor() {
 	return new Editor({
@@ -63,7 +64,7 @@ export function createEditor() {
 			state.editorEl.ariaLabel = 'Your note'
 			state.editorEl.focus()
 			if (state.hasNotes) state.editorEl.classList.add('collapsed')
-			state.editorEl.spellcheck = state.spellcheck
+			state.editorEl.spellcheck = getSpellcheck()
 			state.wasEmpty = true
 		},
 		onUpdate({ editor }) {

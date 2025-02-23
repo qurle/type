@@ -83,11 +83,31 @@
 
         display: flex
         justify-content: space-between
-        align-items: baseline
+        align-items: center
 
         scroll-margin: var(--space-xl)
         padding: var(--space-m)
-        gap: var(--space-xl)
+        gap: var(--space-l)
+
+        .left
+            display: flex
+            align-items: center
+            gap: calc(var(--space-m) + var(--space-s))
+            // Clipping long names
+            width: 100%
+            overflow: hidden
+            -webkit-mask-image: linear-gradient(to right, white calc(100% - 5ch), transparent)
+            mask-image: linear-gradient(to right, white calc(100% - 5ch), transparent)
+
+        .icon-container
+            display: inline-block
+            height: 1.3em
+            aspect-ratio: 1
+            opacity: .50
+            
+        .icon
+            height: 100%
+            filter: var(--icon-filter)
 
         &::before
             content: ''
@@ -114,5 +134,5 @@
     color: var(--color-main-25)
 
 @keyframes show-up
-  from
-    opacity: 0
+    from
+        opacity: 0
