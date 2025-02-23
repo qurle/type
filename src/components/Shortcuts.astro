@@ -78,12 +78,14 @@ const shortcutDict = [
 	}
 </style>
 <script>
-	if (navigator.appVersion.includes('Mac')) {
+	import { isMac } from '@scripts/utils/isMac'
+
+	if (isMac) {
 		const shortcuts = document
 			.getElementById('shortcuts-list')
 			.getElementsByTagName('kbd')
 		for (const el of shortcuts) {
-			el.textContent = el.textContent.replace('Ctrl', '⌘')
+			el.textContent = el.textContent.replace('Ctrl', 'Cmd')
 		}
 	}
 </script>

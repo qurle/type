@@ -6,7 +6,7 @@ import 'fuzzysort'
 
 let selectedEl: HTMLElement = null
 
-export class MenuAction {
+export class Action {
 	id: string
 	name: string
 	icon: string
@@ -30,7 +30,7 @@ export class MenuAction {
 	callback?: (...args: any) => void
 
 
-	constructor(action: Partial<MenuAction>) {
+	constructor(action: Partial<Action>) {
 		for (const key in action)
 			if (action.hasOwnProperty(key))
 				this[key] = action[key]
@@ -57,7 +57,7 @@ export class MenuAction {
 
 		if (this.icon) {
 			const iconEl = document.createElement('img')
-			iconEl.className = 'icon'
+			iconEl.className = 'icon themed-icon'
 			iconEl.src = `/icons/actions/${this.icon}.svg`
 			iconEl.alt = ''
 			iconContainerEl.appendChild(iconEl)

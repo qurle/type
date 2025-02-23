@@ -1,6 +1,6 @@
 import { state } from '@scripts/state';
 import { getByClass, getById, getByTag } from '@scripts/utils/getElements'
-import type { MenuAction } from '@scripts/menu/classes/MenuAction';
+import type { Action } from '@scripts/menu/classes/Action';
 import fuzzysort from 'fuzzysort';
 import { fuzzySortOptions, allActions, type MenuActionId } from '@scripts/menu/config';
 
@@ -20,7 +20,7 @@ export class Menu {
 	actionsEl: HTMLElement
 
 	opened: boolean = false
-	actions: MenuAction[] = []
+	actions: Action[] = []
 	selected: number = null
 
 	constructor(parentElement = document.documentElement) {
@@ -37,15 +37,18 @@ export class Menu {
 		this.toggleEl.addEventListener('click', () => this.toggle())
 		this.actionsEl.addEventListener('mousemove', (e) => {
 			const target = e.target as HTMLElement
-			if (target.tagName.toLowerCase() === 'button') {
+			if (target.tagName.toLowerCase() === 'button')
 				this.select(+target.dataset.index)
-			}
 		})
 		this.actionsEl.addEventListener('focusin', (e) => {
 			const target = e.target as HTMLElement
-			if (target.tagName.toLowerCase() === 'button') {
+			if (target.tagName.toLowerCase() === 'button')
 				this.select(+target.dataset.index)
-			}
+		})
+		// Hide menu on outside click
+		document.documentElement.addEventListener('click', (e: MouseEvent) => {
+			if (!this.rootEl.contains(e.target as Node))
+				this.toggle(false)
 		})
 	}
 
@@ -89,7 +92,7 @@ export class Menu {
 	}
 
 	// Hidden actions are always ignored!
-	renderActions(queryChanged = false, array: MenuAction[] = this.actions) {
+	renderActions(queryChanged = false, array: Action[] = this.actions) {
 		this.actions = array.filter(x => !x.hidden)
 		this.selected ||= 0
 		this.actionsEl.replaceChildren()

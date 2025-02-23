@@ -8,10 +8,11 @@
     z-index: 1
 
 .action-toggle
-    display: flex
+    // display: flex
+    // gap: var(--space-xl)
+    // align-items: center
+
     padding: var(--space-m) var(--space-l)
-    gap: var(--space-m)
-    align-items: baseline
 
     position: relative
     z-index: 2
@@ -19,8 +20,17 @@
     transition: transform var(--transition-s)
     &:hover
         transform: scale(1.03)
+    &:has(+.action-popup.opened),
     &:active
         transform: scale(.97)
+
+    .left
+        display: flex
+        align-items: center
+        gap: var(--space-m)
+
+    img
+        height: 1.5em
 
 .action-popup
     display: flex
@@ -30,7 +40,7 @@
     bottom: calc(100% + 1rem)
     z-index: 1
 
-    width: clamp(300px, 50vw, calc(0.8 * var(--page-width)))
+    width: min(90vw, calc(0.75 * var(--page-width)))
     height: 50vh
     max-height: 20rem
 
@@ -107,7 +117,6 @@
             
         .icon
             height: 100%
-            filter: var(--icon-filter)
 
         &::before
             content: ''

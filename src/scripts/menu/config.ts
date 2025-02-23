@@ -4,13 +4,14 @@ import { openFilePicker } from '@scripts/actions/openFilePicker'
 import { publish } from '@scripts/actions/publish'
 import { toggleSpellcheck } from '@scripts/actions/spellcheck'
 import { cycleThemes, useTheme } from '@scripts/actions/themes'
-import { MenuAction } from '@scripts/menu/classes/MenuAction'
+import { Action } from '@scripts/menu/classes/Action'
+import { isMac } from '@scripts/utils/isMac'
 import MicroModal from 'micromodal';
 
-const ctrl = 'Ctrl'
+// MDN says it's okay
+const ctrl = isMac() ? 'Cmd' : 'Ctrl'
+
 const shift = 'Shift'
-const cmd = '⌘'
-const shiftMac = '⇧'
 
 export const fuzzySortOptions = {
 	keys: ['name', 'aliases'],
@@ -18,13 +19,13 @@ export const fuzzySortOptions = {
 	threshold: 0.3,
 }
 
-const allActionsData: Partial<MenuAction>[] = [
+const allActionsData: Partial<Action>[] = [
 	{
 		id: 'open',
-		name: 'Open document',
+		name: 'Upload file(s)',
 		icon: 'MaterialSymbolsLightUploadFileOutlineRounded',
 		shortcut: [ctrl, 'O'],
-		aliases: 'upload|file',
+		aliases: 'upload|file|гздщфв|открыть',
 		closesMenu: true,
 		callback: openFilePicker,
 	},
@@ -33,7 +34,7 @@ const allActionsData: Partial<MenuAction>[] = [
 		name: 'Publish',
 		icon: 'MaterialSymbolsLightLinkRounded',
 		shortcut: [ctrl, shift, 'P'],
-		aliases: 'share',
+		aliases: 'share|ырфку|опубликовать',
 		hidden: true,
 		closesMenu: true,
 		callback: publish
@@ -43,7 +44,7 @@ const allActionsData: Partial<MenuAction>[] = [
 		name: 'Copy and edit',
 		icon: 'MaterialSymbolsLightFileCopyOutlineRounded',
 		shortcut: [ctrl, shift, 'E'],
-		aliases: 'duplicate',
+		aliases: 'duplicate|сщзн|копировать',
 		closesMenu: true,
 		hidden: false
 	},
@@ -52,7 +53,7 @@ const allActionsData: Partial<MenuAction>[] = [
 		name: 'Download',
 		icon: 'MaterialSymbolsLightCloudDownloadOutlineRounded',
 		shortcut: [ctrl, shift, 'S'],
-		aliases: 'save|export',
+		aliases: 'save|export|вщцтдщфв|загрузить',
 		closesMenu: true,
 		callback: exportFile
 	},
@@ -60,7 +61,7 @@ const allActionsData: Partial<MenuAction>[] = [
 		id: 'exportAll',
 		name: 'Export all',
 		icon: 'MaterialSymbolsLightFolderZipOutlineRounded',
-		aliases: 'save',
+		aliases: 'save|учзщке|экспорт',
 		closesMenu: true,
 		callback: exportAll
 	},
@@ -68,12 +69,14 @@ const allActionsData: Partial<MenuAction>[] = [
 		id: 'font',
 		name: 'Change font',
 		icon: 'MaterialSymbolsLightInsertTextOutlineRounded',
+		aliases: 'ащте|шрифт',
 		callback: cycleFonts
 	},
 	{
 		id: 'fontSans',
 		name: 'Use sans-serif font',
 		icon: 'MaterialSymbolsLightFontDownloadOutlineRounded',
+		aliases: 'гыу',
 		searchOnly: true,
 		callback: () => useFont('sans')
 	},
@@ -81,6 +84,7 @@ const allActionsData: Partial<MenuAction>[] = [
 		id: 'fontSerif',
 		name: 'Use serif font',
 		icon: 'MaterialSymbolsLightSerifOutlineRounded',
+		aliases: 'гыу',
 		searchOnly: true,
 		callback: () => useFont('serif')
 
@@ -89,6 +93,7 @@ const allActionsData: Partial<MenuAction>[] = [
 		id: 'fontMono',
 		name: 'Use monospace font',
 		icon: 'MaterialSymbolsLightSlabSerifOutlineRounded',
+		aliases: 'гыу',
 		searchOnly: true,
 		callback: () => useFont('mono')
 	},
@@ -96,12 +101,14 @@ const allActionsData: Partial<MenuAction>[] = [
 		id: 'theme',
 		name: 'Change theme',
 		icon: 'MaterialSymbolsLightPaletteOutline',
+		aliases: 'color|срфтпу',
 		callback: cycleThemes
 	},
 	{
 		id: 'themeLight',
 		name: 'Use light theme',
 		icon: 'MaterialSymbolsLightSunnyOutlineRounded',
+		aliases: 'color|гыу',
 		searchOnly: true,
 		callback: () => useTheme('light')
 	},
@@ -109,6 +116,7 @@ const allActionsData: Partial<MenuAction>[] = [
 		id: 'themeDark',
 		name: 'Use dark theme',
 		icon: 'MaterialSymbolsLightDarkModeOutlineRounded',
+		aliases: 'color|гыу',
 		searchOnly: true,
 		callback: () => useTheme('dark')
 	},
@@ -116,6 +124,7 @@ const allActionsData: Partial<MenuAction>[] = [
 		id: 'themeDigital',
 		name: 'Use really digital theme',
 		icon: 'MaterialSymbolsLightChargerOutlineRounded',
+		aliases: 'color|гыу|retropunk',
 		searchOnly: true,
 		callback: () => useTheme('digital')
 
@@ -124,20 +133,21 @@ const allActionsData: Partial<MenuAction>[] = [
 		id: 'spellcheckOn',
 		name: 'Turn spellcheck on',
 		icon: 'MaterialSymbolsLightFormatUnderlinedSquiggleRounded',
-		aliases: 'errors',
+		aliases: 'errors|егкт',
 		callback: () => toggleSpellcheck(true)
 	},
 	{
 		id: 'spellcheckOff',
 		name: 'Turn spellcheck off',
 		icon: 'MaterialSymbolsLightFormatUnderlinedSquiggleRounded',
-		aliases: 'errors',
+		aliases: 'errors|егкт',
 		callback: () => toggleSpellcheck(false)
 	},
 	{
 		id: 'mdHandbook',
 		name: 'How to markdown',
 		icon: 'MaterialSymbolsLightMarkdownOutlineRounded',
+		aliases: 'help|рщц ещ',
 		closesMenu: true,
 		// Inline it
 		callback: () => MicroModal.show('modal-instructions'),
@@ -146,6 +156,7 @@ const allActionsData: Partial<MenuAction>[] = [
 		id: 'shortcuts',
 		name: 'Show all shortcuts',
 		icon: 'MaterialSymbolsLightKeyboardAltOutlineRounded',
+		aliases: 'hotkeys|ырщц|ырщкесгеы',
 		closesMenu: true,
 		callback: () => MicroModal.show('modal-shortcuts'),
 	},
@@ -153,6 +164,7 @@ const allActionsData: Partial<MenuAction>[] = [
 		id: 'about',
 		name: 'About type.',
 		icon: 'MaterialSymbolsLightFavoriteOutlineRounded',
+		aliases: 'qurle|help|фищге|meow|hi',
 		closesMenu: true,
 		callback: () => window.open('/hello', '_blank')
 	},
@@ -160,5 +172,5 @@ const allActionsData: Partial<MenuAction>[] = [
 
 export type MenuActionId = typeof allActionsData[number]['id'];
 
-export const allActions: MenuAction[] = (allActionsData as unknown as Partial<MenuAction>[])
-	.map(x => new MenuAction(x));
+export const allActions: Action[] = (allActionsData as unknown as Partial<Action>[])
+	.map(x => new Action(x));
