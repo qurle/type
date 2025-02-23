@@ -11,6 +11,7 @@ export type MenuUpdateEvent =
 	'empty' | 'reading' | 'writing'
 
 const openClass = 'opened'
+const touch = matchMedia('(hover: none)').matches
 
 export class Menu {
 	rootEl: HTMLElement
@@ -81,7 +82,7 @@ export class Menu {
 			state.editorEl.blur()
 			window.getSelection().removeAllRanges()
 			this.popupEl.classList.add(openClass)
-			this.inputEl.focus()
+			!touch && this.inputEl.focus()
 			this.opened = true
 		} else {
 			this.popupEl.classList.remove(openClass)
