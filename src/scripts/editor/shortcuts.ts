@@ -2,7 +2,6 @@ import { exportFile } from '@scripts/actions/export'
 import { publish } from '@scripts/actions/publish'
 import { save } from '@scripts/note/save'
 import { state } from '@scripts/state'
-import { getCurrentId } from '@scripts/utils/currentNote'
 import { getByClass } from '@scripts/utils/getElements'
 import { clearEditor } from '@scripts/editor/clear'
 import { unlock } from '@scripts/editor/lock'
@@ -14,21 +13,21 @@ export function initShortcuts() {
 		if (e.ctrlKey || e.metaKey) {
 			switch (e.code) {
 				case 'KeyS': {
-					e.preventDefault()
 					if (e.repeat) return
+					e.preventDefault()
 					if (state.empty) return
 
-					if (e.shiftKey) {
+					if (e.shiftKey)
 						exportFile()
-					} else {
+					else
 						save('shortcut')
-					}
+
 					return
 				}
 				case 'KeyP': {
-					e.preventDefault()
 					if (e.repeat) return
 					if (!e.shiftKey) return
+					e.preventDefault()
 					if (state.empty) return
 
 					save('publish', true)
@@ -36,26 +35,26 @@ export function initShortcuts() {
 					return
 				}
 				case 'KeyE': {
-					e.preventDefault()
 					if (e.repeat) return
 					if (!e.shiftKey) return
+					e.preventDefault()
 					if (state.empty) return
 
+					e.preventDefault()
 					unlock()
 					save('copy')
 					return
 				}
 				case 'KeyK': {
-					e.preventDefault()
 					if (e.repeat) return
-					console.log('key k')
+					e.preventDefault()
 					state.menu.toggle()
 					return
 				}
 				// Mortal combat mode
 				case 'KeyO': {
-					e.preventDefault()
 					if (e.repeat) return
+					e.preventDefault()
 					openFilePicker()
 					return
 				}
@@ -67,7 +66,6 @@ export function initShortcuts() {
 					if (getByClass('is-open', document.body)) {
 						return
 					}
-					// Rewrite this part to state like menu.open
 					if (state.menu.opened) {
 						state.menu.toggle(false)
 						state.editorEl.focus()

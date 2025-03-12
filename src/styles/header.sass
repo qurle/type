@@ -34,7 +34,7 @@ header.editor-header
 
     .left
         height: 24px
-        
+
         form
             display: none
 
@@ -66,7 +66,10 @@ header.editor-header
         color: var(--color-main)
         opacity: 0
 
-  
+@media print
+    header.editor-header
+        display: none
+
 // Animations
 @keyframes fade-in-with-stop
     0%
