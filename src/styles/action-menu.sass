@@ -37,15 +37,12 @@
         height: 1.5em
 
 .action-popup
-    display: flex
-    flex-direction: column
-
     position: absolute
     bottom: calc(100% + 1rem)
     z-index: 1
 
     width: min(90vw, calc(0.75 * var(--page-width)))
-    height: 50vh
+    height: clamp(5rem, 50vh, 20rem)
     max-height: 20rem
 
     border-radius: var(--radius-xl)
@@ -57,19 +54,31 @@
     transform-origin: bottom center
     transition: opacity var(--transition-s), background-color var(--transition-s), scale var(--transition-s), box-shadow var(--transition-s),
 
-    input
-        width: 100%
-        padding: var(--space-l) var(--space-l) var(--space-m)
-
-    hr
-        margin: var(--space-s) var(--space-l)
-        border-color: var(--color-main-05)
-
     &.opened
         opacity: 1
         scale: 1
         box-shadow: var(--shadow-l)
         pointer-events: all
+
+    hr
+        margin: var(--space-s) var(--space-l)
+        border-color: var(--color-main-05)
+
+*[id ^= view]
+    display: flex
+    &[hidden]
+        display: none
+
+    flex-direction: column
+    height: 100%
+
+    .action-header
+        width: 100%
+        padding: var(--space-l) var(--space-l) var(--space-m)
+
+        & + hr
+            margin-bottom: 0
+        
 
 .action-list
     display: flex
@@ -88,8 +97,9 @@
 
     li
         animation: show-up linear both
+        animation-duration: 1ms
         animation-timeline: view()
-        animation-range: entry
+        transform-origin: 20% center
 
     button, a
         width: 100%
@@ -147,5 +157,15 @@
     color: var(--color-main-25)
 
 @keyframes show-up
-    from
+    0%, 100%
         opacity: 0
+    12%, 88%
+        opacity: 1
+
+@keyframes show-up-scaled
+    0%, 100%
+        opacity: 0
+        transform: scale(0.95)
+    12%, 88%
+        opacity: 1
+        transform: scale(1)

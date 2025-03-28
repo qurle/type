@@ -1,55 +1,26 @@
 ---
 import '@styles/action-menu.sass'
+import Actions from '@components/menu/Actions.astro'
+import NewMenu from '@components/menu/NewMenu.astro'
+import Shortcuts from '@components/menu/Shortcuts.astro'
+import MdHandbook from '@components/menu/MdHandbook.astro'
 ---
 
 <div id="action-menu">
 	<button class="action-toggle bg-blur"
 		><div class="left">
-			<!-- <img
-				alt="Menu"
-				src="/icons/MaterialSymbolsLightMenu.svg"
-				class="themed-icon"
-			/> -->
 			<span>Menu</span>
-		</div>
-		<!-- show only when opened? -->
-		<div class="additional">
-			<div class="barrel">
-				<!-- <span class="shortcut">
-					<kbd>Ctrl</kbd><kbd>K</kbd>
-				</span> -->
-				<!-- <div>hi</div> -->
-			</div>
 		</div>
 	</button>
 	<div class="action-popup bg-blur" role="dialog" tabindex="-1">
-		<div class="input-wrapper">
-			<input
-				type="text"
-				class="search"
-				role="combobox"
-				placeholder="Search for actions"
-				autocomplete="off"
-			/>
-			<hr />
-		</div>
-		<ul class="action-list" role="listbox" data-placeholder="nothing found">
-		</ul>
+		<Actions />
+		<NewMenu />
+		<Shortcuts />
+		<MdHandbook />
 	</div>
+	<script>
+		import { Menu } from '@scripts/menu/classes/Menu'
+		import { state } from '@scripts/state'
+		state.menu = new Menu()
+	</script>
 </div>
-<script>
-	import { Menu } from '@scripts/menu/classes/Menu'
-	import { state } from '@scripts/state'
-	import { isMac } from '@scripts/utils/isMac'
-
-	if (isMac) {
-		const shortcuts = document
-			.getElementById('action-menu')
-			.getElementsByTagName('kbd')
-		for (const el of shortcuts) {
-			el.textContent = el.textContent.replace('Ctrl', 'Cmd')
-		}
-	}
-
-	state.menu = new Menu()
-</script>

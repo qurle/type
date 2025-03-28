@@ -7,6 +7,7 @@ import { getByTag } from '@scripts/utils/getElements';
 import { getEditorVersion } from '@scripts/utils/getEditorVersion';
 import type { Menu } from '@scripts/menu/classes/Menu';
 import { initFont } from '@scripts/actions/fonts';
+import { isMac } from './utils/isMac';
 
 type Status = 'empty' | 'writing' | 'reading'
 
@@ -33,6 +34,9 @@ export const state = {
 	// Elements
 	mainEl: null as HTMLElement,				// Editor + Notes (w/o header)
 	editorEl: null as HTMLElement,				// Lowest-level editor container
+
+	// Platform-specific
+	ctrlKey: 'Ctrl'								// Ctrl / Meta key for shortcuts
 }
 
 export async function initState() {
@@ -47,6 +51,8 @@ export async function initState() {
 	initFont()
 
 	state.mainEl = getByTag('main')
+
+	if (isMac) state.ctrlKey = 'Cmd'
 }
 
 export function updateStatus(status: Status) {

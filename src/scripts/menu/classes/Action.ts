@@ -10,24 +10,15 @@ export class Action {
 	id: string
 	name: string
 	icon: string
-	/** The keyboard shortcuts for the action */
 	shortcut?: string[]
-	/** The keyboard shortcuts for the action on Mac */
-	shortcutMac?: string[]
-	/** Indicates if the action is only searchable and not visible in the menu */
-	searchOnly?: boolean
-	/** Indicates if the action is hidden */
-	hidden?: boolean
-	/** Alternative names for the fuzzysearch */
-	aliases?: string
-	/** The list element associated with the action */
+	searchOnly?: boolean // Action not visible, but searchable
+	hidden?: boolean // Action is not accessible even with search
+	aliases?: string // Alternative names for the fuzzysearch
 	listEl?: HTMLLIElement
-	/** The button element associated with the action */
 	buttonEl?: HTMLButtonElement
-	/** Indicates if the menu should be closed after the action is triggered */
 	closesMenu?: boolean
-	/** The callback function to be executed when the action is triggered */
-	callback?: (...args: any) => void
+	needDivider?: boolean
+	callback?: (...args: any) => void // The callback function to be executed when the action is triggered 
 
 
 	constructor(action: Partial<Action>) {
@@ -36,7 +27,7 @@ export class Action {
 				this[key] = action[key]
 	}
 
-	renderAction(index: number) {
+	renderAction(index: number, hasKeyboard = true) {
 		this.listEl = document.createElement('li')
 		this.buttonEl = document.createElement('button')
 		this.buttonEl.className = 'action'
@@ -69,7 +60,7 @@ export class Action {
 		leftEl.appendChild(iconContainerEl)
 		leftEl.appendChild(nameEl)
 		this.buttonEl.appendChild(leftEl)
-		if (this.shortcut) {
+		if (this.shortcut && hasKeyboard) {
 			const shortcutEl = document.createElement('span')
 			shortcutEl.className = 'shortcut'
 			for (const key of this.shortcut) {

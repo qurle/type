@@ -2,8 +2,6 @@
 import Header from '@components/Header.astro'
 import Editor from '@components/Editor.astro'
 import NoteList from '@components/NoteList.astro'
-import Shortcuts from '@components/Shortcuts.astro'
-import Instructions from '@components/Instructions.astro'
 import ActionsMenu from './ActionMenu.astro'
 
 // For loading published notes
@@ -19,8 +17,6 @@ const { editorVersion } = Astro.props
 	<Editor />
 	<NoteList />
 </main>
-<Instructions />
-<Shortcuts />
 {noteId && <span id="id-storage" data-id={noteId} hidden />}
 <span id="v" data-v={editorVersion || 1} hidden></span>
 <script>

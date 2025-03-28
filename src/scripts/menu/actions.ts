@@ -5,13 +5,15 @@ import { publish } from '@scripts/actions/publish'
 import { toggleSpellcheck } from '@scripts/actions/spellcheck'
 import { cycleThemes, useTheme } from '@scripts/actions/themes'
 import { Action } from '@scripts/menu/classes/Action'
+import { state } from '@scripts/state'
 import { isMac } from '@scripts/utils/isMac'
 import MicroModal from 'micromodal';
 
 // MDN says it's okay
 const ctrl = isMac() ? 'Cmd' : 'Ctrl'
-
 const shift = 'Shift'
+
+const hideNewMenu = localStorage.getItem('saw-new-menu') === 'true'
 
 export const fuzzySortOptions = {
 	keys: ['name', 'aliases'],
@@ -20,6 +22,13 @@ export const fuzzySortOptions = {
 }
 
 const allActionsData: Partial<Action>[] = [
+	{
+		id: 'newMenu',
+		name: 'A few words about new menu',
+		icon: 'MaterialSymbolsLightWavingHandOutlineRounded',
+		needDivider: true,
+		callback: () => state.menu.openView('newMenu'),
+	},
 	{
 		id: 'open',
 		name: 'Upload file(s)',
@@ -148,17 +157,17 @@ const allActionsData: Partial<Action>[] = [
 		name: 'How to markdown',
 		icon: 'MaterialSymbolsLightMarkdownOutlineRounded',
 		aliases: 'help|рщц ещ',
-		closesMenu: true,
-		// Inline it
-		callback: () => MicroModal.show('modal-instructions'),
+		// callback: () => MicroModal.show('modal-instructions'),
+		callback: () => state.menu.openView('mdHandbook'),
+
 	},
 	{
 		id: 'shortcuts',
 		name: 'Show all shortcuts',
 		icon: 'MaterialSymbolsLightKeyboardAltOutlineRounded',
 		aliases: 'hotkeys|ырщц|ырщкесгеы',
-		closesMenu: true,
-		callback: () => MicroModal.show('modal-shortcuts'),
+		// callback: () => MicroModal.show('modal-shortcuts'),
+		callback: () => state.menu.openView('shortcuts'),
 	},
 	{
 		id: 'about',
@@ -168,9 +177,9 @@ const allActionsData: Partial<Action>[] = [
 		closesMenu: true,
 		callback: () => window.open('/hello', '_blank')
 	},
-] as const;
+] as const
 
-export type MenuActionId = typeof allActionsData[number]['id'];
+export type MenuActionId = typeof allActionsData[number]['id']
 
 export const allActions: Action[] = (allActionsData as unknown as Partial<Action>[])
-	.map(x => new Action(x));
+	.map(x => new Action(x))

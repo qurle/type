@@ -2,7 +2,7 @@ import { state } from '@scripts/state';
 import { getByClass, getById, getByTag } from '@scripts/utils/getElements'
 import type { Action } from '@scripts/menu/classes/Action';
 import fuzzysort from 'fuzzysort';
-import { fuzzySortOptions, allActions, type MenuActionId } from '@scripts/menu/config';
+import { fuzzySortOptions, allActions, type MenuActionId } from '@scripts/menu/actions';
 
 export type MenuUpdateEvent =
 	'spellcheckOff' | 'spellcheckOn' |
@@ -11,7 +11,7 @@ export type MenuUpdateEvent =
 	'empty' | 'reading' | 'writing'
 
 const openClass = 'opened'
-const touch = matchMedia('(hover: none)').matches
+const hasKeyboard = window.matchMedia('(hover: hover)').matches
 
 export class Menu {
 	rootEl: HTMLElement
@@ -24,6 +24,10 @@ export class Menu {
 	actions: Action[] = []
 	selected: number = null
 
+	views: HTMLCollection
+	actionsView: HTMLElement
+	viewOpened: boolean = false
+
 	constructor(parentElement = document.documentElement) {
 		this.rootEl = getById('action-menu')
 		this.toggleEl = getByClass('action-toggle', this.rootEl) as HTMLButtonElement
@@ -31,6 +35,9 @@ export class Menu {
 		this.actionsEl = getByClass('action-list', this.rootEl)
 		this.inputEl = getByTag('input', this.rootEl) as HTMLInputElement
 		this.actions = allActions.filter(x => !x.searchOnly)
+
+		this.actionsView = getById('view-actions')
+		this.views = this.popupEl.children
 
 		console.debug(`Init render`)
 		this.renderActions()
@@ -82,7 +89,10 @@ export class Menu {
 			state.editorEl.blur()
 			window.getSelection().removeAllRanges()
 			this.popupEl.classList.add(openClass)
-			!touch && this.inputEl.focus()
+
+			this.closeViews()
+			hasKeyboard && this.inputEl.focus()
+
 			this.opened = true
 		} else {
 			this.popupEl.classList.remove(openClass)
@@ -90,6 +100,21 @@ export class Menu {
 			this.opened = false
 		}
 		return open
+	}
+
+	escape() {
+		if (!this.opened) return false
+
+		// If view is opened — go back to actions
+		if (this.viewOpened) {
+			this.closeViews()
+			return true
+		}
+		// Else just close menu
+		state.menu.toggle(false)
+		state.editorEl.focus()
+		// Approve the esc key is handled
+		return true
 	}
 
 	// Hidden actions are always ignored!
@@ -131,7 +156,9 @@ export class Menu {
 		}
 
 		this.actions.forEach((x, i) => {
-			const el = this.actionsEl.appendChild(x.renderAction(i))
+			const el = this.actionsEl.appendChild(x.renderAction(i, hasKeyboard))
+			if (x.needDivider && i + 1 !== this.actions.length)
+				this.actionsEl.appendChild(document.createElement('hr'))
 			// Fixing tab navigation buy switching back to input
 			el.onmouseup = () => this.inputEl.focus()
 			el.onmouseleave = () => this.inputEl.focus()
@@ -156,7 +183,33 @@ export class Menu {
 		allActions.find(x => x.id === id).hidden = false
 	}
 
+	openView(id: string) {
+		for (const view of this.views) {
+			(view as HTMLElement).hidden = true
+		}
+		const currentView = getById("view-" + id)
+		currentView.hidden = false
 
+		console.debug('Focusing')
+		console.debug(currentView)
+		// currentView.dispatchEvent(new Event('show'))
+		currentView.focus()
+		this.viewOpened = true
+	}
+
+	closeViews() {
+		if (!this.viewOpened) return
+
+		for (const view of this.views) {
+			(view as HTMLElement).hidden = true
+		}
+		this.actionsView.hidden = false
+		hasKeyboard && this.inputEl.focus()
+		this.viewOpened = false
+	}
+
+
+	// This is... something you'd like not to see
 	updateActions(event: MenuUpdateEvent) {
 		console.debug(`Updating menu actions by ${event}`)
 		switch (event) {

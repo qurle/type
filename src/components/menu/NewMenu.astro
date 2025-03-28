@@ -1,0 +1,42 @@
+---
+import MenuView from '@layouts/MenuView.astro'
+---
+
+<MenuView id="newMenu" title="A few words about the new menu">
+	<h3>As you may notice, type’s menu is updated</h3>
+	<p>Now it’s wide, searchable, and super keyboard-friendly.</p>
+	<p>
+		Type anything to search for an action. Hit <kbd>Ctrl</kbd> <kbd>K</kbd> to
+		open and close the menu. Use arrows keys <kbd>↓↑</kbd> to move
+		around, and press <kbd>Enter</kbd> to execute an action.
+	</p>
+
+	<h3>Why did you do this?</h3>
+	<p>
+		As <i>type</i> grows, cramming everything into that old three-dot menu just
+		wasn’t cutting it. Is the new menu any different? Definitely.
+	</p>
+
+	<p>
+		It’s bigger, you no longer need to aim with your mouse, and you can
+		filter out the options. If you’re a touch user, you’re covered with a
+		closer-to-finger menu button and bigger touch zones.
+	</p>
+
+	<h3>Has the menu content changed?</h3>
+	<p>
+		Yes. But not for the worse. As the menu becomes the new hub, now you can
+		be more specific with more available actions. E.g., not just “Change
+		font”, but “Use serif font”.
+	</p>
+
+	<p>
+		This update isn’t just about looks. It’s a strong foundation for more
+		features down the road. Hope you like it!
+	</p>
+</MenuView>
+<style>
+	kbd {
+		font-size: var(--font-size-xs);
+	}
+	</style>

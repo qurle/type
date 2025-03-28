@@ -1,0 +1,91 @@
+---
+import MenuView from '@layouts/MenuView.astro'
+
+const markdownDict = [
+    { markdown: '# Heading 1', html: `<h1>Heading 1</h1>` },
+    { markdown: '## Heading 2', html: `<h2>Heading 2</h2>` },
+    { markdown: '### Heading 3', html: `<h3>Heading 3</h3>` },
+    { markdown: '**Bold text**', html: `<b>Bold text</b>` },
+    { markdown: '*Italic text**', html: `<i>Italic text</i>` },
+    { markdown: '`Code`', html: `<code>Code</code>` },
+    {
+        markdown: '```<br/>Code Block<br/>```',
+        html: `<pre><code>Code Block</code></pre>`,
+    },
+    {
+        markdown: '[Link](https://type.baby/)',
+        html: `<a tabindex="-1" href="https://type.baby" target="_blank">Link</a>`,
+    },
+    {
+        markdown: '&lt;https://type.baby/&gt;',
+        html: `<a tabindex="-1" href="https://type.baby" target="_blank">https://type.baby</a>`,
+    },
+    {
+        markdown: '- Item 1<br/>- Item 2<br/>  - Nested item',
+        html: `<ul><li>Item 1</li><li>Item 2<ul><li>Nested item</li></ul></li></ul>`,
+    },
+    {
+        markdown: '1. Item 1<br/>2. Item 2<br/>  1. Nested item',
+        html: `<ol><li>Item 1</li><li>Item 2<ol><li>Nested item</li></ol></li></ol>`,
+    },
+    {
+        markdown: '> Quote',
+        html: `<blockquote>Quote</blockquote/>`,
+    },
+    {
+        markdown: '---',
+        html: `<hr/>`,
+    },
+    {
+        markdown: 'Ignore symbol \\*',
+        html: `Ignore symbol *`,
+    },
+]
+---
+
+<MenuView id="mdHandbook" title="How to markdown"
+    ><dl class="instructions blocks">
+        {
+            markdownDict.map((x) => (
+                <>
+                    <dt>
+                        <code set:html={x.markdown} />
+                    </dt>
+                    <dd set:html={x.html} />
+                </>
+            ))
+        }
+    </dl>
+</Modal>
+<style lang="scss">
+    .instructions {
+        display: grid;
+        grid-template-columns: repeat(auto-fit,minmax(min(150px,100%),1fr));
+        row-gap: var(--space-m);
+        align-items: center;
+
+        width: 100%;
+        gap: var(--space-m);
+
+        > dt > code {
+            display: inline-block;
+            width: 100%;
+            overflow: hidden;
+
+            padding: var(--space-l);
+            font-size: var(--font-size-xs);
+
+            
+            background: none;
+            border: 1px solid var(--color-main-15);
+        }
+    }
+
+    // Hack to align usually hanging elements
+    dd:has(ol, blockquote) {
+        padding-left: calc(var(--space-l) + var(--space-m));
+    }
+    dd:has(ul) {
+        padding-left: var(--space-l);
+    }
+</style>

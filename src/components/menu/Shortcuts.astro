@@ -1,5 +1,5 @@
 ---
-import Modal from './Modal.astro'
+import MenuView from '@layouts/MenuView.astro'
 
 const shortcutDict = [
 	{ shortcut: ['Ctrl', 'S'], action: `Force save` },
@@ -20,7 +20,7 @@ const shortcutDict = [
 ]
 ---
 
-<Modal name="shortcuts" title="Shortcuts"
+<MenuView id="shortcuts" title="Shortcuts"
 	><dl id="shortcuts-list" class="shortcuts">
 		{
 			shortcutDict.map((x) => (
@@ -35,7 +35,7 @@ const shortcutDict = [
 			))
 		}
 	</dl>
-</Modal>
+</MenuView>
 <style lang="scss">
 	@use '@styles/blocks.sass';
 

@@ -63,14 +63,15 @@ export function initShortcuts() {
 			switch (e.code) {
 				case 'Escape': {
 					e.preventDefault()
+					// Ignore micromodals
 					if (getByClass('is-open', document.body)) {
 						return
 					}
-					if (state.menu.opened) {
-						state.menu.toggle(false)
-						state.editorEl.focus()
+					// Return if menu escape is handled
+					if (state.menu.escape()) {
 						return
 					}
+					// Go to notes otherwise
 					save('clear')
 					clearEditor()
 					return
