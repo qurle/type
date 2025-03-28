@@ -1,5 +1,3 @@
-import { state } from '@scripts/state'
-
 export const modes = {
 	font: ['serif', 'mono', 'sans'],
 	theme: ['light', 'dark', 'digital']

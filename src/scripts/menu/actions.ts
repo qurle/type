@@ -7,7 +7,6 @@ import { cycleThemes, useTheme } from '@scripts/actions/themes'
 import { Action } from '@scripts/menu/classes/Action'
 import { state } from '@scripts/state'
 import { isMac } from '@scripts/utils/isMac'
-import MicroModal from 'micromodal';
 
 // MDN says it's okay
 const ctrl = isMac() ? 'Cmd' : 'Ctrl'
@@ -157,7 +156,6 @@ const allActionsData: Partial<Action>[] = [
 		name: 'How to markdown',
 		icon: 'MaterialSymbolsLightMarkdownOutlineRounded',
 		aliases: 'help|рщц ещ',
-		// callback: () => MicroModal.show('modal-instructions'),
 		callback: () => state.menu.openView('mdHandbook'),
 
 	},
@@ -166,7 +164,6 @@ const allActionsData: Partial<Action>[] = [
 		name: 'Show all shortcuts',
 		icon: 'MaterialSymbolsLightKeyboardAltOutlineRounded',
 		aliases: 'hotkeys|ырщц|ырщкесгеы',
-		// callback: () => MicroModal.show('modal-shortcuts'),
 		callback: () => state.menu.openView('shortcuts'),
 	},
 	{

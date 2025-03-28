@@ -1,10 +1,9 @@
-import { getMarkdown } from '@milkdown/utils';
-import { isEmptyString } from '@scripts/utils/isEmptyString';
-import { showStatus } from '@scripts/render/showStatus';
-import { smartTrunc } from '@scripts/utils/smartTrunc';
-import { downloadZip } from 'client-zip';
-import { state } from '@scripts/state';
-import { getMD } from '@scripts/versions/getMD';
+import { isEmptyString } from '@scripts/utils/isEmptyString'
+import { showStatus } from '@scripts/render/showStatus'
+import { smartTrunc } from '@scripts/utils/smartTrunc'
+import { downloadZip } from 'client-zip'
+import { state } from '@scripts/state'
+import { getMD } from '@scripts/versions/getMD'
 
 /**
  * Downloads file which is currently in editor
@@ -59,7 +58,7 @@ export async function exportAll() {
 /**
  * Creates link and clicks it to download a blob file
  */
-function downloadBlob(filename, blob) {
+function downloadBlob(filename: string, blob: Blob | MediaSource) {
 	const link = document.createElement('a')
 	link.href = URL.createObjectURL(blob)
 	link.download = filename
@@ -74,10 +73,10 @@ function downloadBlob(filename, blob) {
  */
 function downloadText(filename: string, content: string) {
 	// Removing space HTML entities
-	content = content.replace(/&#x20;/g, ' ')
+	content = content.replace(/&#x20/g, ' ')
 
 	const link = document.createElement('a')
-	link.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(content)
+	link.href = 'data:text/plaincharset=utf-8,' + encodeURIComponent(content)
 	link.download = filename
 
 	link.click()

@@ -4,7 +4,7 @@ import { uploadNotes } from '@scripts/storage/uploadNotes'
 export function initDragAndDrop() {
 	state.editorEl.dataset.placeholder =
 		`drop .md and .txt to editor\ndrop images to insert`
-	state.editorEl.addEventListener('dragover', (e) => {
+	state.editorEl.addEventListener('dragover', () => {
 		state.editorEl.dataset.placeholderShow = 'true'
 	})
 	state.editorEl.addEventListener('dragleave', () => {

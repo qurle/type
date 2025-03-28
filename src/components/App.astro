@@ -2,7 +2,7 @@
 import Header from '@components/Header.astro'
 import Editor from '@components/Editor.astro'
 import NoteList from '@components/NoteList.astro'
-import ActionsMenu from './ActionMenu.astro'
+import ActionsMenu from '@components/ActionMenu.astro'
 
 // For loading published notes
 const captureNoteId = RegExp(/notes?\/(.*)\/?/, 'g')
@@ -23,9 +23,6 @@ const { editorVersion } = Astro.props
 	// Bad code doesn't mean bad product 🙏🏻
 	import { registerServiceWorker } from '@scripts/utils/serviceWorkers'
 	registerServiceWorker('/sw.js')
-
-	import MicroModal from 'micromodal'
-	MicroModal.init({ disableFocus: true, debug: false })
 
 	import { createEditor } from '@scripts/editor/create'
 	import { createEditor as createEditor2 } from '@scripts/editor2/create'

@@ -13,7 +13,7 @@ export function initHeaderListeners() {
 		header.filePickerEl.click()
 	})
 
-	header.filePickerEl.addEventListener('change', (e: InputEvent) => {
+	header.filePickerEl.addEventListener('change', () => {
 		uploadNotes(header.filePickerEl.files)
 	})
 }

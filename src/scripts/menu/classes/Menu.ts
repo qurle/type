@@ -28,7 +28,7 @@ export class Menu {
 	actionsView: HTMLElement
 	viewOpened: boolean = false
 
-	constructor(parentElement = document.documentElement) {
+	constructor() {
 		this.rootEl = getById('action-menu')
 		this.toggleEl = getByClass('action-toggle', this.rootEl) as HTMLButtonElement
 		this.popupEl = getByClass('action-popup', this.rootEl)
