@@ -5,7 +5,7 @@ const { title, id } = Astro.props
 
 <menu-view id={'view-' + id} hidden tabindex="0">
 	<ViewHeader title={title} />
-	<div class="content"  tabindex="0">
+	<div class="content" tabindex="0">
 		<slot />
 	</div>
 </menu-view>
@@ -32,6 +32,7 @@ const { title, id } = Astro.props
 <style>
 	.content {
 		overflow-y: scroll;
+		position: relative;
 
 		padding: var(--space-l);
 		font-size: var(--font-size-s);
@@ -39,6 +40,21 @@ const { title, id } = Astro.props
 		h2,
 		h3 {
 			font-weight: 600;
+		}
+
+		&:after {
+			position: fixed;
+			content: '';
+			z-index: 1;
+			inset: auto 0 0;
+			border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+			height: var(--space-l);
+
+			background: linear-gradient(
+				to top,
+				var(--color-background),
+				transparent
+			);
 		}
 	}
 </style>

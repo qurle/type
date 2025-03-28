@@ -52,7 +52,7 @@
     pointer-events: none
     scale: .85
     transform-origin: bottom center
-    transition: opacity var(--transition-s), background-color var(--transition-s), scale var(--transition-s), box-shadow var(--transition-s),
+    transition: opacity var(--transition-s),background-color var(--transition-s), scale var(--transition-s),
 
     &.opened
         opacity: 1
@@ -66,11 +66,12 @@
 
 *[id ^= view]
     display: flex
-    &[hidden]
-        display: none
 
     flex-direction: column
     height: 100%
+
+    &[hidden]
+        display: none
 
     .action-header
         width: 100%
@@ -78,7 +79,6 @@
 
         & + hr
             margin-bottom: 0
-        
 
 .action-list
     display: flex

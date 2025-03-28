@@ -192,7 +192,6 @@ export class Menu {
 
 		console.debug('Focusing')
 		console.debug(currentView)
-		// currentView.dispatchEvent(new Event('show'))
 		currentView.focus()
 		this.viewOpened = true
 	}
