@@ -1,15 +1,31 @@
 ---
 import { Icon } from 'astro-icon/components'
-const { closable } = Astro.props
+const { closable, class: className } = Astro.props
 ---
 
-<div class="hint">
-	<span class="content"><slot /></span>{
-		closable && <Icon name="light/close" />
+<hr />
+<div class=`hint ${className}`>
+	<div class="content">
+		<span
+			><samp><kbd>↑↓</kbd></samp>
+			to select</span
+		><span><samp><kbd>↲</kbd></samp> to run </span><span
+			><samp><kbd>⌘</kbd><kbd>K</kbd></samp> to toggle menu</span
+		>
+	</div>{
+		closable && (
+			<button>
+				<Icon name="close" />
+			</button>
+		)
 	}
 </div>
 
 <style>
+	hr {
+		margin-top: 0;
+		margin-bottom: 0;
+	}
 	.hint {
 		display: flex;
 
@@ -17,7 +33,10 @@ const { closable } = Astro.props
 			calc(var(--space-m) + var(--space-m));
 		font-size: var(--font-size-xs);
 		display: flex;
-		gap: var(--space-m);
+	}
+
+	span {
+		margin-right: var(--space-m);
 	}
 
 	.content {
@@ -28,9 +47,15 @@ const { closable } = Astro.props
 		color: var(--color-main);
 		font-size: inherit;
 	}
-	
-	svg[data-icon='light/close'] {
+
+	svg[data-icon='close'] {
+		color: var(--color-main-25);
 		height: 100%;
 		width: auto;
+
+		&:hover {
+			color: var(--color-main-50);
+		}
 	}
 </style>
+<script></script>
