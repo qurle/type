@@ -1,0 +1,36 @@
+---
+import { Icon } from 'astro-icon/components'
+const { closable } = Astro.props
+---
+
+<div class="hint">
+	<span class="content"><slot /></span>{
+		closable && <Icon name="light/close" />
+	}
+</div>
+
+<style>
+	.hint {
+		display: flex;
+
+		padding: calc(var(--space-s) + var(--space-m))
+			calc(var(--space-m) + var(--space-m));
+		font-size: var(--font-size-xs);
+		display: flex;
+		gap: var(--space-m);
+	}
+
+	.content {
+		width: 100%;
+	}
+
+	samp {
+		color: var(--color-main);
+		font-size: inherit;
+	}
+	
+	svg[data-icon='light/close'] {
+		height: 100%;
+		width: auto;
+	}
+</style>

@@ -9,7 +9,7 @@ import { state } from '@scripts/state'
 import { isMac } from '@scripts/utils/isMac'
 
 // MDN says it's okay
-const ctrl = isMac() ? 'Cmd' : 'Ctrl'
+const ctrl = isMac() ? '⌘' : 'Ctrl'
 const shift = 'Shift'
 
 const hideNewMenu = localStorage.getItem('saw-new-menu') === 'true'

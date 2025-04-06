@@ -1,12 +1,20 @@
+---
+import Hint from '@components/menu/Hint.astro'
+---
+
 <div id="view-actions">
-		<input
-			type="text"
-			class="search action-header"
-			role="combobox"
-			placeholder="Search for actions"
-			autocomplete="off"
-		/>
-		<hr />
+	<input
+		type="text"
+		class="search action-header"
+		role="combobox"
+		placeholder="Search for actions"
+		autocomplete="off"
+	/>
+	<hr />
 	<ul class="action-list" role="listbox" data-placeholder="nothing found">
 	</ul>
+	<Hint closable>
+		<samp><kbd>↑↓</kbd></samp>
+		to select, <samp><kbd>↲</kbd></samp> to run</Hint
+	>
 </div>

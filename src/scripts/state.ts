@@ -52,7 +52,7 @@ export async function initState() {
 
 	state.mainEl = getByTag('main')
 
-	if (isMac) state.ctrlKey = 'Cmd'
+	if (isMac) state.ctrlKey = '⌘'
 }
 
 export function updateStatus(status: Status) {

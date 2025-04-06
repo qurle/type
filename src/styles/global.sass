@@ -50,6 +50,20 @@ hr
     border: 0
     border-top: 1px solid var(--color-main-25)
 
+samp
+    display: inline-flex
+    gap: var(--space-s)
+    color: var(--color-main-50)
+    font-size: var(--font-size-xs)
+
+kbd
+    min-width: 1.25rem
+    padding: var(--space-s)
+    border-radius: var(--radius-m)
+    background: var(--color-main-05)
+
+    text-align: center
+
 input::placeholder
     color: var(--color-main-25)
 
@@ -125,6 +139,11 @@ input::placeholder
 :root[data-theme="digital"]
     @include digital
 
+@media print
+    :root
+        --color-main: #000
+        --color-background: #FFF
+        
 // Animations
 @keyframes fade-in
     0%

@@ -61,8 +61,7 @@ export class Action {
 		leftEl.appendChild(nameEl)
 		this.buttonEl.appendChild(leftEl)
 		if (this.shortcut && hasKeyboard) {
-			const shortcutEl = document.createElement('span')
-			shortcutEl.className = 'shortcut'
+			const shortcutEl = document.createElement('samp')
 			for (const key of this.shortcut) {
 				const keyEl = document.createElement('kbd')
 				keyEl.textContent = key

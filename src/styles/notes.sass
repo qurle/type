@@ -53,12 +53,11 @@ ul#notes
                     transform: scale(1)
                     opacity: 1
 
-            &:focus
-                &::before
-                    transform: scale(1)
-                    background: var(--color-main-05)
-                    border-radius: var(--radius-l)
-
+            &:focus-visible::before
+                transform: scale(1)
+                background: var(--color-main-05)
+                border-radius: var(--radius-l)
+            
             .name
                 transition: color var(--transition-xs)
                 flex-grow: 1
@@ -68,6 +67,7 @@ ul#notes
 
             .right
                 display: flex
+                align-items: baseline
                 gap: var(--space-m)
                 color: var(--color-main-50)
                 text-wrap: nowrap
@@ -79,6 +79,7 @@ ul#notes
                 opacity: 0
                 z-index: 1
                 font-size: var(--font-size-s)
+
 
 // Animations
 @keyframes fade-in-scale

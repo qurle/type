@@ -11,7 +11,7 @@ export function deleteNote(noteEl: HTMLButtonElement, opfs: FileSystemDirectoryH
 			noteEl.parentElement.parentElement.remove()
 		else
 			noteEl.parentElement.remove()
-		localStorage.removeItem(`note-${noteId}`)
+		localStorage.removeItem(`name-${noteId}`)
 	}
 
 	return confirmation
