@@ -20,6 +20,9 @@ export class Menu {
 	inputEl: HTMLInputElement
 	actionsEl: HTMLElement
 
+	// TODO: Legacy. Delete in summer or smth
+	showMenuEl: HTMLButtonElement
+
 	opened: boolean = false
 	actions: Action[] = []
 	selected: number = null
@@ -43,6 +46,11 @@ export class Menu {
 		this.renderActions()
 		this.inputEl.addEventListener('input', () => this.search())
 		this.toggleEl.addEventListener('click', () => this.toggle())
+
+		// TODO: Legacy. Delete in summer or smth
+		this.showMenuEl = getByClass('show-menu') as HTMLButtonElement
+		this.showMenuEl.addEventListener('click', () => this.toggle())
+
 		this.actionsEl.addEventListener('mousemove', (e) => {
 			const target = e.target as HTMLElement
 			if (target.tagName.toLowerCase() === 'button')
@@ -55,7 +63,11 @@ export class Menu {
 		})
 		// Hide menu on outside click
 		document.documentElement.addEventListener('click', (e: MouseEvent) => {
-			if (!this.rootEl.contains(e.target as Node))
+			if (this.opened && !(
+				this.rootEl.contains(e.target as Node)
+				// TODO: Legacy. Delete in summer or smth
+				|| this.showMenuEl.contains(e.target as Node)
+			))
 				this.toggle(false)
 		})
 	}
@@ -88,11 +100,9 @@ export class Menu {
 		if (open) {
 			state.editorEl.blur()
 			window.getSelection().removeAllRanges()
-			this.popupEl.classList.add(openClass)
-
 			this.closeViews()
+			this.popupEl.classList.add(openClass)
 			hasKeyboard && this.inputEl.focus()
-
 			this.opened = true
 		} else {
 			this.popupEl.classList.remove(openClass)

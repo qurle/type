@@ -61,7 +61,7 @@ const shortcutDict = [
 <script>
 	import { isMac } from '@scripts/utils/isMac'
 
-	if (isMac) {
+	if (isMac()) {
 		const shortcuts = document
 			.getElementById('shortcuts-list')
 			.getElementsByTagName('kbd')
