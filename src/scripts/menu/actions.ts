@@ -21,13 +21,13 @@ export const fuzzySortOptions = {
 }
 
 const allActionsData: Partial<Action>[] = [
-	{
-		id: 'newMenu',
-		name: 'A few words about new menu',
-		icon: 'MaterialSymbolsLightWavingHandOutlineRounded',
-		needDivider: true,
-		callback: () => state.menu.openView('newMenu'),
-	},
+	// {
+	// 	id: 'newMenu',
+	// 	name: 'A few words about new menu',
+	// 	icon: 'MaterialSymbolsLightWavingHandOutlineRounded',
+	// 	needDivider: true,
+	// 	callback: () => state.menu.openView('newMenu'),
+	// },
 	{
 		id: 'open',
 		name: 'Upload file(s)',
