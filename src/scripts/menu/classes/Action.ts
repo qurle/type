@@ -81,9 +81,10 @@ export class Action {
 	}
 
 	run() {
-		console.debug(`Running ${this.name}`)
+		console.debug(`Running ${this?.name}`)
+		console.debug(`Closes menu ${this?.closesMenu === true}`)
 		console.debug(this?.callback)
 		this?.callback()
-		if (this?.closesMenu) state.menu.toggle(false)
+		if (this?.closesMenu === true) state.menu.toggle(false)
 	}
 }

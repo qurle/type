@@ -47,7 +47,7 @@ export class Menu {
 		this.inputEl.addEventListener('input', () => this.search())
 		this.toggleEl.addEventListener('click', () => this.toggle())
 
-		// TODO: Legacy. Delete in summer or smth
+		// TODO: Legacy. Delete in 2026 or smth
 		this.showMenuEl = getByClass('show-menu') as HTMLButtonElement
 		this.showMenuEl.addEventListener('click', () => this.toggle())
 
@@ -62,13 +62,30 @@ export class Menu {
 				this.select(+target.dataset.index)
 		})
 		// Hide menu on outside click
+		// document.documentElement.addEventListener('click', (e: MouseEvent) => {
+		// 	if (this.opened && !(
+		// 		this.rootEl.contains(e.target as Node)
+		// 		// TODO: Legacy. Delete in 2026 or smth
+		// 		|| this.showMenuEl.contains(e.target as Node)
+		// 	)) {
+		// 		this.toggle(false)
+		// 	}
+		// })
+
 		document.documentElement.addEventListener('click', (e: MouseEvent) => {
-			if (this.opened && !(
-				this.rootEl.contains(e.target as Node)
-				// TODO: Legacy. Delete in summer or smth
-				|| this.showMenuEl.contains(e.target as Node)
-			))
-				this.toggle(false)
+			console.debug(`Menu is opened: ${this.opened}`)
+			if (!this.opened) return
+			let rect = this.actionsEl.getBoundingClientRect()
+			if (this.rootEl.contains(e.target as Node)) return
+			if (e.clientX > rect.left && e.clientX < rect.right &&
+				e.clientY > rect.top && e.clientY < rect.bottom)
+				return
+
+			console.debug(`Outside click`)
+			console.debug(`Root contain target: ${this.rootEl.contains(e.target as Node)}`)
+			console.debug(this.rootEl)
+			console.debug(e.target)
+			this.toggle(false)
 		})
 	}
 
@@ -106,6 +123,7 @@ export class Menu {
 			this.opened = true
 		} else {
 			this.popupEl.classList.remove(openClass)
+			this.inputEl.value = ''
 			state.editorEl.focus()
 			this.opened = false
 		}
