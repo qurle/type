@@ -14,8 +14,6 @@ import { isMac } from '@scripts/utils/isMac'
 const ctrl = isMac() ? '⌘' : 'Ctrl'
 const shift = 'Shift'
 
-const hideNewMenu = localStorage.getItem('saw-new-menu') === 'true'
-
 export const fuzzySortOptions = {
 	keys: ['name', 'aliases'],
 	limit: 100,
@@ -23,13 +21,6 @@ export const fuzzySortOptions = {
 }
 
 const allActionsData: Partial<Action>[] = [
-	// {
-	// 	id: 'newMenu',
-	// 	name: 'A few words about new menu',
-	// 	icon: 'MaterialSymbolsLightWavingHandOutlineRounded',
-	// 	needDivider: true,
-	// 	callback: () => state.menu.openView('newMenu'),
-	// },
 	{
 		id: 'publish',
 		name: 'Publish',
