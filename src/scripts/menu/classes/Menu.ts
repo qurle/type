@@ -250,6 +250,7 @@ export class Menu {
 				show('publish')
 				show('download')
 				hide('exportAll')
+				hide('copyAndEdit')
 				break
 			case 'reading':
 				hide('publish')
