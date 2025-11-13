@@ -4,7 +4,9 @@ import { openFilePicker } from '@scripts/actions/openFilePicker'
 import { publish } from '@scripts/actions/publish'
 import { toggleSpellcheck } from '@scripts/actions/spellcheck'
 import { cycleThemes, useTheme } from '@scripts/actions/themes'
+import { unlock } from '@scripts/editor/lock'
 import { Action } from '@scripts/menu/classes/Action'
+import { save } from '@scripts/note/save'
 import { state } from '@scripts/state'
 import { isMac } from '@scripts/utils/isMac'
 
@@ -54,7 +56,8 @@ const allActionsData: Partial<Action>[] = [
 		shortcut: [ctrl, shift, 'E'],
 		aliases: 'duplicate|сщзн|копировать',
 		closesMenu: true,
-		hidden: false
+		hidden: false,
+		callback: () => { unlock(); save('copy') }
 	},
 	{
 		id: 'download',
