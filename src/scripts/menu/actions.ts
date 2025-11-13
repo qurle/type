@@ -31,15 +31,6 @@ const allActionsData: Partial<Action>[] = [
 	// 	callback: () => state.menu.openView('newMenu'),
 	// },
 	{
-		id: 'open',
-		name: 'Upload file(s)',
-		icon: 'MaterialSymbolsLightUploadFileOutlineRounded',
-		shortcut: [ctrl, 'O'],
-		aliases: 'upload|file|гздщфв|открыть',
-		closesMenu: true,
-		callback: openFilePicker,
-	},
-	{
 		id: 'publish',
 		name: 'Publish',
 		icon: 'MaterialSymbolsLightLinkRounded',
@@ -67,6 +58,15 @@ const allActionsData: Partial<Action>[] = [
 		aliases: 'save|export|вщцтдщфв|загрузить',
 		closesMenu: true,
 		callback: exportFile
+	},
+	{
+		id: 'open',
+		name: 'Upload file(s)',
+		icon: 'MaterialSymbolsLightUploadFileOutlineRounded',
+		shortcut: [ctrl, 'O'],
+		aliases: 'upload|file|гздщфв|открыть',
+		closesMenu: true,
+		callback: openFilePicker,
 	},
 	{
 		id: 'exportAll',
