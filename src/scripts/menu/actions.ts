@@ -26,7 +26,7 @@ const allActionsData: Partial<Action>[] = [
 		name: 'Publish',
 		icon: 'MaterialSymbolsLightLinkRounded',
 		shortcut: [ctrl, shift, 'P'],
-		aliases: 'share|ырфку|опубликовать',
+		aliases: 'share|згидшыр|опубликовать',
 		hidden: true,
 		closesMenu: true,
 		callback: publish
@@ -71,14 +71,14 @@ const allActionsData: Partial<Action>[] = [
 		id: 'font',
 		name: 'Change font',
 		icon: 'MaterialSymbolsLightInsertTextOutlineRounded',
-		aliases: 'ащте|шрифт',
+		aliases: 'style|ащте|шрифт',
 		callback: cycleFonts
 	},
 	{
 		id: 'fontSans',
 		name: 'Use sans-serif font',
 		icon: 'MaterialSymbolsLightFontDownloadOutlineRounded',
-		aliases: 'гыу',
+		aliases: 'style|гыу ыфты-ыукша ащте|шрифт',
 		searchOnly: true,
 		callback: () => useFont('sans')
 	},
@@ -86,7 +86,7 @@ const allActionsData: Partial<Action>[] = [
 		id: 'fontSerif',
 		name: 'Use serif font',
 		icon: 'MaterialSymbolsLightSerifOutlineRounded',
-		aliases: 'гыу',
+		aliases: 'style|гыу ыукша ащте|шрифт',
 		searchOnly: true,
 		callback: () => useFont('serif')
 
@@ -95,7 +95,7 @@ const allActionsData: Partial<Action>[] = [
 		id: 'fontMono',
 		name: 'Use monospace font',
 		icon: 'MaterialSymbolsLightSlabSerifOutlineRounded',
-		aliases: 'гыу',
+		aliases: 'style|гыу ьщтщ ащте|шрифт',
 		searchOnly: true,
 		callback: () => useFont('mono')
 	},
@@ -103,14 +103,14 @@ const allActionsData: Partial<Action>[] = [
 		id: 'theme',
 		name: 'Change theme',
 		icon: 'MaterialSymbolsLightPaletteOutline',
-		aliases: 'color|срфтпу',
+		aliases: 'style|color|гыу срфтпу еруьу|тема',
 		callback: cycleThemes
 	},
 	{
 		id: 'themeLight',
 		name: 'Use light theme',
 		icon: 'MaterialSymbolsLightSunnyOutlineRounded',
-		aliases: 'color|гыу',
+		aliases: 'style|color|гыу срфтпу еруьу|светлая тема',
 		searchOnly: true,
 		callback: () => useTheme('light')
 	},
@@ -118,7 +118,7 @@ const allActionsData: Partial<Action>[] = [
 		id: 'themeDark',
 		name: 'Use dark theme',
 		icon: 'MaterialSymbolsLightDarkModeOutlineRounded',
-		aliases: 'color|гыу',
+		aliases: 'style|color|гыу срфтпу еруьу|темная тема',
 		searchOnly: true,
 		callback: () => useTheme('dark')
 	},
@@ -126,7 +126,7 @@ const allActionsData: Partial<Action>[] = [
 		id: 'themeDigital',
 		name: 'Use really digital theme',
 		icon: 'MaterialSymbolsLightChargerOutlineRounded',
-		aliases: 'color|гыу|retropunk',
+		aliases: 'style|color|гыу куфддн вшпшефд еруьу|цифровая тема|retropunk',
 		searchOnly: true,
 		callback: () => useTheme('digital')
 
@@ -135,21 +135,21 @@ const allActionsData: Partial<Action>[] = [
 		id: 'spellcheckOn',
 		name: 'Turn spellcheck on',
 		icon: 'MaterialSymbolsLightFormatUnderlinedSquiggleRounded',
-		aliases: 'errors|егкт',
+		aliases: 'errors|ызуддсрусл|ошибки',
 		callback: () => toggleSpellcheck(true)
 	},
 	{
 		id: 'spellcheckOff',
 		name: 'Turn spellcheck off',
 		icon: 'MaterialSymbolsLightFormatUnderlinedSquiggleRounded',
-		aliases: 'errors|егкт',
+		aliases: 'errors|ызуддсрусл|ошибки',
 		callback: () => toggleSpellcheck(false)
 	},
 	{
 		id: 'mdHandbook',
 		name: 'How to markdown',
 		icon: 'MaterialSymbolsLightMarkdownOutlineRounded',
-		aliases: 'help|рщц ещ',
+		aliases: 'help|рщц ещ ьфклвщцт|помощь',
 		callback: () => state.menu.openView('mdHandbook'),
 
 	},
@@ -157,7 +157,7 @@ const allActionsData: Partial<Action>[] = [
 		id: 'shortcuts',
 		name: 'Show all shortcuts',
 		icon: 'MaterialSymbolsLightKeyboardAltOutlineRounded',
-		aliases: 'hotkeys|ырщц|ырщкесгеы',
+		aliases: 'hotkeys|ырщц фдд ырщкесгеы|шоткаты',
 		callback: () => state.menu.openView('shortcuts'),
 	},
 	{
