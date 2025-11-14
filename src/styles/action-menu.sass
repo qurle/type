@@ -92,7 +92,7 @@
     text-wrap: nowrap
 
     transform-origin: center
-    transition: opacity var(--transition-s), background-color var(--transition-s), transform var(--transition-m)
+    transition: opacity var(--transition-s), transform var(--transition-m)
 
     li
         animation: show-up linear both
@@ -145,7 +145,7 @@
             transform: scale(.97)
         &.active
             &::before
-                transform: scale(1)
+                //  transform: scale(1)
                 background: var(--color-main-05)
 
     samp

@@ -64,7 +64,9 @@ const { editorVersion } = Astro.props
 		}
 	}
 
-	await loadByURL()
+	try {
+		await loadByURL()
+	} catch (e) {}
 	reopenLastNote()
 	updateNotesList()
 	setFocus(state.editorEl)
