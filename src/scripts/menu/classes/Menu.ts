@@ -121,10 +121,7 @@ export class Menu {
 			window.getSelection().removeAllRanges()
 			this.closeViews()
 			this.popupEl.classList.add(openClass)
-			console.debug(`Has Keyboard: ${hasKeyboard}`)
-			hasKeyboard && console.debug(`Focusing on input:`)
-			console.debug(this.inputEl)
-			hasKeyboard && this.inputEl.focus()
+			hasKeyboard && this.inputEl.select()
 			this.opened = true
 		} else {
 			this.popupEl.classList.remove(openClass)
