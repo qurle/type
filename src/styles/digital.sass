@@ -3,8 +3,6 @@
         background: radial-gradient(circle at 50% 50%, #031e23 0%, #001107 100%)
         position: relative
         cursor: url(/cursors/default.svg), default
-        animation: 1s ease-in 1 forwards glow-up
-        animation-fill-mode: none
 
         &::before, &::after
             position: absolute
@@ -34,8 +32,10 @@
         *
             border-radius: 0 !important
 
-    main
-        animation: 10s ease-in-out infinite forwards shake
+    // Not animating whole body cause it fucks up fixed elements
+    header, main
+        animation: 10s ease-in-out infinite forwards shake, 1s ease-in 1 forwards glow-up
+        animation-fill-mode: none
 
     #notes
         span, button
