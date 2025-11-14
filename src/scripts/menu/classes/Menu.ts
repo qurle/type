@@ -3,6 +3,7 @@ import { getByClass, getById, getByTag } from '@scripts/utils/getElements'
 import type { Action } from '@scripts/menu/classes/Action';
 import fuzzysort from 'fuzzysort';
 import { fuzzySortOptions, allActions, type MenuActionId } from '@scripts/menu/actions';
+import { getCssVariable } from '@scripts/utils/getCssVariable';
 
 export type MenuUpdateEvent =
 	'spellcheckOff' | 'spellcheckOn' |
@@ -125,7 +126,11 @@ export class Menu {
 			this.opened = true
 		} else {
 			this.popupEl.classList.remove(openClass)
-			this.inputEl.value = ''
+			// Updating menu after animation ends
+			setTimeout(() => {
+				this.inputEl.value = ''
+				this.search()
+			}, 175)
 			state.editorEl.focus()
 			this.opened = false
 		}
