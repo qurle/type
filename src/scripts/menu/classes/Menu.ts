@@ -75,6 +75,7 @@ export class Menu {
 		document.documentElement.addEventListener('click', (e: MouseEvent) => {
 			console.debug(`Menu is opened: ${this.opened}`)
 			if (!this.opened) return
+			if (this.showMenuEl.contains(e.target as Node)) return
 			let rect = this.actionsEl.getBoundingClientRect()
 			if (this.rootEl.contains(e.target as Node)) return
 			if (e.clientX > rect.left && e.clientX < rect.right &&
@@ -86,6 +87,7 @@ export class Menu {
 			console.debug(this.rootEl)
 			console.debug(e.target)
 			this.toggle(false)
+
 		})
 	}
 
