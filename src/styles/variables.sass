@@ -44,7 +44,9 @@
     --transition-s: 175ms var(--transition-easing)
     --transition-m: 300ms var(--transition-easing)
 
-    --shadow-l: 0 24px 32px var(--color-main-25)
+    --shadow-color: var(--color-main-25)
+
+    --shadow-l: 0 24px 32px -16px var(--shadow-color)
 
     --icon-filter: invert(0)
 
@@ -69,10 +71,11 @@
     --color-background: var(--color-dark)
     --color-main: oklch(92% 0 0)
     --icon-filter: invert(1)
-    --shadow-l: 0 32px 32px -24px var(--color-main-15)
+    --shadow-color: var(--color-main-05)
 
 :root[data-theme="digital"]
     --color-background: #001108
     --color-main: #21e386
     --font-main: var(--font-digital)
     --icon-filter: invert(94%) sepia(46%) saturate(2279%) hue-rotate(71deg) brightness(94%) contrast(88%)
+    --shadow-color: var(--color-main-15)
