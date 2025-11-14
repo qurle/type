@@ -1,0 +1,29 @@
+---
+import '@styles/action-menu.sass'
+import Actions from '@components/menu/Actions.astro'
+import Shortcuts from '@components/menu/views/Shortcuts.astro'
+import MdHandbook from '@components/menu/views/MdHandbook.astro'
+---
+
+<div id="action-menu">
+	<button class="action-toggle bg-blur"
+		><div class="left">
+			<span>Menu</span>
+			<samp
+				><kbd>⌘</kbd>
+				<kbd>K</kbd></samp
+			>
+		</div>
+	</button>
+	<div class="action-popup bg-blur" role="dialog" tabindex="-1">
+		<Actions />
+		<Shortcuts />
+		<MdHandbook />
+	</div>
+</div>
+<script>
+	import { Menu } from '@scripts/menu/classes/Menu'
+	import { state } from '@scripts/state'
+	state.menu = new Menu()
+</script>
+<style></style>

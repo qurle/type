@@ -9,7 +9,7 @@ export function insertMD(content: string, version = state.editorVersion) {
 			return state.editor.action(insert(content))
 		case "2":
 			const html = marked.parse(content)
-			console.log(html)
+			console.debug(html)
 			return state.editor2.commands.setContent(html, true)
 	}
 }

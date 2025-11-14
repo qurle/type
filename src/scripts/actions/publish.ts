@@ -2,14 +2,15 @@ import { isEmptyString } from '@scripts/utils/isEmptyString';
 import { showStatus } from '@scripts/render/showStatus';
 import { getMD } from '@scripts/versions/getMD';
 import { state } from '@scripts/state';
+import { getCurrentId } from '@scripts/utils/currentNote';
 
 /**
  * Publish note to the server
- * @param id ID of note
+ * @param id Custom ID of note. Falls back to current ID if empty 
  * @param markdown Custom markdown
  * @returns true if sended, false if not
  */
-export function publish(id: string, markdown: string = getMD()) {
+export function publish(id: string = getCurrentId(), markdown: string = getMD()) {
 	console.debug(`Publishing`)
 
 	if (isEmptyString(markdown)) {

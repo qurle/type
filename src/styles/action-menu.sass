@@ -1,0 +1,169 @@
+#action-menu
+    display: flex
+    flex-direction: column
+    align-items: center
+
+    position: fixed
+    bottom: 4rem
+    z-index: 1
+
+@media print
+    #action-menu
+        display: none
+
+.action-toggle
+    // display: flex
+    // gap: var(--space-xl)
+    // align-items: center
+
+    padding: var(--space-m) var(--space-l)
+
+    position: relative
+    z-index: 2
+
+    transition: transform var(--transition-s)
+    &:hover
+        transform: scale(1.03)
+    &:has(+.action-popup.opened),
+    &:active
+        transform: scale(.97)
+
+    .left
+        display: flex
+        align-items: center
+        gap: var(--space-m)
+
+    img
+        height: 1.5em
+
+.action-popup
+    position: absolute
+    bottom: calc(100% + 1rem)
+    z-index: 1
+
+    width: min(90vw, calc(0.75 * var(--page-width)))
+    height: clamp(5rem, 50vh, 21rem)
+
+    border-radius: var(--radius-xl)
+    box-shadow: none
+
+    opacity: 0
+    pointer-events: none
+    scale: .85
+    transform-origin: bottom center
+    transition: opacity var(--transition-s),background-color var(--transition-s), scale var(--transition-s),
+
+    &.opened
+        opacity: 1
+        scale: 1
+        box-shadow: var(--shadow-l)
+        pointer-events: all
+
+    hr
+        margin: var(--space-s) var(--space-l)
+        border-color: var(--color-main-05)
+
+*[id ^= view]
+    display: flex
+
+    flex-direction: column
+    height: 100%
+
+    &[hidden]
+        display: none
+
+    .action-header
+        width: 100%
+        padding: var(--space-l) var(--space-l) var(--space-m)
+
+        & + hr
+            margin-bottom: 0
+
+.action-list
+    display: flex
+    flex-direction: column
+    gap: var(--space-s)
+    padding: var(--space-s) var(--space-m)
+
+    height: 100%
+    overflow-y: scroll
+
+    font-size: var(--font-size-s)
+    text-wrap: nowrap
+
+    transform-origin: center
+    transition: opacity var(--transition-s), background-color var(--transition-s), transform var(--transition-m)
+
+    li
+        animation: show-up linear both
+        animation-duration: 1ms
+        animation-timeline: view()
+        transform-origin: 20% center
+
+    button, a
+        width: 100%
+        position: relative
+
+        display: flex
+        justify-content: space-between
+        align-items: center
+
+        scroll-margin: var(--space-xl)
+        padding: var(--space-m)
+        gap: var(--space-l)
+
+        transition: transform var(--transition-s)
+
+        .left
+            display: flex
+            align-items: center
+            gap: calc(var(--space-m) + var(--space-s))
+            // Clipping long names
+            width: 100%
+            overflow: hidden
+            -webkit-mask-image: linear-gradient(to right, white calc(100% - 5ch), transparent)
+            mask-image: linear-gradient(to right, white calc(100% - 5ch), transparent)
+
+        .icon-container
+            display: inline-block
+            height: 1.3em
+            aspect-ratio: 1
+            opacity: .50
+
+        .icon
+            height: 100%
+
+        &::before
+            content: ''
+            position: absolute
+            inset: 0 calc(-0.5 * var(--space-s))
+            border-radius: var(--radius-l)
+            background: transparent
+            z-index: -1
+            transition: transform var(--transition-s)
+        &:active
+            transform: scale(.97)
+        &.active
+            &::before
+                transform: scale(1)
+                background: var(--color-main-05)
+
+    samp
+        color: var(--color-main-50)
+
+    hr
+        margin: 0 var(--space-m)
+
+@keyframes show-up
+    0%, 100%
+        opacity: 0
+    12%, 88%
+        opacity: 1
+
+@keyframes show-up-scaled
+    0%, 100%
+        opacity: 0
+        transform: scale(0.95)
+    12%, 88%
+        opacity: 1
+        transform: scale(1)

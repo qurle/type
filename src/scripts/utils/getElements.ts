@@ -13,8 +13,8 @@ export function getByClass(
 	return multiple ? elements : elements[0]
 }
 
-export function getByTag(className: string, parent?: HTMLElement, multiple?: false): HTMLElement
-export function getByTag(className: string, parent?: HTMLElement, multiple?: true): HTMLCollectionOf<HTMLElement>
+export function getByTag(tagName: string, parent?: HTMLElement, multiple?: false): HTMLElement
+export function getByTag(tagName: string, parent?: HTMLElement, multiple?: true): HTMLCollectionOf<HTMLElement>
 export function getByTag(
 	tag: string,
 	parent: HTMLElement = document.documentElement,

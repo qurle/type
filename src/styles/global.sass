@@ -13,7 +13,7 @@ h1
 h2
     &:not(:first-child)
         padding-top: var(--space-xl)
-        font-size: 1.4em
+        font-size: 1.5em
 
 h3
     &:not(:first-child)
@@ -27,6 +27,9 @@ h4, h5
 
 h5
     font-size: 0.8em
+
+strong
+    font-weight: 600
 
 p
     line-height: 140%
@@ -47,6 +50,23 @@ hr
     border: 0
     border-top: 1px solid var(--color-main-25)
 
+samp
+    display: inline-flex
+    gap: var(--space-s)
+    color: var(--color-main-50)
+    font-size: var(--font-size-xs)
+
+kbd
+    min-width: 1.25rem
+    padding: var(--space-s)
+    border-radius: var(--radius-m)
+    background: var(--color-main-05)
+
+    text-align: center
+
+input::placeholder
+    color: var(--color-main-25)
+
 ::selection
     background-color: var(--color-main-15)
     border-radius: 2px
@@ -66,13 +86,13 @@ hr
     display: block
     width: fit-content
     padding: var(--space-m) calc(var(--space-l) + var(--space-m)) calc(var(--space-m) + 2px)
-   
-    color: var(--color-main) 
+
+    color: var(--color-main)
     border: 1px solid var(--color-main-15)
-    
+
     border-radius: calc(1.5 * var(--space-m))
     text-decoration: none
-   
+
     cursor: pointer
     user-select: none
 
@@ -82,10 +102,47 @@ hr
         background: var(--color-main-05)
     &:active
         transform: scale(.95)
-        
+
+.themed-icon
+    filter: var(--icon-filter)
+
+.bg-blur
+    border-radius: var(--radius-xl)
+
+    outline: 1px solid var(--color-main-05)
+    background: var(--color-background-75)
+    // I'm not a fan of vendor prefixes, so shout out to Safari here
+    -webkit-backdrop-filter: blur(50px) saturate(4) brightness(1.1)
+    backdrop-filter: blur(50px) saturate(4) brightness(1.1)
+
+[data-placeholder]:not([data-placeholder=""])
+    &[data-placeholder-show]
+        &::after
+            opacity: 1
+
+    &::after
+        content: attr(data-placeholder)
+        position: absolute
+        top: 50%
+        left: 50%
+        transform: translate(-50%, -50%)
+
+        font-size: var(--font-size-s)
+        color: var(--color-main-50)
+        text-align: center
+        white-space: pre-wrap
+
+        opacity: 0
+        pointer-events: none
+        transition: opacity var(--transition-m)
 
 :root[data-theme="digital"]
     @include digital
+
+@media print
+    :root
+        --color-main: #000
+        --color-background: #FFF
 
 // Animations
 @keyframes fade-in

@@ -2,7 +2,7 @@ import { config } from '@scripts/config'
 import { state } from '@scripts/state'
 import { writeToFile } from '@scripts/storage/writeToFile'
 import { createId } from '@scripts/utils/createId'
-import { loadCurrentId, setCurrentId } from '@scripts/utils/currentNote'
+import { getCurrentId, setCurrentId } from '@scripts/utils/currentNote'
 
 const nonExplicitSaveRefs: SaveRef[] = ['unload', 'clear', 'overwrite', 'multiple-drop']
 
@@ -46,7 +46,7 @@ export function save(saveRef: SaveRef, hidden = false) {
 		nonExplicitSaveRefs.includes(saveRef)
 	) {
 		const currentId =
-			loadCurrentId() || setCurrentId(createId())
+			getCurrentId() || setCurrentId(createId())
 		console.debug(`Saving with ID: ${currentId} by ref "${saveRef}"`)
 		writeToFile(currentId, saveRef, hidden)
 		state.updated = false

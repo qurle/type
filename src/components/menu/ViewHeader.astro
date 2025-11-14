@@ -1,0 +1,44 @@
+---
+import { Icon } from 'astro-icon/components'
+const { title } = Astro.props
+---
+
+<header class="action-header">
+	<button class="back"><Icon name="back" /></button>
+	<h2 class="title">{title}</h2>
+</header>
+<hr />
+
+<style>
+	header {
+		display: flex;
+		align-items: center;
+		gap: var(--space-m);
+
+		.title {
+			font-size: inherit;
+			font-weight: inherit;
+			padding: 0;
+			width: 100%;
+		}
+	}
+
+	button {
+		display: block;
+		opacity: 0.25;
+
+		transition:
+			opacity var(--transition-s),
+			transform var(--transition-m);
+
+		&:hover {
+			opacity: 0.5;
+		}
+
+		svg {
+			display: block;
+			height: 24px;
+			width: 24px;
+		}
+	}
+</style>

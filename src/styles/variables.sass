@@ -1,6 +1,9 @@
 @import @styles/fonts.sass
 :root
     --color-background: oklch(98% 0 0)
+    --color-background-50: color-mix(in hsl, var(--color-background) 50%, transparent)
+    --color-background-75: color-mix(in hsl, var(--color-background) 75%, transparent)
+
     --color-main: oklch(20% 0 0)
     --color-main-05: color-mix(in hsl, var(--color-main) 5%, transparent)
     --color-main-15: color-mix(in hsl, var(--color-main) 15%, transparent)
@@ -41,6 +44,10 @@
     --transition-s: 175ms var(--transition-easing)
     --transition-m: 300ms var(--transition-easing)
 
+    --shadow-l: 0 24px 32px var(--color-main-25)
+
+    --icon-filter: invert(0)
+
 @media screen and (max-width: 640px)
     :root
         --font-size-m: 1rem
@@ -61,16 +68,11 @@
 :root[data-theme="dark"]
     --color-background: var(--color-dark)
     --color-main: oklch(92% 0 0)
-
-:root[data-theme="sepia"]
-    --color-background: var(--color-sepia)
-    --color-main: oklch(19.79% 0.031 47.06)
-
-:root[data-theme="blue"]
-    --color-background: var(--color-blue)
-    --color-main: oklch(87.02% 0.017 280.97)
+    --icon-filter: invert(1)
+    --shadow-l: 0 32px 32px -24px var(--color-main-15)
 
 :root[data-theme="digital"]
     --color-background: #001108
     --color-main: #21e386
     --font-main: var(--font-digital)
+    --icon-filter: invert(94%) sepia(46%) saturate(2279%) hue-rotate(71deg) brightness(94%) contrast(88%)

@@ -32,7 +32,7 @@
         > p:only-child::before
             content: 'Loading note...'
             color: var(--color-main)
-            animation: pulse 2s linear infinite alternate 
+            animation: pulse 2s linear infinite alternate
 
     // Editor is empty
     > p:only-child
@@ -42,29 +42,16 @@
 
     @include blocks
 
-    &::after
-        transition: opacity var(--transition-m)
-        content: 'drop .md and .txt to edit \A drop images to insert'
-        text-align: center
-        white-space: pre-wrap
-        position: absolute
-        top: 50%
-        left: 50%
-        transform: translate(-50%, -50%)
-        font-size: var(--font-size-s)
-        opacity: 0
-        pointer-events: none
-
-    &.dragover
+    &[data-placeholder-show]
         background-color: var(--color-main-05)
         position: relative
-        &::after
-            opacity: 0.33
 
         > p:only-child::before
             opacity: 0
 
 main:not(.notes-shown)
+    .editor
+        padding-bottom: 25vh
     ul#notes
         animation: none
         opacity: 0

@@ -3,7 +3,7 @@
         background: radial-gradient(circle at 50% 50%, #031e23 0%, #001107 100%)
         position: relative
         cursor: url(/cursors/default.svg), default
-        animation: 10s ease-in-out infinite forwards shake, 1s ease-in 1 forwards glow-up
+        animation: 1s ease-in 1 forwards glow-up
         animation-fill-mode: none
 
         &::before, &::after
@@ -14,7 +14,7 @@
 
             content: ''
             background-position: 0px 0px
-            pointer-events: none            
+            pointer-events: none
         &::before
             background: linear-gradient(to bottom, #00000020 0px, #00000020 4px, #00000000 1px, #00000000 10px)
             background-size: 10px 10px
@@ -33,6 +33,9 @@
 
         *
             border-radius: 0 !important
+
+    main
+        animation: 10s ease-in-out infinite forwards shake
 
     #notes
         span, button
@@ -64,12 +67,10 @@
             filter: blur(0)
 
         40%
-            transform: translateX(10px)
             transform: translateX(8px)
             filter: blur(2px)
 
         41%
-            transform: translateX(-5px)
             transform: translateX(-3px)
         42%
             transform: translateX(0)

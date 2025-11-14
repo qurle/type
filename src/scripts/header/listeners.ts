@@ -10,10 +10,10 @@ export function initHeaderListeners() {
 	})
 
 	header.addEl.addEventListener('click', () => {
-		header.uploadInputEl.click()
+		header.filePickerEl.click()
 	})
 
-	header.uploadInputEl.addEventListener('change', (e: InputEvent) => {
-		uploadNotes(header.uploadInputEl.files)
+	header.filePickerEl.addEventListener('change', () => {
+		uploadNotes(header.filePickerEl.files)
 	})
 }

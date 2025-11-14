@@ -25,12 +25,12 @@ function decode(str: string) {
 }
 
 export async function GET(req: Request) {
-	return await getById(req);
+	return await getById(req)
 }
 
-async function getById(req) {
-	const params = new URL(req.url).searchParams;
-	const id = params.get('id');
+async function getById(req: Request) {
+	const params = new URL(req.url).searchParams
+	const id = params.get('id')
 
 	if (!id) {
 		return new Response('ID is empty', {

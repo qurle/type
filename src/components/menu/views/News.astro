@@ -1,0 +1,36 @@
+---
+import MenuView from '@layouts/MenuView.astro'
+import { render } from 'astro:content'
+import { getCollection, type CollectionEntry } from 'astro:content'
+
+const newsItems = await getCollection('news')
+const sortedNews = newsItems.sort(
+	(a, b) => new Date(b.data.date).getDate() - new Date(a.data.date).getDate(),
+)
+const latestNews = sortedNews[0]
+const { Content } = await render(latestNews)
+---
+
+<section>
+	<!-- <header>
+		<h2>{latestNews.data.title}</h2>
+		<p>
+			<time>{latestNews.data.date}</time>
+		</p>
+	</header> -->
+	<MenuView>
+		{}
+	</MenuView>
+	<p>
+		To navigate, press <span class="ctrl-key">Ctrl</span> + <span
+			class="ctrl-key">K</span
+		>.
+	</p>
+</section>
+<script>
+	if (navigator.platform.toLowerCase().includes('mac')) {
+		document.querySelectorAll('.ctrl-key').forEach((el) => {
+			el.textContent = el.textContent.replace('Ctrl', '⌘')
+		})
+	}
+</script>

@@ -24,8 +24,6 @@ header.editor-header
         transition: opacity var(--transition-s), transform var(--transition-m)
         &:hover
             opacity: .5
-        &:active
-            transform: scale(0.8)
 
     svg
         display: block
@@ -34,7 +32,7 @@ header.editor-header
 
     .left
         height: 24px
-        
+
         form
             display: none
 
@@ -58,7 +56,6 @@ header.editor-header
 
     .right
         display: flex
-        align-items: center
         gap: var(--space-l)
 
     .status
@@ -66,7 +63,10 @@ header.editor-header
         color: var(--color-main)
         opacity: 0
 
-  
+@media print
+    header.editor-header
+        display: none
+
 // Animations
 @keyframes fade-in-with-stop
     0%

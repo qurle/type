@@ -3,6 +3,7 @@ export const modes = {
 	theme: ['light', 'dark', 'digital']
 }
 
+
 export function cycleAppearance(mode: keyof typeof modes) {
 	const modeArray = modes[mode]
 	const currentValueRaw = document.documentElement.dataset[mode]
@@ -13,7 +14,7 @@ export function cycleAppearance(mode: keyof typeof modes) {
 	return nextValue
 }
 
-export function currentAppearance(mode: keyof typeof modes) {
+export function getAppearance(mode: keyof typeof modes) {
 	return localStorage.getItem(mode) || document.documentElement.dataset[mode]
 }
 

@@ -14,13 +14,12 @@ import Typography from '@tiptap/extension-typography'
 import Underline from '@tiptap/extension-underline'
 import { Markdown } from 'tiptap-markdown'
 import { linkConfig, markdownConfig } from '@scripts/editor2/config'
-import { state } from '@scripts/state'
-import { menu } from '@scripts/menu/elements'
+import { state, updateStatus } from '@scripts/state'
 import { toggleNotesList, updateNotesList } from '@scripts/render/notes'
 import { header } from '@scripts/header/elements'
 import { setTitle } from '@scripts/utils/setTitle'
-import { updateActions } from '@scripts/menu/updateActions'
 import { clearCurrentId } from '@scripts/utils/currentNote'
+import { getSpellcheck } from '@scripts/actions/spellcheck'
 
 export function createEditor() {
 	return new Editor({
@@ -47,9 +46,9 @@ export function createEditor() {
 			Image.configure({
 				allowBase64: true,
 			}),
-			Placeholder.configure({
-				placeholder: 'Write something …',
-			}),
+			// Placeholder.configure({
+			// 	placeholder: 'Write something …',
+			// }),
 		],
 		autofocus: true,
 		editorProps: {
@@ -60,18 +59,19 @@ export function createEditor() {
 		injectCSS: false,
 
 		onCreate({ editor }) {
+			updateStatus('empty')
 			state.editorEl = editor.options.element.firstChild as HTMLElement
 			state.editorEl.ariaLabel = 'Your note'
+			state.editorEl.focus()
 			if (state.hasNotes) state.editorEl.classList.add('collapsed')
-			state.editorEl.spellcheck =
-				localStorage.getItem('spell') === 'true' || false
+			state.editorEl.spellcheck = getSpellcheck()
 			state.wasEmpty = true
 		},
 		onUpdate({ editor }) {
+			console.debug(`Editor updated`)
 			state.updated = true
 			state.empty = editor.isEmpty
-
-			menu.showMenuEl.classList.remove('active')
+			state.menu.toggle(false)
 
 			if (state.empty) {
 				console.debug('Turned to empty')
@@ -80,7 +80,7 @@ export function createEditor() {
 				header.headerLeftEl.dataset.context = 'notes'
 				setTitle()
 				updateNotesList()
-				updateActions('empty')
+				state.menu.updateActions('empty')
 				clearCurrentId()
 				state.wasEmpty = true
 			} else if (state.wasEmpty) {
@@ -91,7 +91,7 @@ export function createEditor() {
 				header.headerLeftEl.dataset.context = 'editor'
 				state.wasEmpty = false
 				// Change buttons in menu
-				if (!state.locked) updateActions('notEmpty')
+				if (!state.locked) state.menu.updateActions('writing')
 			}
 		},
 	})

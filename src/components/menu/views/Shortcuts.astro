@@ -1,5 +1,5 @@
 ---
-import Modal from './Modal.astro'
+import MenuView from '@layouts/MenuView.astro'
 
 const shortcutDict = [
 	{ shortcut: ['Ctrl', 'S'], action: `Force save` },
@@ -20,22 +20,24 @@ const shortcutDict = [
 ]
 ---
 
-<Modal name="shortcuts" title="Shortcuts"
+<MenuView id="shortcuts" title="Shortcuts"
 	><dl id="shortcuts-list" class="shortcuts">
 		{
 			shortcutDict.map((x) => (
 				<div>
 					<dt>
-						{x.shortcut.map((key) => (
-							<kbd>{key}</kbd>
-						))}
+						<samp>
+							{x.shortcut.map((key) => (
+								<kbd>{key}</kbd>
+							))}
+						</samp>
 					</dt>
 					<dd>{x.action}</dd>
 				</div>
 			))
 		}
 	</dl>
-</Modal>
+</MenuView>
 <style lang="scss">
 	@use '@styles/blocks.sass';
 
@@ -48,29 +50,8 @@ const shortcutDict = [
 		padding-bottom: var(--space-l);
 	}
 
-	kbd {
-		display: inline-block;
-		min-width: 2rem;
-		padding: var(--space-s) var(--space-m);
-
-		font-size: var(--font-size-xs);
-		text-align: center;
-
-		border-radius: var(--radius-m);
-		border: 1px solid var(--color-main-15);
-		background: var(--color-main-05);
-		transition: transform var(--transition-s);
-		box-shadow:
-			inset 2px 2px 2px #ffffff80,
-			inset -1px -1px 0px #00000020;
-
-		&:active {
-			transform: scale(0.75);
-		}
-
-		&:not(:first-child) {
-			margin-left: var(--space-s);
-		}
+	samp {
+		color: var(--color-main);
 	}
 
 	dd {
@@ -78,7 +59,9 @@ const shortcutDict = [
 	}
 </style>
 <script>
-	if (navigator.appVersion.includes('Mac')) {
+	import { isMac } from '@scripts/utils/isMac'
+
+	if (isMac()) {
 		const shortcuts = document
 			.getElementById('shortcuts-list')
 			.getElementsByTagName('kbd')

@@ -1,6 +1,14 @@
 let currentId = loadCurrentId()
 
 /**
+ * Return ID of current note
+ * @returns Value of current ID or null if not present
+ */
+export function getCurrentId() {
+	return currentId || loadCurrentId()
+}
+
+/**
  * Set ID of current note in variable and local storage
  * @param id New ID
  * @returns Assigned ID
@@ -21,8 +29,8 @@ export function clearCurrentId() {
 
 /**
  * Load ID of current note from local storage
- * @returns ID of latest note or empty string
+ * @returns ID of latest note or null if not present
  */
 export function loadCurrentId() {
-	return localStorage.getItem('opened') || ''
+	return localStorage.getItem('opened') || null
 }

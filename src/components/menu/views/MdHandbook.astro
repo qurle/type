@@ -1,5 +1,5 @@
 ---
-import Modal from './Modal.astro'
+import MenuView from '@layouts/MenuView.astro'
 
 const markdownDict = [
     { markdown: '# Heading 1', html: `<h1>Heading 1</h1>` },
@@ -43,7 +43,7 @@ const markdownDict = [
 ]
 ---
 
-<Modal name="instructions" title="How to markdown"
+<MenuView id="mdHandbook" title="How to markdown"
     ><dl class="instructions blocks">
         {
             markdownDict.map((x) => (
@@ -58,25 +58,27 @@ const markdownDict = [
     </dl>
 </Modal>
 <style lang="scss">
-    @use '@styles/blocks.sass';
-
     .instructions {
-        display: flex;
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: repeat(auto-fit,minmax(min(150px,100%),1fr));
+        row-gap: var(--space-m);
+        align-items: center;
+
         width: 100%;
         gap: var(--space-m);
-        padding-right: var(--space-xl);
-        padding-bottom: var(--space-l);
 
         > dt > code {
-            font-size: var(--font-size-xs);
-            padding: var(--space-l);
             display: inline-block;
-        }
-    }
+            width: 100%;
+            overflow: hidden;
 
-    dt:not(:first-child) {
-        margin-top: var(--space-xl);
+            padding: var(--space-l);
+            font-size: var(--font-size-xs);
+
+            
+            background: none;
+            border: 1px solid var(--color-main-15);
+        }
     }
 
     // Hack to align usually hanging elements
