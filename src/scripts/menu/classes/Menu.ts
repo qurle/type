@@ -82,11 +82,6 @@ export class Menu {
 			if (e.clientX > rect.left && e.clientX < rect.right &&
 				e.clientY > rect.top && e.clientY < rect.bottom)
 				return
-
-			console.debug(`Outside click`)
-			console.debug(`Root contain target: ${this.rootEl.contains(e.target as Node)}`)
-			console.debug(this.rootEl)
-			console.debug(e.target)
 			this.toggle(false)
 
 		})
@@ -131,7 +126,7 @@ export class Menu {
 				this.inputEl.value = ''
 				this.search()
 			}, 175)
-			state.editorEl.focus()
+			hasKeyboard && state.editorEl.focus()
 			this.opened = false
 		}
 		return open
