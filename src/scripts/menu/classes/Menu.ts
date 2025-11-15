@@ -1,9 +1,8 @@
-import { state } from '@scripts/state';
+import { state } from '@scripts/state'
 import { getByClass, getById, getByTag } from '@scripts/utils/getElements'
-import type { Action } from '@scripts/menu/classes/Action';
-import fuzzysort from 'fuzzysort';
-import { fuzzySortOptions, allActions, type MenuActionId } from '@scripts/menu/actions';
-import { getCssVariable } from '@scripts/utils/getCssVariable';
+import type { Action } from '@scripts/menu/classes/Action'
+import fuzzysort from 'fuzzysort'
+import { fuzzySortOptions, allActions, type MenuActionId } from '@scripts/menu/actions'
 
 export type MenuUpdateEvent =
 	'spellcheckOff' | 'spellcheckOn' |
@@ -62,16 +61,6 @@ export class Menu {
 			if (target.tagName.toLowerCase() === 'button')
 				this.select(+target.dataset.index)
 		})
-		// Hide menu on outside click
-		// document.documentElement.addEventListener('click', (e: MouseEvent) => {
-		// 	if (this.opened && !(
-		// 		this.rootEl.contains(e.target as Node)
-		// 		// TODO: Legacy. Delete in 2026 or smth
-		// 		|| this.showMenuEl.contains(e.target as Node)
-		// 	)) {
-		// 		this.toggle(false)
-		// 	}
-		// })
 
 		document.documentElement.addEventListener('click', (e: MouseEvent) => {
 			console.debug(`Menu is opened: ${this.opened}`)
@@ -83,20 +72,17 @@ export class Menu {
 				e.clientY > rect.top && e.clientY < rect.bottom)
 				return
 			this.toggle(false)
-
 		})
 	}
 
 	search(queryChanged = true) {
 		const value = this.inputEl.value
-
 		if (!value) {
 			this.actions = allActions.filter(x => !x.searchOnly)
 			console.debug(`Rendering without search`)
 			this.renderActions()
 			return
 		}
-
 		this.renderActions(queryChanged, this.fuzz(value))
 	}
 
@@ -190,8 +176,8 @@ export class Menu {
 			if (x.needDivider && i + 1 !== this.actions.length)
 				this.actionsEl.appendChild(document.createElement('hr'))
 			// Fixing tab navigation buy switching back to input
-			el.onmouseup = () => this.inputEl.focus()
-			el.onmouseleave = () => this.inputEl.focus()
+			el.onmouseup = () => hasKeyboard && this.inputEl.focus()
+			el.onmouseleave = () => hasKeyboard && this.inputEl.focus()
 		})
 		this.select(queryChanged ? 0 : this.selected)
 	}
