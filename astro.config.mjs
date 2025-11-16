@@ -1,12 +1,13 @@
-import icon from "astro-icon";
-import { defineConfig } from 'astro/config';
-import vercel from "@astrojs/vercel";
+import { defineConfig } from 'astro/config'
+import icon from 'astro-icon'
+import vercel from '@astrojs/vercel'
+import AstroPWA from '@vite-pwa/astro'
 
 // https://astro.build/config
 export default defineConfig({
   adapter: vercel(),
 
-  integrations: [icon()],
+  integrations: [icon(), AstroPWA()],
 
   vite: {
     css: {
