@@ -43,10 +43,6 @@ Meanwhile you can use install type as PWA or use [nativefier](https://github.co
 
 
 ---
-
-## How do I build this?
-
-
 ### How do I run it locally
 
 1. Install [Node.js](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) (cause you need npm)
