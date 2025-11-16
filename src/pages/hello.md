@@ -9,7 +9,7 @@ hideHeader: true
 
 Zen markdown-friendly editor
 
-<img class="hero-image" src="/hello/hero-image.webp" alt="Look of type homepage" width="1920" height="1320"/>
+<img class="hero-image" src="/hello/hero-image.webp" alt="Look of type homepage" width="1920"/>
 
 <div class="center no-padding"><a class="primary button" href='/'><i>Start typing</i></a></div>
 
@@ -45,7 +45,7 @@ Markdown is easy markup language which makes *type* more than plain text edito
 
 <br/>
 
-<img src="/hello/appearance.webp" alt="Example of switching font and theme" width="1920" height="1000"/>
+<img src="/hello/appearance.webp" alt="Example of switching font and theme" width="1920"/>
 
 <br/><br/>
 
@@ -76,12 +76,12 @@ Not at all. You can write plain text as in notepad. However, you can check
 You can export Notion pages as markdown and upload them into *type*. Not all functions of Notion will work, though.
 
 
-**Maybe desktop version?**  
-You can use [nativefier](https://github.com/nativefier/nativefier). If you have Node.js installed, it's as simple as
-```sh
-npm install -g nativefier
-nativefier 'type.baby'
-```
+**Maybe native version?**  
+Type is a progressive web app, so you can add it to home screen or install it right from your browser.
+
+<br/>
+
+<img src="/hello/pwa-install.webp" alt="Installing PWA from Google Chrome" width="1920"/>
 
 <br/>
 <div class="center">∗ ∗ ∗</div>
