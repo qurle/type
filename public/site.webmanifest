@@ -25,11 +25,32 @@
   ],
   "screenshots": [
     {
-      "src": "screenshots/desktop/main.png",
+      "src": "screenshots/desktop/look.png",
       "sizes": "1920x1080",
       "type": "image/png",
       "form_factor": "wide",
       "label": "Home screen with list of notes"
+    },
+    {
+      "src": "screenshots/desktop/keyboard.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "New note with opened menu"
+    },
+    {
+      "src": "screenshots/desktop/appearance.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Type in light and dark themes"
+    },
+    {
+      "src": "screenshots/desktop/offline.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Home screen with questioning Chrome's offline dinosaur"
     },
     {
       "src": "screenshots/mobile/main.png",
