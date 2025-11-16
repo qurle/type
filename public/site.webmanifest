@@ -3,8 +3,8 @@
   "short_name": "type.",
   "description": "Zen editor for those who love simplicity",
   "start_url": "/",
-  "theme_color": "#FEFCFC",
-  "background_color": "#FEFCFC",
+  "theme_color": "#f9f9f9",
+  "background_color": "#f9f9f9",
   "display": "standalone",
   "categories": [
     "productivity"
