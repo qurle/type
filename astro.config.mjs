@@ -1,7 +1,6 @@
 import { defineConfig } from 'astro/config'
 import icon from 'astro-icon'
 import vercel from '@astrojs/vercel'
-import AstroPWA from '@vite-pwa/astro'
 
 // https://astro.build/config
 export default defineConfig({
