@@ -1,21 +1,42 @@
 {
   "name": "type.",
   "short_name": "type.",
+  "description": "Zen editor for those who love simplicity",
+  "start_url": "https://type.baby",
+  "theme_color": "#FEFCFC",
+  "background_color": "#FEFCFC",
+  "display": "standalone",
+  "categories": [
+    "productivity"
+  ],
   "icons": [
     {
       "src": "/fav/web-app-manifest-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "maskable"
+      "purpose": "any"
     },
     {
       "src": "/fav/web-app-manifest-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "maskable"
+      "purpose": "any"
     }
   ],
-  "theme_color": "#FEFCFC",
-  "background_color": "#FEFCFC",
-  "display": "standalone"
+  "screenshots": [
+    {
+      "src": "screenshots/desktop/main.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Home screen with list of notes"
+    },
+    {
+      "src": "screenshots/mobile/main.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "New note with opened menu"
+    }
+  ]
 }
