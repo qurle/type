@@ -25,27 +25,6 @@
   ],
   "screenshots": [
     {
-      "src": "screenshots/desktop/look.png",
-      "sizes": "1920x1080",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "Home screen with list of notes"
-    },
-    {
-      "src": "screenshots/desktop/keyboard.png",
-      "sizes": "1920x1080",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "New note with opened menu"
-    },
-    {
-      "src": "screenshots/desktop/appearance.png",
-      "sizes": "1920x1080",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "Type in light and dark themes"
-    },
-    {
       "src": "screenshots/desktop/offline.png",
       "sizes": "1920x1080",
       "type": "image/png",
@@ -53,11 +32,53 @@
       "label": "Home screen with questioning Chrome's offline dinosaur"
     },
     {
-      "src": "screenshots/mobile/main.png",
+      "src": "screenshots/desktop/distractions.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "New note with extra clean UI"
+    },
+    {
+      "src": "screenshots/desktop/menu.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Main action menu"
+    },
+    {
+      "src": "screenshots/desktop/appearance.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Type in different themes"
+    },
+    {
+      "src": "screenshots/mobile/offline.png",
       "sizes": "1080x1920",
       "type": "image/png",
-      "form_factor": "narrow",
-      "label": "New note with opened menu"
-    }
+      "form_factor": "wide",
+      "label": "Home screen with questioning Chrome's offline dinosaur"
+    },
+    {
+      "src": "screenshots/mobile/distractions.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "New note with extra clean UI"
+    },
+    {
+      "src": "screenshots/mobile/menu.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Main action menu"
+    },
+    {
+      "src": "screenshots/mobile/appearance.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Type in different themes"
+    },
   ]
 }
