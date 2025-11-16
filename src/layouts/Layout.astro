@@ -1,12 +1,12 @@
 ---
-import Fonts from '@components/utils/Fonts.astro'
+import Icons from '@components/utils/Icons.astro'
 import '@styles/global.sass'
 
 const defaultTitle = 'type.'
 const {
   title = defaultTitle,
   simpleTitle = false,
-  description = 'Zen markdown-friendly editor for just typing',
+  description = 'Zen editor for those who love simplicity',
   class: className,
 } = Astro.props
 
@@ -24,14 +24,11 @@ const base = Astro.url.pathname.endsWith('/')
   <head>
     <base href={base} target="_self" />
     <meta charset="UTF-8" />
+    <title>type.</title>
     <meta name="description" content={description} />
     <meta
       name="viewport"
-      content="
-      width=device-width 
-      initial-scale=1 
-      interactive-widget=resizes-content
-      "
+      content="width=device-width initial-scale=1 interactive-widget=resizes-content"
     />
     <meta name="theme-color" content="var(--color-background)" />
 
@@ -45,27 +42,9 @@ const base = Astro.url.pathname.endsWith('/')
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content="/og/main.png" />
 
-    <Fonts />
+    <Icons />
+    <link rel="manifest" href="/site.webmanifest" />
 
-    <link rel="icon" type="image/svg+xml" href="/fav/favicon.svg" />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="/fav/favicon-32.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="/fav/favicon-16.png"
-    />
-    <link
-      rel="shortcut icon"
-      type="image/x-icon"
-      href="/fav/favicon.ico"
-      sizes="64x64"
-    />
     <script is:inline>
       // This thing comes inline to avoid flickering when your
       // theme is not default. Sorry, just saving your eyes!

@@ -1,3 +1,5 @@
+// News not planned but structure may help in future
+
 import { glob } from 'astro/loaders'
 import { defineCollection, getCollection, getEntry, z } from 'astro:content'
 
