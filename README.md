@@ -42,6 +42,21 @@ Meanwhile you can use install type as PWA or use [nativefier](https://github.co
 ![Installing PWA from Google Chrome](https://github.com/qurle/type/blob/main/.github/pwa-install.png)
 
 
+---
+
+## How do I build this?
+
+
+### How do I run it locally
+
+1. Install [Node.js](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) (cause you need npm)
+2. Download repository
+3. Navigate to project and run this in terminal
+```bash
+cd <path to type>
+npm i
+npm run dev
+```
 
 ---
 
