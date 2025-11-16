@@ -7,7 +7,7 @@ import AstroPWA from '@vite-pwa/astro'
 export default defineConfig({
   adapter: vercel(),
 
-  integrations: [icon(), AstroPWA()],
+  integrations: [icon()],
 
   vite: {
     css: {
