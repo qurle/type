@@ -107,10 +107,11 @@ export class Menu {
 			this.opened = true
 		} else {
 			this.popupEl.classList.remove(openClass)
-			// Updating menu after animation ends
+			// Resetting menu after animation ends
 			setTimeout(() => {
 				this.inputEl.value = ''
 				this.search()
+				this.select(0, true)
 			}, 175)
 			hasKeyboard && state.editorEl.focus()
 			this.opened = false

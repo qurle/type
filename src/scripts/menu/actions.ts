@@ -80,6 +80,7 @@ const allActionsData: Partial<Action>[] = [
 		icon: 'MaterialSymbolsLightFontDownloadOutlineRounded',
 		aliases: 'style|гыу ыфты-ыукша ащте|шрифт',
 		searchOnly: true,
+		closesMenu: true,
 		callback: () => useFont('sans')
 	},
 	{
@@ -88,6 +89,7 @@ const allActionsData: Partial<Action>[] = [
 		icon: 'MaterialSymbolsLightSerifOutlineRounded',
 		aliases: 'style|гыу ыукша ащте|шрифт',
 		searchOnly: true,
+		closesMenu: true,
 		callback: () => useFont('serif')
 
 	},
@@ -97,6 +99,7 @@ const allActionsData: Partial<Action>[] = [
 		icon: 'MaterialSymbolsLightSlabSerifOutlineRounded',
 		aliases: 'style|гыу ьщтщ ащте|шрифт',
 		searchOnly: true,
+		closesMenu: true,
 		callback: () => useFont('mono')
 	},
 	{
@@ -112,6 +115,7 @@ const allActionsData: Partial<Action>[] = [
 		icon: 'MaterialSymbolsLightSunnyOutlineRounded',
 		aliases: 'style|color|гыу срфтпу еруьу|светлая тема',
 		searchOnly: true,
+		closesMenu: true,
 		callback: () => useTheme('light')
 	},
 	{
@@ -120,6 +124,7 @@ const allActionsData: Partial<Action>[] = [
 		icon: 'MaterialSymbolsLightDarkModeOutlineRounded',
 		aliases: 'style|color|гыу срфтпу еруьу|темная тема',
 		searchOnly: true,
+		closesMenu: true,
 		callback: () => useTheme('dark')
 	},
 	{
@@ -128,6 +133,7 @@ const allActionsData: Partial<Action>[] = [
 		icon: 'MaterialSymbolsLightChargerOutlineRounded',
 		aliases: 'style|color|гыу куфддн вшпшефд еруьу|цифровая тема|retropunk',
 		searchOnly: true,
+		closesMenu: true,
 		callback: () => useTheme('digital')
 
 	},

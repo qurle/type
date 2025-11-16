@@ -56,6 +56,14 @@ samp
     color: var(--color-main-50)
     font-size: var(--font-size-xs)
 
+// Hiding shortcuts on mobile
+@media not (hover: hover)
+    samp
+        display: none
+    // Except shortcuts list
+    #shortcuts-list samp
+        display: inline-flex
+
 kbd
     min-width: 1.25rem
     padding: var(--space-s)
