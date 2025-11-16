@@ -2,7 +2,7 @@
   "name": "type.",
   "short_name": "type.",
   "description": "Zen editor for those who love simplicity",
-  "start_url": "https://type.baby",
+  "start_url": "/",
   "theme_color": "#FEFCFC",
   "background_color": "#FEFCFC",
   "display": "standalone",
@@ -33,7 +33,7 @@
     },
     {
       "src": "screenshots/mobile/main.png",
-      "sizes": "1280x720",
+      "sizes": "1080x1920",
       "type": "image/png",
       "form_factor": "narrow",
       "label": "New note with opened menu"
