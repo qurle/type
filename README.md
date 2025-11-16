@@ -53,6 +53,7 @@ cd <path to type>
 npm i
 npm run dev
 ```
+4. Open link from terminal (prob http://localhost:4321/)
 
 ---
 
