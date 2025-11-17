@@ -36,8 +36,7 @@ Markdown is easy markup language which makes *type* more than plain text edito
 Shout out to [Milkdown](https://milkdown.dev/) — markdown engine of type. Fronted by [Astro](https://astro.build), backed by [Vercel Functions](https://vercel.com/docs/functions), stored by [PostreSQL](https://www.postgresql.org/).
 
 **Maybe native version?**  
-If you can help with desktop app, contact me at [nick@qurle.net](mailto:nick@qurle.net?subject=type.%20desktop) or [Telegram](https://t.me/qurle).
-Meanwhile you can use install type as PWA or use [nativefier](https://github.com/nativefier/nativefier)
+You can use install type as PWA or use [nativefier](https://github.com/nativefier/nativefier).
 
 ![Installing PWA from Google Chrome](https://github.com/qurle/type/blob/main/.github/pwa-install.png)
 
