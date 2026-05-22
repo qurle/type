@@ -1,62 +1,41 @@
-import knex, { type Knex } from 'knex';
-
-type PublishedNote = {
-	id: string,
-	content: string,
-	author: string,
-	client_id: string,
-	modified: string,
+export const config = {
+	runtime: 'edge',
 }
 
-const k: Knex = knex({
-	client: 'pg',
-	connection: {
-		host: process.env.PG_HOST,
-		user: process.env.PG_USER,
-		password: process.env.PG_PASSWORD,
-		database: process.env.PG_DB,
-	},
-})
+import { createClient } from '@supabase/supabase-js';
 
-const table = 'published'
+
+const supabase = createClient(
+	process.env.TYPE_SUPABASE_URL,
+	process.env.TYPE_SUPABASE_ANON_KEY
+)
 
 function decode(str: string) {
 	return Buffer.from(str, 'base64url').toString('utf8');
 }
 
-export async function GET(req: Request) {
-	return await getById(req)
-}
+export default async (req: Request) => {
+	switch (req.method) {
+		case 'GET':
+			const params = new URL(req.url).searchParams;
+			const id = params.get('id');
 
-async function getById(req: Request) {
-	const params = new URL(req.url).searchParams
-	const id = params.get('id')
+			if (!id) {
+				return new Response('ID is empty', {
+					status: 400,
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+			}
 
-	if (!id) {
-		return new Response('ID is empty', {
-			status: 400,
-		})
+			const result = await supabase.from('notes').select('content, author, client_id, encoded').eq('id', id).maybeSingle()
+			console.log(`Result:`)
+			const content = result.data?.encoded ? (result.data?.content ? decode(result.data.content) : null) : result.data?.content
+			console.log(result)
+			return new Response(JSON.stringify({
+				content: content,
+				clientId: result.data?.client_id
+			}), { status: 200, statusText: "Returning URL" })
 	}
-
-	const note = await getNote(id)
-
-	if (!note) {
-		return new Response('Note not found', {
-			status: 404,
-		})
-	}
-
-	return new Response(JSON.stringify({
-		content: decode(note.content),
-		clientId: note.client_id
-	}), {
-		status: 200, statusText: "Returning note",
-	})
-}
-
-async function getNote(id: string): Promise<PublishedNote> {
-	return (await k<PublishedNote>(table)
-		.select()
-		.where('id', id)
-		.first())
 }
