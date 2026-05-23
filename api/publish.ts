@@ -5,16 +5,29 @@ export const config = {
 import { createClient } from '@supabase/supabase-js';
 import { nanoid } from 'nanoid';
 
-interface NoteBody {
+type PublishedNote = {
+	id: string,
+	content: string,
+	author: string,
+	client_id: string,
+	modified: string,
+}
+
+type NoteBody = {
 	content: string,
 	clientId: string
 	author?: string,
 }
 
 const supabase = createClient(
-	process.env.TYPE_SUPABASE_URL,
-	process.env.TYPE_SUPABASE_ANON_KEY
+	process.env.TYPE_SUPABASE_URL || '',
+	process.env.TYPE_SUPABASE_ANON_KEY || ''
 )
+
+const table = 'published'
+const maxFileSize = 12_000_000
+const maxLifeDate = 14
+
 
 function encode(str: string) {
 	return Buffer.from(str, 'utf8').toString('base64url')
@@ -27,7 +40,7 @@ export default async (req: Request) => {
 	}
 }
 
-async function insert(req) {
+async function insert(req: Request) {
 	const { content, clientId, author }: NoteBody = await req.json()
 	console.log(`Sending ${content.slice(0, 10)} with clientId ${clientId} and author ${author}`)
 
@@ -37,18 +50,15 @@ async function insert(req) {
 		})
 	}
 
-	if (new TextEncoder().encode(content).length >= 7_000_000) {
+	if (new TextEncoder().encode(content).length >= maxFileSize) {
 		return new Response(
 			'{ error: "Note is too large" }', {
-			status: 413,
-			headers: {
-				"Content-Type": "application/json"
-			}
+			status: 413
 		})
 	}
 
 	const from = new Date()
-	from.setDate(from.getDate() - 14)
+	from.setDate(from.getDate() - maxLifeDate)
 
 	let id = await getExistingId(clientId, from)
 	if (id) {
@@ -69,7 +79,7 @@ async function insert(req) {
 
 async function getExistingId(clientId: string, from: Date) {
 	return (await supabase
-		.from('notes')
+		.from(table)
 		.select('id')
 		.eq('client_id', clientId)
 		.gte('modified', from.toISOString())
@@ -80,11 +90,10 @@ async function getExistingId(clientId: string, from: Date) {
 
 async function updateNoteGetId(id: string, content: string) {
 	return (await supabase
-		.from('notes')
+		.from(table)
 		.update({
 			content: encode(content),
 			modified: new Date().toISOString(),
-			encoded: true
 		})
 		.eq('id', id)
 		.order('modified', { ascending: false })
@@ -95,14 +104,13 @@ async function updateNoteGetId(id: string, content: string) {
 
 async function insertNoteGetId(content: string, author: string, clientId: string) {
 	return (await supabase
-		.from('notes')
+		.from(table)
 		.insert({
 			id: nanoid(12),
 			content: encode(content),
 			author: author || 'type.',
 			client_id: clientId,
 			modified: new Date().toISOString(),
-			encoded: true
 		})
 		.order('id', { ascending: false })
 		.select()
