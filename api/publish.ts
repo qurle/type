@@ -1,7 +1,11 @@
-import knex, { type Knex } from 'knex';
+export const config = {
+	runtime: 'edge',
+}
+
+import { createClient } from '@supabase/supabase-js';
 import { nanoid } from 'nanoid';
 
-type PusblishedNote = {
+type PublishedNote = {
 	id: string,
 	content: string,
 	author: string,
@@ -15,30 +19,30 @@ type NoteBody = {
 	author?: string,
 }
 
-const k: Knex = knex({
-	client: 'pg',
-	connection: {
-		host: process.env.PG_HOST,
-		user: process.env.PG_USER,
-		password: process.env.PG_PASSWORD,
-		database: process.env.PG_DB,
-	},
-})
+const supabase = createClient(
+	process.env.TYPE_SUPABASE_URL || '',
+	process.env.TYPE_SUPABASE_SERVICE_ROLE_KEY || ''
+)
 
-const maxFileSize = 12_000_000
 const table = 'published'
+const maxFileSize = 12_000_000
+const maxLifeDate = 14
+
 
 function encode(str: string) {
 	return Buffer.from(str, 'utf8').toString('base64url')
 }
 
-export async function POST(req: Request) {
-	return await insert(req);
+export default async (req: Request) => {
+	switch (req.method) {
+		case 'POST':
+			return await insert(req)
+	}
 }
 
-async function insert(req) {
+async function insert(req: Request) {
 	const { content, clientId, author }: NoteBody = await req.json()
-	console.log(`Sending ${content.slice(0, 10)} with author ${author}`)
+	console.log(`Sending ${content.slice(0, 10)} clientId ${clientId} and author ${author}`)
 
 	if (!content || !clientId) {
 		return new Response('Bad request', {
@@ -46,15 +50,15 @@ async function insert(req) {
 		})
 	}
 
-	if (new TextEncoder().encode(content).length > maxFileSize) {
+	if (new TextEncoder().encode(content).length >= maxFileSize) {
 		return new Response(
 			'{ error: "Note is too large" }', {
-				status: 413,
+			status: 413
 		})
 	}
 
 	const from = new Date()
-	from.setDate(from.getDate() - 14)
+	from.setDate(from.getDate() - maxLifeDate)
 
 	let id = await getExistingId(clientId, from)
 	if (id) {
@@ -64,6 +68,7 @@ async function insert(req) {
 		id = await insertNoteGetId(content, author, clientId)
 		console.log('Inserted')
 	}
+
 	console.log(`Result:`)
 	console.log(id)
 	return new Response(JSON.stringify({
@@ -72,32 +77,43 @@ async function insert(req) {
 }
 
 
-async function getExistingId(clientId: string, from: Date): Promise<string> {
-	return (await k<PusblishedNote>(table)
+async function getExistingId(clientId: string, from: Date) {
+	return (await supabase
+		.from(table)
 		.select('id')
-		.where('client_id', clientId)
-		.where('modified', '>=', from.toISOString())
-		.first())?.id
+		.eq('client_id', clientId)
+		.gte('modified', from.toISOString())
+		.limit(1)
+		.single())?.data?.id
+
 }
 
-async function updateNoteGetId(id: string, content: string): Promise<string> {
-	return (await k(table)
-		.where('id', id)
+async function updateNoteGetId(id: string, content: string) {
+	return (await supabase
+		.from(table)
 		.update({
 			content: encode(content),
 			modified: new Date().toISOString(),
-		},
-			'id'))[0]?.id
-
+		})
+		.eq('id', id)
+		.order('modified', { ascending: false })
+		.limit(1)
+		.select()
+		.single())?.data?.id
 }
 
-async function insertNoteGetId(content: string, author: string, clientId: string): Promise<string> {
-	return (await k<PusblishedNote>(table)
+async function insertNoteGetId(content: string, author: string, clientId: string) {
+	return (await supabase
+		.from(table)
 		.insert({
 			id: nanoid(12),
 			content: encode(content),
 			author: author || 'type.',
 			client_id: clientId,
 			modified: new Date().toISOString(),
-		}, 'id'))[0]?.id
+		})
+		.order('id', { ascending: false })
+		.select()
+		.limit(1)
+		.single())?.data?.id
 }

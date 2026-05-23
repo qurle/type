@@ -1,4 +1,8 @@
-import knex, { type Knex } from 'knex';
+export const config = {
+	runtime: 'edge',
+}
+
+import { createClient, type PostgrestSingleResponse } from '@supabase/supabase-js'
 
 type PublishedNote = {
 	id: string,
@@ -8,55 +12,51 @@ type PublishedNote = {
 	modified: string,
 }
 
-const k: Knex = knex({
-	client: 'pg',
-	connection: {
-		host: process.env.PG_HOST,
-		user: process.env.PG_USER,
-		password: process.env.PG_PASSWORD,
-		database: process.env.PG_DB,
-	},
-})
+const supabase = createClient(
+	process.env.TYPE_SUPABASE_URL || '',
+	process.env.TYPE_SUPABASE_SERVICE_ROLE_KEY || ''
+)
 
 const table = 'published'
 
 function decode(str: string) {
-	return Buffer.from(str, 'base64url').toString('utf8');
+	return Buffer.from(str, 'base64url').toString('utf8')
 }
 
-export async function GET(req: Request) {
-	return await getById(req)
-}
+export default async (req: Request) => {
+	switch (req.method) {
+		case 'GET':
+			const params = new URL(req.url).searchParams
+			const id = params.get('id')
 
-async function getById(req: Request) {
-	const params = new URL(req.url).searchParams
-	const id = params.get('id')
+			if (!id) {
+				return new Response('ID is empty', {
+					status: 400,
+				})
+			}
 
-	if (!id) {
-		return new Response('ID is empty', {
-			status: 400,
-		})
+			const note = await getNote(id)
+
+			if (!note || !note.success) {
+				return new Response('Note not found', {
+					status: 404,
+				})
+			}
+
+			console.log(`Result:`)
+			console.log(note)
+			return new Response(JSON.stringify({
+				content: decode(note.data?.content || ''),
+				clientId: note.data?.client_id
+			}), { status: 200, statusText: "Returning note" })
 	}
-
-	const note = await getNote(id)
-
-	if (!note) {
-		return new Response('Note not found', {
-			status: 404,
-		})
-	}
-
-	return new Response(JSON.stringify({
-		content: decode(note.content),
-		clientId: note.client_id
-	}), {
-		status: 200, statusText: "Returning note",
-	})
 }
 
-async function getNote(id: string): Promise<PublishedNote> {
-	return (await k<PublishedNote>(table)
-		.select()
-		.where('id', id)
-		.first())
+async function getNote(id: string): Promise<PostgrestSingleResponse<Partial<PublishedNote>>> {
+	return await supabase
+		.from(table)
+		.select('content, author, client_id')
+		.eq('id', id)
+		.limit(1)
+		.single()
 }

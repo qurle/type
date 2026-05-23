@@ -1,0 +1,5 @@
+[functions.publish]
+verify_jwt = false
+
+[functions.getPublished]
+verify_jwt = false
