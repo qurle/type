@@ -21,7 +21,7 @@ type NoteBody = {
 
 const supabase = createClient(
 	process.env.TYPE_SUPABASE_URL || '',
-	process.env.TYPE_SUPABASE_ANON_KEY || ''
+	process.env.TYPE_SUPABASE_SERVICE_ROLE_KEY || ''
 )
 
 const table = 'published'
@@ -42,7 +42,7 @@ export default async (req: Request) => {
 
 async function insert(req: Request) {
 	const { content, clientId, author }: NoteBody = await req.json()
-	console.log(`Sending ${content.slice(0, 10)} with clientId ${clientId} and author ${author}`)
+	console.log(`Sending ${content.slice(0, 10)} clientId ${clientId} and author ${author}`)
 
 	if (!content || !clientId) {
 		return new Response('Bad request', {
