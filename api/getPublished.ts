@@ -2,7 +2,7 @@ export const config = {
 	runtime: 'edge',
 }
 
-import { createClient, PostgrestResponse, PostgrestSingleResponse } from '@supabase/supabase-js';
+import { createClient, type PostgrestSingleResponse } from '@supabase/supabase-js';
 
 type PublishedNote = {
 	id: string,

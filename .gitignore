@@ -1,7 +1,11 @@
 # build output
 dist/
+
 # generated types
 .astro/
+
+# supabase stuff
+supabase/
 
 # dependencies
 node_modules/
