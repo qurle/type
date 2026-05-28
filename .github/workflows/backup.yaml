@@ -5,23 +5,9 @@ on:
   schedule:
     - cron: "0 0 14,28 * *" # Twice a month
 
-env:
-  BACKUP_ENABLED: true
-
 jobs:
-  check_variables:
-    env:
-      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
-      BACKUP_ENABLED: ${{ vars.BACKUP_ENABLED }} # Repository variable (true or false)
-    runs-on: ubuntu-latest
-    steps:
-      - name: Print variables
-        run: |
-          printenv
-          echo 'BACKUP_ENABLED ↴'
-          echo $BACKUP_ENABLED
   run_db_backup:
-    if: ${{ vars.BACKUP_ENABLED == 'true' }}
+    if: vars.BACKUP_ENABLED == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write
