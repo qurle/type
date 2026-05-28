@@ -15,13 +15,11 @@ jobs:
       SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
       BACKUP_ENABLED: ${{ vars.BACKUP_ENABLED }} # Repository variable (true or false)
     steps:
-      - name: Check if backups are enabled
-        run: |
-          printenv
-          echo 'BACKUP_ENABLED ↴'
-          echo $BACKUP_ENABLED
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          repository: 'qurle/type-backups'
+          token: ${{ secrets.BACKUPS_TOKEN }}
 
       - name: Setup Supabase CLI
         uses: supabase/setup-cli@v1
