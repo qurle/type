@@ -10,6 +10,7 @@ env:
 
 jobs:
   run_db_backup:
+    if: ${{ vars.BACKUP_ENABLED == 'true' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -19,39 +20,30 @@ jobs:
     steps:
       - name: Check if backups are enabled
         run: |
-          if [ "$BACKUP_ENABLED" != "true" ]; then
-            echo "Backups are disabled. Exiting workflow."
-            exit 0
-          fi
-
+          printenv
+          echo 'BACKUP_ENABLED ↴'
+          echo $BACKUP_ENABLED
       - name: Checkout repository
-        if: env.BACKUP_ENABLED == 'true'
         uses: actions/checkout@v3
 
       - name: Setup Supabase CLI
-        if: env.BACKUP_ENABLED == 'true'
         uses: supabase/setup-cli@v1
         with:
           version: latest
 
       - name: Create timestamp folder
-        if: env.BACKUP_ENABLED == 'true'
         run: mkdir -p prisma/backups
 
       - name: Backup roles
-        if: env.BACKUP_ENABLED == 'true'
         run: supabase db dump --db-url "$SUPABASE_DB_URL" -f prisma/backups/roles.sql --role-only
 
       - name: Backup schema
-        if: env.BACKUP_ENABLED == 'true'
         run: supabase db dump --db-url "$SUPABASE_DB_URL" -f prisma/backups/schema.sql
 
       - name: Backup data
-        if: env.BACKUP_ENABLED == 'true'
         run: supabase db dump --db-url "$SUPABASE_DB_URL" -f prisma/backups/data.sql --data-only --use-copy
 
       - name: Commit backups
-        if: env.BACKUP_ENABLED == 'true'
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Supabase backup
