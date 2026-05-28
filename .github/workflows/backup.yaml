@@ -10,7 +10,7 @@ env:
 
 jobs:
   check_variables:
-   env:
+    env:
       SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
       BACKUP_ENABLED: ${{ vars.BACKUP_ENABLED }} # Repository variable (true or false)
     runs-on: ubuntu-latest
