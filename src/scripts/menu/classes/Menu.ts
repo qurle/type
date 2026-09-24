@@ -20,9 +20,6 @@ export class Menu {
 	inputEl: HTMLInputElement
 	actionsEl: HTMLElement
 
-	// TODO: Legacy. Delete in summer or smth
-	showMenuEl: HTMLButtonElement
-
 	opened: boolean = false
 	actions: Action[] = []
 	selected: number = null
@@ -47,10 +44,6 @@ export class Menu {
 		this.inputEl.addEventListener('input', () => this.search())
 		this.toggleEl.addEventListener('click', () => this.toggle())
 
-		// TODO: Legacy. Delete in 2026 or smth
-		this.showMenuEl = getByClass('show-menu') as HTMLButtonElement
-		this.showMenuEl.addEventListener('click', () => this.toggle())
-
 		this.actionsEl.addEventListener('mousemove', (e) => {
 			const target = e.target as HTMLElement
 			if (target.tagName.toLowerCase() === 'button')
@@ -65,7 +58,6 @@ export class Menu {
 		document.documentElement.addEventListener('click', (e: MouseEvent) => {
 			console.debug(`Menu is opened: ${this.opened}`)
 			if (!this.opened) return
-			if (this.showMenuEl.contains(e.target as Node)) return
 			let rect = this.actionsEl.getBoundingClientRect()
 			if (this.rootEl.contains(e.target as Node)) return
 			if (e.clientX > rect.left && e.clientX < rect.right &&

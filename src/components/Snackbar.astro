@@ -1,0 +1,112 @@
+---
+import { Icon } from "astro-icon/components";
+
+const { title, subtitle = null, button, assert } = Astro.props
+---
+
+<aside
+	id="snackbar"
+	class=`snackbar bg-blur${assert ? ' assert' : ''}`
+	aria-live="assertive"
+	aria-hidden="true"
+	hidden>
+	<div class="content">
+		<p class="title">{title}</p>
+		<p class="subtitle">{subtitle}</p>
+	</div>
+	<a class="primary button" href={button?.href}
+		>{button?.label}</a
+	>
+	<button class="close" type="button" aria-label="Close"><Icon name="close"></button>
+</aside>
+
+<script>
+	import { hideSnackbar } from '@scripts/utils/snackbar'
+
+	const closeButton = document.querySelector('#snackbar .close')
+	closeButton?.addEventListener('click', hideSnackbar)
+</script>
+
+<style>
+	.snackbar {
+		position: fixed;
+		bottom: var(--page-padding-v);
+		left: var(--page-padding);
+		right: var(--page-padding);
+		z-index: 3;
+
+		display: flex;
+		align-items: center;
+		gap: var(--space-l);
+		flex-wrap: wrap;
+		width: auto;
+		max-width: 35rem;
+		margin: 0 auto;
+		padding: var(--space-l);
+
+		overflow: hidden;
+
+		opacity: 0;
+		pointer-events: none;
+		transform: translateY(-1rem) scale(.95);
+		transition: opacity var(--transition-m), transform var(--transition-m);
+
+		&.assert {
+			outline: 1px solid var(--color-assert);
+			&::before {
+				content: '';
+				position: absolute;
+				height: 50%;
+				width: 75%;
+				inset: 75% 12.5% 0;
+
+				background-color: var(--color-assert);
+				border-radius: 100%;
+				filter: blur(50px);
+				opacity: .25;
+				z-index: -1;
+			}
+		}
+
+		&.opened {
+			opacity: 1;
+			pointer-events: auto;
+			transform: translateY(0) scale(1);
+		}
+
+		.content {
+			flex: 1;
+			min-width: 0;
+		}
+
+		.subtitle {
+			padding-top: 0;
+			color: var(--color-main-50);
+
+			&:empty {
+				display: none;
+			}
+		}
+
+		.button:empty {
+			display: none;
+		}
+
+
+		.close {
+			line-height: 1;
+			font-size: 24px;
+			opacity: .25;
+			transition: opacity var(--transition-s), transform var(--transition-m);
+
+			&:hover {
+				opacity: .5;
+			}
+
+			&:active {
+				transform: scale(.9);
+			}
+		}
+		
+	}
+</style>

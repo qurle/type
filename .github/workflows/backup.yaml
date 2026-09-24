@@ -15,13 +15,11 @@ jobs:
       SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
       BACKUP_ENABLED: ${{ vars.BACKUP_ENABLED }} # Repository variable (true or false)
     steps:
-      - name: Check if backups are enabled
-        run: |
-          printenv
-          echo 'BACKUP_ENABLED ↴'
-          echo $BACKUP_ENABLED
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          repository: 'qurle/type-backups'
+          token: ${{ secrets.BACKUPS_TOKEN }}
 
       - name: Setup Supabase CLI
         uses: supabase/setup-cli@v1
@@ -32,13 +30,13 @@ jobs:
         run: mkdir -p prisma/backups
 
       - name: Backup roles
-        run: supabase db dump --db-url "$SUPABASE_DB_URL" -f prisma/backups/roles.sql --role-only
+        run: supabase db dump --db-url "$SUPABASE_DB_URL" -f roles.sql --role-only
 
       - name: Backup schema
-        run: supabase db dump --db-url "$SUPABASE_DB_URL" -f prisma/backups/schema.sql
+        run: supabase db dump --db-url "$SUPABASE_DB_URL" -f schema.sql
 
       - name: Backup data
-        run: supabase db dump --db-url "$SUPABASE_DB_URL" -f prisma/backups/data.sql --data-only --use-copy
+        run: supabase db dump --db-url "$SUPABASE_DB_URL" -f data.sql --data-only --use-copy
 
       - name: Commit backups
         uses: stefanzweifel/git-auto-commit-action@v4

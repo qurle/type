@@ -32,6 +32,11 @@
         *
             border-radius: 0 !important
 
+    .snackbar
+        border-radius: 0 !important
+        &.assert
+            border: 6px double var(--color-assert)
+
     // Not animating whole body cause it fucks up fixed elements
     header, main
         animation: 10s ease-in-out infinite forwards shake, 1s ease-in 1 forwards glow-up

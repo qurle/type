@@ -2,6 +2,7 @@
 import Header from '@components/Header.astro'
 import Editor from '@components/Editor.astro'
 import NoteList from '@components/NoteList.astro'
+import Snackbar from '@components/Snackbar.astro'
 import ActionsMenu from '@components/ActionMenu.astro'
 
 // For loading published notes
@@ -12,6 +13,7 @@ const { editorVersion } = Astro.props
 ---
 
 <Header editorVersion={editorVersion} />
+<Snackbar />
 <ActionsMenu />
 <main>
 	<Editor />
@@ -32,6 +34,7 @@ const { editorVersion } = Astro.props
 	import { header } from '@scripts/header/elements'
 	import { loadByURL } from '@scripts/note/loadByURL'
 	import { toggleAutosave } from '@scripts/note/save'
+	import { exportAll } from '@scripts/actions/export'
 	import { updateNotesList } from '@scripts/render/notes'
 	import { initStatus } from '@scripts/render/showStatus'
 	import { initState, state } from '@scripts/state'
@@ -43,6 +46,7 @@ const { editorVersion } = Astro.props
 	} from '@scripts/utils/systemListenters'
 	import { initHeaderElements } from '@scripts/header/elements'
 	import { initHeaderListeners } from '@scripts/header/listeners'
+import { showSnackbar } from '@scripts/utils/snackbar'
 
 	await initState()
 	initHeaderElements()
@@ -77,4 +81,15 @@ const { editorVersion } = Astro.props
 	initFocusListener()
 	initUnloadListener()
 	initDragAndDrop()
+
+	if (window.location.hostname.endsWith('type.baby'))
+		showSnackbar({
+			title: 'type is moving to <a class="link" href="https://type.qurle.net">type.qurle.net</a>',
+			subtitle: 'Please migrate your notes before 2 oct',
+			button: { 
+				label: 'Export notes',
+				action: exportAll,
+				},
+			assert: true
+		})
 </script>
