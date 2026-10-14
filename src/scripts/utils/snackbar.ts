@@ -2,6 +2,7 @@ import { getByClass, getById } from '@scripts/utils/getElements'
 
 const animationDuration = 300
 let snackbarTimer: number | undefined
+let snackbarId: string | undefined
 
 export type Button = {
 	label: string
@@ -15,11 +16,14 @@ type SnackbarOptions = {
 	button?: Button,
 	timer?: number
 	assert?: boolean
+	id?: string
 }
 
-export function showSnackbar({ title, subtitle, button, timer = Infinity, assert = false }: SnackbarOptions) {
+export function showSnackbar({ title, subtitle, button, timer = Infinity, assert = false, id }: SnackbarOptions) {
 	const snackbarEl = getById('snackbar')
 	if (!snackbarEl) return
+
+	snackbarId = id
 
 	if (snackbarTimer) window.clearTimeout(snackbarTimer)
 
@@ -47,9 +51,12 @@ export function showSnackbar({ title, subtitle, button, timer = Infinity, assert
 
 }
 
-export function hideSnackbar() {
+export function hideSnackbar(dismissedByUser = false) {
 	const snackbarEl = getById('snackbar')
 	if (!snackbarEl) return
+
+	if (dismissedByUser && snackbarId) localStorage.setItem(`dismissed-${snackbarId}`, 'true')
+	snackbarId = undefined
 
 	if (snackbarTimer) {
 		window.clearTimeout(snackbarTimer)

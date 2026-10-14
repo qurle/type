@@ -46,7 +46,7 @@ const { editorVersion } = Astro.props
 	} from '@scripts/utils/systemListenters'
 	import { initHeaderElements } from '@scripts/header/elements'
 	import { initHeaderListeners } from '@scripts/header/listeners'
-import { showSnackbar } from '@scripts/utils/snackbar'
+	import { showSnackbar } from '@scripts/utils/snackbar'
 
 	await initState()
 	initHeaderElements()
@@ -82,14 +82,19 @@ import { showSnackbar } from '@scripts/utils/snackbar'
 	initUnloadListener()
 	initDragAndDrop()
 
-	if (window.location.hostname.endsWith('type.baby'))
+	const migrationNoticeId = 'migration-notice'
+	if (
+		window.location.hostname.endsWith('type.baby') &&
+		!localStorage.getItem(`dismissed-${migrationNoticeId}`)
+	)
 		showSnackbar({
 			title: 'type is moving to <a class="link" href="https://type.qurle.net">type.qurle.net</a>',
-			subtitle: 'Please migrate your notes before 2 oct',
-			button: { 
+			subtitle: 'Please migrate your notes',
+			button: {
 				label: 'Export notes',
 				action: exportAll,
-				},
-			assert: true
+			},
+			assert: true,
+			id: migrationNoticeId,
 		})
 </script>
