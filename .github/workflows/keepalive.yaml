@@ -1,0 +1,30 @@
+name: supabase-keepalive
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 12 */6 * *" # Every 6 days (resets on the 1st, so gaps are never longer)
+
+jobs:
+  publish_system_note:
+    runs-on: ubuntu-latest
+    env:
+      TYPE_URL: ${{ vars.TYPE_URL || 'https://type.qurle.net' }}
+    steps:
+      - name: Publish system note
+        run: |
+          content="# type. is alive"$'\n\n'"Last ping: $(date -u '+%Y-%m-%d %H:%M UTC')"
+          body=$(jq -n --arg content "$content" \
+            '{content: $content, clientId: "system-keepalive", author: "type."}')
+
+          response=$(curl -sS --fail-with-body -X POST "$TYPE_URL/api/publish" \
+            -H 'Content-Type: application/json' \
+            -d "$body")
+          echo "$response"
+
+          id=$(echo "$response" | jq -r '.id // empty')
+          if [ -z "$id" ]; then
+            echo "::error::No note id returned, database write probably failed"
+            exit 1
+          fi
+          echo "Published: $TYPE_URL/note/$id"
